@@ -76,11 +76,23 @@ class QDAC:
         if step_length < 0.001:
             raise Exception('Step length must be greater than 0.001ms')
 
-        if not (len(v_startlist) == len(v_endlist) == len(list(self._channel_generator_map.keys()))):
-            raise Exception('A start and end voltage must be supplied for each channel.')
+        if not (len(v_endlist) == len(list(self._channel_generator_map.keys()))):
+            raise Exception('An end voltage must be supplied for each channel.')
 
         if len(list(self._channel_generator_map.keys())) > 10:
             raise Exception('Can\'t map more than 10 QDAC channels to its 10 generators.')
+
+        if len(v_startlist) != len(list(self._channel_generator_map.keys())) and len(v_startlist) != 0:
+            raise Exception(
+                'A start voltage must be supplied for each channel or no start voltages may be supplied at all.'
+            )
+
+        if len(v_startlist) == 0:
+            # build the v_startlist from existing config
+            init = self.instr.getLocalInitValuesDict()
+            for ch_id in list(self._channel_generator_map.keys()):
+                # should always work since channel modes set on init of this class
+                v_startlist.append(init[self._qdac_channel_offset_key(ch_id)])
 
         nsteps = ramp_time / step_length
 

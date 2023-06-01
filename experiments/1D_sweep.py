@@ -1,5 +1,6 @@
 import Labber
 import numpy as np
+import time
 
 from ..devices.NI_DAQ import NIDAQ
 from ..devices.QDevil_QDAC import QDAC
@@ -9,14 +10,14 @@ from ..logging import Log
 V_LIMIT = 2.5
 
 
-def one_dimensional_sweep(single_e_transistor, gain=1e8, sample_rate_per_channel=1e6):
+def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, sample_rate_per_channel=1e6):
 
     # connect to instrument server
     client = Labber.connectToServer('localhost')
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    qdac = QDAC(client)
+    qdac = QDAC(client, channel_generator_map)
 
     # print QDAC overview
     print(qdac.instr.getLocalInitValuesDict())
@@ -43,7 +44,21 @@ def one_dimensional_sweep(single_e_transistor, gain=1e8, sample_rate_per_channel
             ]) > V_LIMIT):
         raise Exception("Voltage too high")
 
-    # TODO: collect data and save to database
+    # ramp to initial voltages in 1 sec
+    qdac.ramp_voltages(
+        v_startlist=[],
+        v_endlist=[
+            single_e_transistor.bias_v,
+            single_e_transistor.plunger_v,
+            single_e_transistor.acc_v,
+            single_e_transistor.vb1_v,
+            single_e_transistor.vb2_v
+        ],
+        ramp_time=1,
+        repetitions=1,
+        step_length=single_e_transistor.fast_step_size
+    )
+    time.sleep(2)
 
 
 if __name__ == '__main__':
@@ -65,4 +80,10 @@ if __name__ == '__main__':
     SET1.vb1_v = 0
     SET1.vb2_v = 0
 
-    one_dimensional_sweep(SET1)
+    one_dimensional_sweep(SET1, {
+        SET1.bias_ch_num: 1,
+        SET1.plunger_ch_num: 2,
+        SET1.acc_ch_num: 3,
+        SET1.vb1_ch_num: 4,
+        SET1.vb2_ch_num: 5
+    })
