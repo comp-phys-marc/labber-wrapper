@@ -60,6 +60,35 @@ def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, 
     )
     time.sleep(2)
 
+    # NI_DAQ parameters calculation
+    num_samples_raw = int(single_e_transistor.fast_step_size * sample_rate_per_channel)
+    num_samples_averaged = 1
+
+    # collect data and save to database
+    start_time = time.time()
+
+    for vfast in np.linspace(SET1.fast_vstart, SET1.fast_vend, SET1.fast_steps):
+        qdac.ramp_voltages(
+            v_startlist=[],
+            v_endlist=[vfast for _ in range(len(SET1.fast_ch))],
+            ramp_time=0.005,
+            repetitions=1,
+            step_length=single_e_transistor.fast_step_size
+        )
+        time.sleep(0.005)
+        result = nidaq.read(
+            ch_id=SET1.ai_ch_num,
+            v_min=-1,
+            v_max=1,
+            gain=gain,
+            num_samples=num_samples_raw,
+            sample_rate=sample_rate_per_channel
+        )
+        #TODO: save data using logging
+
+    end_time = time.time()
+    print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
+
 
 if __name__ == '__main__':
 
