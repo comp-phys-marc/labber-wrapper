@@ -51,8 +51,9 @@ class SET:
         time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
         qdac.sync(1, self.fast_ch[0])
         qdac.ramp_voltages(
-            self.fast_ch,
-            [self.fast_vstart for _ in range(len(self.fast_ch))],
-            [self.fast_vend for _ in range(len(self.fast_ch))],
-            self.fast_step_size * self.fast_steps
+            v_startlist=[self.fast_vstart for _ in range(len(self.fast_ch))],
+            v_endlist=[self.fast_vend for _ in range(len(self.fast_ch))],
+            ramp_time=self.fast_step_size * self.fast_steps,
+            step_length=self.fast_step_size,
+            repetitions=1
         )
