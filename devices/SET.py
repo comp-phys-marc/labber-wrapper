@@ -1,7 +1,9 @@
 import numpy as np
 import time
 
+
 class SET:
+
     def __init__(
             self,
             bias_ch_num: int,
@@ -47,7 +49,7 @@ class SET:
 
     def sweep(self, qdac):
         time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
-        # qdac.channels[self.fast_ch[0]-1].sync(1)  TODO: use QDAC sync channels' labber config
+        qdac.sync(1, self.fast_ch[0])
         qdac.ramp_voltages(
             self.fast_ch,
             [self.fast_vstart for _ in range(len(self.fast_ch))],

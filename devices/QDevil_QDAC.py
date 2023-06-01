@@ -6,6 +6,10 @@ class QDAC:
     #   can we somehow use QCodes' driver on top of Labber?
 
     @staticmethod
+    def _qdac_sync_key(sync):
+        return f'Syn{sync} Source'
+
+    @staticmethod
     def _qdac_channel_offset_key(ch_id):
         return f'CH{ch_id.zfill(2)} OffsetV'
 
@@ -37,12 +41,31 @@ class QDAC:
     def _qdac_channel_mode_key(ch_id):
         return f'CH{ch_id.zfill(2)} Mode'
 
-    def __init__(self, client):
+    def __init__(self, client, channel_generator_map):
         self.instr = client.connectToInstrument('QDevil QDAC', dict(interface='Serial', address='3'))
+
+        for i, ch_id in enumerate(list(channel_generator_map.keys())):
+            if ch_id > 24 or ch_id < 1:
+                raise Exception(f'QDAC channel {ch_id} out of range (1..24).')
+            if channel_generator_map[ch_id] > 10 or channel_generator_map[ch_id] < 1:
+                raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
+
+            self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
+
+        self._channel_generator_map = channel_generator_map
+
+    def sync(self, sync, channel):
+        if sync not in (1, 2):
+            raise Exception('Sync parameter must be 1 or 2.')
+
+        if channel > 24 or channel < 1:
+            raise Exception(f'There are 24 channels labelled 1-24. {channel} specified.')
+
+        generator = self._channel_generator_map[channel]
+        self.instr.setValue(self._qdac_sync_key(sync), f'Generator {generator}')
 
     def ramp_voltages(
             self,
-            channel_generator_map,
             v_startlist,
             v_endlist,
             ramp_time,
@@ -53,27 +76,21 @@ class QDAC:
         if step_length < 0.001:
             raise Exception('Step length must be greater than 0.001ms')
 
-        if not (len(v_startlist) == len(v_endlist) == len(list(channel_generator_map.keys()))):
+        if not (len(v_startlist) == len(v_endlist) == len(list(self._channel_generator_map.keys()))):
             raise Exception('A start and end voltage must be supplied for each channel.')
 
-        if len(list(channel_generator_map.keys())) > 10:
+        if len(list(self._channel_generator_map.keys())) > 10:
             raise Exception('Can\'t map more than 10 QDAC channels to its 10 generators.')
 
         nsteps = ramp_time / step_length
 
-        for i, ch_id in enumerate(list(channel_generator_map.keys())):
+        for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
             amplitude = v_endlist[i] - v_startlist[i]
 
-            if ch_id > 24:
-                raise Exception(f'QDAC channel {ch_id} out of range (1..24).')
-            if channel_generator_map[ch_id] > 10:
-                raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
-
-            self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
             self.instr.setValue(self._qdac_channel_amplitude_key(ch_id), amplitude)
             self.instr.setValue(self._qdac_channel_offset_key(ch_id), v_startlist[i])
 
-            g_id = channel_generator_map[ch_id]
+            g_id = self._channel_generator_map[ch_id]
 
             if trigger is not None:
                 self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
