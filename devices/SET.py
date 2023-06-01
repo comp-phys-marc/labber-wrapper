@@ -13,6 +13,7 @@ class SET:
             vb2_ch_num: int,
             ai_ch_num: str
     ):
+        # TODO: use experiment / device setup (json config file) instead of attributes
         self.bias_ch_num = bias_ch_num
         self.plunger_ch_num = plunger_ch_num
         self.acc_ch_num = acc_ch_num

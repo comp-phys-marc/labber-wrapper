@@ -10,7 +10,14 @@ from ..logging import Log
 V_LIMIT = 2.5
 
 
-def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, sample_rate_per_channel=1e6):
+def one_dimensional_sweep(
+        single_e_transistor,
+        channel_generator_map,
+        gain=1e8,
+        sample_rate_per_channel=1e6,
+        v_min=-1,
+        v_max=1
+):
 
     # connect to instrument server
     client = Labber.connectToServer('localhost')
@@ -55,7 +62,8 @@ def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, 
     # collect data and save to database
     start_time = time.time()
 
-    vfast_list = np.linspace(SET1.fast_vstart, SET1.fast_vend, SET1.fast_steps)
+    vfast_list = np.linspace(single_e_transistor.fast_vstart, single_e_transistor.fast_vend, single_e_transistor.fast_steps)
+    # TODO: choose label based on experiment / device setup (json config file)
     Vx = dict(name='Vx', unit='V', values=vfast_list)
 
     # initialize logging
@@ -66,19 +74,19 @@ def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, 
         [Vx]
     )
 
-    for vfast in np.linspace(SET1.fast_vstart, SET1.fast_vend, SET1.fast_steps):
+    for vfast in np.linspace(single_e_transistor.fast_vstart, single_e_transistor.fast_vend, single_e_transistor.fast_steps):
         qdac.ramp_voltages(
             v_startlist=[],
-            v_endlist=[vfast for _ in range(len(SET1.fast_ch))],
+            v_endlist=[vfast for _ in range(len(single_e_transistor.fast_ch))],
             ramp_time=0.005,
             repetitions=1,
             step_length=single_e_transistor.fast_step_size
         )
         time.sleep(0.005)
         result = nidaq.read(
-            ch_id=SET1.ai_ch_num,
-            v_min=-1,
-            v_max=1,
+            ch_id=single_e_transistor.ai_ch_num,
+            v_min=v_min,
+            v_max=v_max,
             gain=gain,
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
