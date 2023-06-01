@@ -22,17 +22,6 @@ def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, 
     # print QDAC overview
     print(qdac.instr.getLocalInitValuesDict())
 
-    I = dict(name='I', unit='A')
-    Vx = dict(name='Vx', unit='V')
-
-    # initialize logging
-    log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST.hdf5",
-        'Signal',
-        'V',
-        [I, Vx]
-    )
-
     # voltage safety check
     if any(np.abs([
                 single_e_transistor.bias_v,
@@ -62,10 +51,20 @@ def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, 
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(single_e_transistor.fast_step_size * sample_rate_per_channel)
-    num_samples_averaged = 1
 
     # collect data and save to database
     start_time = time.time()
+
+    vfast_list = np.linspace(SET1.fast_vstart, SET1.fast_vend, SET1.fast_steps)
+    Vx = dict(name='Vx', unit='V', values=vfast_list)
+
+    # initialize logging
+    log = Log(
+        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST.hdf5",
+        'I',
+        'A',
+        [Vx]
+    )
 
     for vfast in np.linspace(SET1.fast_vstart, SET1.fast_vend, SET1.fast_steps):
         qdac.ramp_voltages(
@@ -84,7 +83,8 @@ def one_dimensional_sweep(single_e_transistor, channel_generator_map, gain=1e8, 
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
-        #TODO: save data using logging
+        data = {'I': result}
+        log.file.addEntry(data)
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
