@@ -1,5 +1,6 @@
 import Labber
 
+
 class Log:
 
     def __init__(self, log_file_path, log_name, log_units, params):

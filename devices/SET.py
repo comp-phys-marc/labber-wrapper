@@ -1,42 +1,18 @@
-import numpy as np
 import time
+from dataclasses import dataclass
 
 
+@dataclass
 class SET:
-
-    def __init__(
-            self,
-            bias_ch_num: int,
-            plunger_ch_num: int,
-            acc_ch_num: int,
-            vb1_ch_num: int,
-            vb2_ch_num: int,
-            ai_ch_num: str
-    ):
-        # TODO: use experiment / device setup (json config file) instead of attributes
-        self.bias_ch_num = bias_ch_num
-        self.plunger_ch_num = plunger_ch_num
-        self.acc_ch_num = acc_ch_num
-        self.vb1_ch_num = vb1_ch_num
-        self.vb2_ch_num = vb2_ch_num
-        self.bias_v = np.array([])
-        self.plunger_v = np.array([])
-        self.acc_v = np.array([])
-        self.vb1_v = np.array([])
-        self.vb2_v = np.array([])
-        self.slow_ch = np.array([])
-        self.fast_ch = np.array([])
-        self.slow_vstart = np.array([])
-        self.slow_vend = np.array([])
-        self.slow_steps = np.array([])
-        self.fast_vstart = np.array([])
-        self.fast_vend = np.array([])
-        self.fast_steps = np.array([])
-        self.fast_step_size = np.array([])
-        self.ai_ch_num = ai_ch_num
+    bias_ch_num: int
+    plunger_ch_num: int
+    acc_ch_num: int
+    vb1_ch_num: int
+    vb2_ch_num: int
+    ai_ch_num: str
 
     def __repr__(self):
-        return "SET()"
+        return str(self)
 
     def __str__(self):
         return f'SET(' \
@@ -48,13 +24,13 @@ class SET:
                f'{self.ai_ch_num}' \
                f')'
 
-    def sweep(self, qdac):
+    def sweep(self, qdac, config):
         time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
-        qdac.sync(1, self.fast_ch[0])
+        qdac.sync(1, config['fast_ch'][0])
         qdac.ramp_voltages(
-            v_startlist=[self.fast_vstart for _ in range(len(self.fast_ch))],
-            v_endlist=[self.fast_vend for _ in range(len(self.fast_ch))],
-            ramp_time=self.fast_step_size * self.fast_steps,
-            step_length=self.fast_step_size,
+            v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
+            v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
+            ramp_time=config['fast_step_size'] * config['fast_steps'],
+            step_length=config['fast_step_size'],
             repetitions=1
         )
