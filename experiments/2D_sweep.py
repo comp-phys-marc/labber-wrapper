@@ -49,31 +49,37 @@ def one_dimensional_sweep(
     time.sleep(2)
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['fast_step_size'] * sample_rate_per_channel)
+    num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
 
     # collect data and save to database
     start_time = time.time()
 
+    # setup logging parameters
     vfast_list = np.linspace(config['fast_vstart'], config['fast_vend'], config['fast_steps'])
     Vx = dict(name=config['fast_ch_name'], unit='V', values=vfast_list)
 
+    vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
+    Vy = dict(name=config['slow_ch_name'], unit='V', values=vslow_list)
+
+
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST.hdf5",
+        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST2.hdf5",
         'I',
         'A',
-        [Vx]
+        [Vx, Vy]
     )
 
-    for vfast in vfast_list:
+    for i, vslow in enumerate(vslow_list):
         qdac.ramp_voltages(
             v_startlist=[],
-            v_endlist=[vfast for _ in range(len(config['fast_ch']))],
+            v_endlist=[vslow for _ in range(len(config['slow_ch']))],
             ramp_time=0.005,
             repetitions=1,
             step_length=config['fast_step_size']
         )
         time.sleep(0.005)
+        single_e_transistor.sweep(qdac, config)
         result = nidaq.read(
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
@@ -85,6 +91,10 @@ def one_dimensional_sweep(
         data = {'I': result}
         log.file.addEntry(data)
 
+        print(
+            f'Time elapsed: {np.round(time.time() - start_time, 2)} sec. '
+            f'Loop finished: {i + 1}/{config["slow_steps"]}.')
+
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
 
@@ -95,7 +105,7 @@ if __name__ == '__main__':
     SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0")
 
     # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    config = json.load(open('../configs/2D_sweep.json', 'r'))
 
     # voltage safety check
     if any(np.abs([
@@ -104,6 +114,7 @@ if __name__ == '__main__':
                 config['acc_v'],
                 config['vb1_v'],
                 config['vb2_v'],
+                config['slow_vend'],
                 config['fast_vend']
             ]) > V_LIMIT):
         raise Exception("Voltage too high")

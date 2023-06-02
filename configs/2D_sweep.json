@@ -1,0 +1,18 @@
+{
+    "slow_ch": [12],
+    "fast_ch": [13],
+    "bias_v": -10e-6,
+    "plunger_v": -1.95,
+    "acc_v": -2.4,
+    "vb1_v": -1.8,
+    "vb2_v": -1.75,
+    "slow_vstart": -1.8,
+    "slow_vend": -1.805,
+    "slow_steps": 2,
+    "fast_vstart": -1.75,
+    "fast_vend": -1.8,
+    "fast_steps": 41,
+    "fast_step_size": 0.05,
+    "fast_ch_name": "Vx",
+    "slow_ch_name": "Vy"
+}
