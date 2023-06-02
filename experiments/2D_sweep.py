@@ -12,7 +12,7 @@ from ..logging import Log
 V_LIMIT = 2.5
 
 
-def one_dimensional_sweep(
+def two_dimensional_sweep(
         single_e_transistor,
         config,
         channel_generator_map,
@@ -120,7 +120,7 @@ if __name__ == '__main__':
         raise Exception("Voltage too high")
 
     # perform the sweep
-    one_dimensional_sweep(SET1, config, {
+    two_dimensional_sweep(SET1, config, {
         SET1.bias_ch_num: 1,
         SET1.plunger_ch_num: 2,
         SET1.acc_ch_num: 3,
