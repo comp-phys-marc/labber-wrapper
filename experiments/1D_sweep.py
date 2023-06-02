@@ -66,8 +66,7 @@ def one_dimensional_sweep(
     start_time = time.time()
 
     vfast_list = np.linspace(config['fast_vstart'], config['fast_vend'], config['fast_steps'])
-    # TODO: choose label based on experiment / device setup (json config file)
-    Vx = dict(name='Vx', unit='V', values=vfast_list)
+    Vx = dict(name=config['fast_ch_name'], unit='V', values=vfast_list)
 
     # initialize logging
     log = Log(

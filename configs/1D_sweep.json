@@ -8,5 +8,6 @@
     "fast_vstart": -1.7,
     "fast_vend": -2.4,
     "fast_steps": 100,
-    "fast_step_size": 0.05
+    "fast_step_size": 0.05,
+    "fast_ch_name": "Vx"
 }
