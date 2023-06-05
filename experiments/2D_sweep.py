@@ -80,9 +80,7 @@ def two_dimensional_sweep(
             repetitions=1,
             step_length=config['slow_step_size']
         )
-        time.sleep(0.005)
 
-        time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
         qdac.sync(1, config['fast_ch'][0])
         qdac.ramp_voltages(
             v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
@@ -91,6 +89,8 @@ def two_dimensional_sweep(
             step_length=config['fast_step_size'],
             repetitions=1
         )
+
+        time.sleep(0.015)  # it usually takes about 2 ms for setting up the NIDAQ tasks
 
         qdac.instr.startInstrument()  # ramp_voltages only sets config, we still have to start
 
