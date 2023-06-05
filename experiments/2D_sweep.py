@@ -78,26 +78,23 @@ def two_dimensional_sweep(
             v_endlist=[vslow for _ in range(len(config['slow_ch']))],
             ramp_time=0.005,
             repetitions=1,
-            step_length=config['fast_step_size']
+            step_length=config['slow_step_size']
         )
         time.sleep(0.005)
 
-        def inner_sweep():
-            time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
-            qdac.sync(1, config['fast_ch'][0])
-            qdac.ramp_voltages(
-                v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
-                v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
-                ramp_time=config['fast_step_size'] * config['fast_steps'],
-                step_length=config['fast_step_size'],
-                repetitions=1
-            )
-        Thread(target=inner_sweep).start()
+        time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
+        qdac.sync(1, config['fast_ch'][0])
+        qdac.ramp_voltages(
+            v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
+            v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
+            ramp_time=config['fast_step_size'] * config['fast_steps'],
+            step_length=config['fast_step_size'],
+            repetitions=1
+        )
 
-        # TODO: replace this sleep with a proper join
-        time.sleep(config['fast_step_size'] * config['fast_steps'])
+        qdac.instr.startInstrument()  # ramp_voltages only sets config, we still have to start
 
-        result = nidaq.read(
+        result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
             v_max=v_max,
@@ -105,6 +102,9 @@ def two_dimensional_sweep(
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
+
+        qdac.instr.stopInstrument()
+
         data = {'I': result}
         log.file.addEntry(data)
 
