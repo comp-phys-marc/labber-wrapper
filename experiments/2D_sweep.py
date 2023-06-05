@@ -1,3 +1,5 @@
+from threading import Thread
+
 import Labber
 import numpy as np
 import time
@@ -80,15 +82,20 @@ def two_dimensional_sweep(
         )
         time.sleep(0.005)
 
-        time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
-        qdac.sync(1, config['fast_ch'][0])
-        qdac.ramp_voltages(
-            v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
-            v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
-            ramp_time=config['fast_step_size'] * config['fast_steps'],
-            step_length=config['fast_step_size'],
-            repetitions=1
-        )
+        def inner_sweep():
+            time.sleep(0.01)  # it usually takes about 2 ms for setting up the NIDAQ tasks
+            qdac.sync(1, config['fast_ch'][0])
+            qdac.ramp_voltages(
+                v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
+                v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
+                ramp_time=config['fast_step_size'] * config['fast_steps'],
+                step_length=config['fast_step_size'],
+                repetitions=1
+            )
+        Thread(target=inner_sweep).start()
+
+        # TODO: replace this sleep with a proper join
+        time.sleep(config['fast_step_size'] * config['fast_steps'])
 
         result = nidaq.read(
             ch_id=single_e_transistor.ai_ch_num,
