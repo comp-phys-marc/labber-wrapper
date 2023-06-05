@@ -76,7 +76,7 @@ def two_dimensional_sweep(
         qdac.ramp_voltages(
             v_startlist=[],
             v_endlist=[vslow for _ in range(len(config['slow_ch']))],
-            ramp_time=0.005,
+            ramp_time=config['slow_step_size'] * config['slow_steps'],
             repetitions=1,
             step_length=config['slow_step_size']
         )
