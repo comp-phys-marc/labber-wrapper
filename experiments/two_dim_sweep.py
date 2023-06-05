@@ -5,10 +5,10 @@ import numpy as np
 import time
 import json
 
-from ..devices.NI_DAQ import NIDAQ
-from ..devices.QDevil_QDAC import QDAC
-from ..devices.SET import SET
-from ..logging import Log
+from labberwrapper.devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.SET import SET
+from labberwrapper.logging.log import Log
 
 
 V_LIMIT = 2.5

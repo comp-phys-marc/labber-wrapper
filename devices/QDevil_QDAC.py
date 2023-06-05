@@ -39,7 +39,7 @@ class QDAC:
 
     @staticmethod
     def _qdac_channel_mode_key(ch_id):
-        return f'CH{ch_id.zfill(2)} Mode'
+        return f'CH{str(ch_id).zfill(2)} Mode'
 
     def __init__(self, client, channel_generator_map):
         self.instr = client.connectToInstrument('QDevil QDAC', dict(interface='Serial', address='3'))

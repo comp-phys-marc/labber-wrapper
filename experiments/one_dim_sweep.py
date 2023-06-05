@@ -3,11 +3,12 @@ import numpy as np
 import time
 import json
 
-from ..devices.NI_DAQ import NIDAQ
-from ..devices.QDevil_QDAC import QDAC
-from ..devices.SET import SET
-from ..logging import Log
+__package__ = "C:/Users/Measurement1/Documents/Keysight/Labber/labber-wrapper"
 
+from labberwrapper.devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.SET import SET
+from labberwrapper.logging.log import Log
 
 V_LIMIT = 2.5
 
@@ -59,7 +60,7 @@ def one_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "C:/Users/Measurement1/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST.hdf5",
+        "~/Documents/Keysight/Labber/20230530_measurement/TEST.hdf5",
         'I',
         'A',
         [Vx]
