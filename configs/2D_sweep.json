@@ -9,7 +9,7 @@
     "slow_vstart": -1.8,
     "slow_vend": -1.805,
     "slow_steps": 2,
-    "slow_step_size": 0.005,
+    "slow_step_size": 2.05,
     "fast_vstart": -1.75,
     "fast_vend": -1.8,
     "fast_steps": 41,
