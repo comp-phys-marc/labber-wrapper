@@ -86,14 +86,14 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0")
+    SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0")  # TODO: get from config
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
 
     # voltage safety check
     if any(np.abs([
-                config['bias_v'],
+                config['bias_v'],  # TODO: move out of config
                 config['plunger_v'],
                 config['acc_v'],
                 config['vb1_v'],

@@ -1,0 +1,8 @@
+{
+    "bias_ch_num": 9,
+    "plunger_ch_num": 10,
+    "acc_ch_num": 11,
+    "vb1_ch_num": 12,
+    "vb2_ch_num": 13,
+    "ai_ch_num": "Dev1/ai0"
+}

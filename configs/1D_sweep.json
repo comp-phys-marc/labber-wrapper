@@ -1,12 +1,12 @@
 {
     "fast_ch": [11],
-    "bias_v": -10e-6,
+    "bias_v": 0,
     "plunger_v": 0,
-    "acc_v": -1.7,
+    "acc_v": 0,
     "vb1_v": 0,
     "vb2_v": 0,
-    "fast_vstart": -1.7,
-    "fast_vend": -2.4,
+    "fast_vstart": 0,
+    "fast_vend": -0.5,
     "fast_steps": 100,
     "fast_step_size": 0.05,
     "fast_ch_name": "Vx"
