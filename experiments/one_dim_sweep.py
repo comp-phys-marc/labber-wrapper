@@ -60,14 +60,19 @@ def one_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "~/Documents/Keysight/Labber/20230530_measurement/TEST.hdf5",
+        "TEST.hdf5",
         'I',
         'A',
         [Vx]
     )
 
+    fast_ramp_mapping = {}
+
+    for i in range(len(config['fast_ch'])):
+        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
+
     for vfast in vfast_list:
-        qdac.ramp_voltages(
+        QDAC(client, fast_ramp_mapping).ramp_voltages(
             v_startlist=[],
             v_endlist=[vfast for _ in range(len(config['fast_ch']))],
             ramp_time=0.005,

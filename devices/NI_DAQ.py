@@ -24,6 +24,8 @@ class NIDAQ:
 
     def read(self, ch_id, gain, num_samples, sample_rate, v_min=-10, v_max=10, trigger=None):
 
+        self.instr.startInstrument()
+
         # configure sampling
         self.instr.setValue(self._ni_num_sames_key, num_samples)
         self.instr.setValue(self._ni_sample_rate_key, sample_rate)
@@ -42,7 +44,6 @@ class NIDAQ:
             self.instr.setValue(self._ni_trig_key, trigger)
 
         # make measurement
-        self.instr.startInstrument()
         result = self.instr.getValue(self._ni_data_key(ch_id)) / gain
         self.instr.stopInstrument()
 

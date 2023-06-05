@@ -11,11 +11,11 @@ class QDAC:
 
     @staticmethod
     def _qdac_channel_offset_key(ch_id):
-        return f'CH{ch_id.zfill(2)} OffsetV'
+        return f'CH{str(ch_id).zfill(2)} OffsetV'
 
     @staticmethod
     def _qdac_channel_amplitude_key(ch_id):
-        return f'CH{ch_id.zfill(2)} AmplitudeV'
+        return f'CH{str(ch_id).zfill(2)} AmplitudeV'
 
     @staticmethod
     def _qdac_generator_reps_key(g_id):
@@ -23,7 +23,7 @@ class QDAC:
 
     @staticmethod
     def _qdac_generator_steps_key(g_id):
-        return f'G{g_id}'
+        return f'G{g_id} Steps'
 
     @staticmethod
     def _qdac_generator_sweep_rate_key(g_id):
@@ -35,7 +35,7 @@ class QDAC:
 
     @staticmethod
     def _qdac_generator_trigger_key(g_id):
-        return f'G{g_id} trigger'
+        return f'G{g_id} Trigger'
 
     @staticmethod
     def _qdac_channel_mode_key(ch_id):
@@ -44,6 +44,7 @@ class QDAC:
     def __init__(self, client, channel_generator_map):
         self.instr = client.connectToInstrument('QDevil QDAC', dict(interface='Serial', address='3'))
 
+        self.instr.startInstrument()
         for i, ch_id in enumerate(list(channel_generator_map.keys())):
             if ch_id > 24 or ch_id < 1:
                 raise Exception(f'QDAC channel {ch_id} out of range (1..24).')
@@ -51,6 +52,7 @@ class QDAC:
                 raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
 
             self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
+        self.instr.stopInstrument()
 
         self._channel_generator_map = channel_generator_map
 
@@ -96,6 +98,8 @@ class QDAC:
 
         nsteps = ramp_time / step_length
 
+        self.instr.startInstrument()
+
         for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
             amplitude = v_endlist[i] - v_startlist[i]
 
@@ -110,10 +114,12 @@ class QDAC:
                 trigger = 'None'
 
             self.instr.setValue(self._qdac_generator_waveform_key(g_id), 'Stair case')
-            self.instr.setValue(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
+            # self.instr.setValue(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
             self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
             self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
+
+        self.instr.stopInstrument()
 
         time_ramp = nsteps * step_length / 1000  # s
 
