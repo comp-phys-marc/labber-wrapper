@@ -1,7 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "SET values",
-    "required" : [ "bias_ch_num", "plunger_ch_num" ,"acc_ch_num","vb1_ch_num","vb2_ch_num","ai_ch_num"],
+    "required" : ["bias_ch_num", "plunger_ch_num" ,"acc_ch_num","vb1_ch_num","vb2_ch_num","ai_ch_num"],
     "type": "object",
     "properties": {
         "bias_ch_num": {
@@ -35,32 +35,4 @@
     }
 
   }
-}
-
-{
-    "bias_ch_num" : 9,
-     "plunger_ch_num": 10,
-     "acc_ch_num": 11,
-     "vb1_ch_num": 12,
-     "vb2_ch_num": 13,
-     "ai_ch_num": "Dev1/ai0"
- }
-
-   
-    
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-}
+} 
