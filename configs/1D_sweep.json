@@ -7,7 +7,7 @@
     "vb2_v": 0,
     "fast_vstart": 0,
     "fast_vend": -0.5,
-    "fast_steps": 100,
+    "fast_steps": 50,
     "fast_step_size": 0.05,
     "fast_ch_name": "Vx"
 }

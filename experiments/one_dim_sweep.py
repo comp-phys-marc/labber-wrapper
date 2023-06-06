@@ -67,6 +67,7 @@ def one_dimensional_sweep(
     )
 
     fast_ramp_mapping = {}
+    results = np.array([])
 
     for i in range(len(config['fast_ch'])):
         fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
@@ -88,8 +89,9 @@ def one_dimensional_sweep(
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
-        data = {'I': result}
-        log.file.addEntry(data)
+        results = np.append(results, result.max())
+    data = {'I': results}
+    log.file.addEntry(data)
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
