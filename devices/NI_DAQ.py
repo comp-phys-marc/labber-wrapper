@@ -31,8 +31,6 @@ class NIDAQ:
         self.instr.setValue(self._ni_sample_rate_key, sample_rate)
 
         # enable channel
-        for channel in range(1, 8, 1):
-            self.instr.setValue(self._ni_enable_key(channel), False)
         self.instr.setValue(self._ni_enable_key(ch_id), True)
 
         # configure range
@@ -44,7 +42,7 @@ class NIDAQ:
             self.instr.setValue(self._ni_trig_key, trigger)
 
         # make measurement
-        result = self.instr.getValue(self._ni_data_key(ch_id)) / gain
+        result = self.instr.getValue(self._ni_data_key(ch_id))['y'] / gain
         self.instr.stopInstrument()
 
         return result

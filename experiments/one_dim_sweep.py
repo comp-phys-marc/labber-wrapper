@@ -50,7 +50,7 @@ def one_dimensional_sweep(
     time.sleep(2)
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['fast_step_size'] * sample_rate_per_channel)
+    num_samples_raw = config['fast_steps']
 
     # collect data and save to database
     start_time = time.time()
@@ -107,7 +107,7 @@ if __name__ == '__main__':
                config["vb2_ch_num"],
                config["ai_ch_num"])
 
-    #SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0") - old SET1 (without config)
+    #SET1 = SET(9, 10, 11, 12, 13, 0) - old SET1 (without config)
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
