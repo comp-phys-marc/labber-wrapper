@@ -1,38 +1,37 @@
 {
+    "$id": "Labber-wrapper_configs_jsonschemas_SET_json_schema",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "SET values",
-    "required" : ["bias_ch_num", "plunger_ch_num" ,"acc_ch_num","vb1_ch_num","vb2_ch_num","ai_ch_num"],
+    "required" : ["bias_ch_num", "plunger_ch_num", "acc_ch_num", "vb1_ch_num", "vb2_ch_num", "ai_ch_num"],
     "type": "object",
     "properties": {
         "bias_ch_num": {
             "type": "number",
             "minimum": 1,
             "maximum": 24
-     },
+        },
         "plunger_ch_num": {
             "type": "number",
             "minimum": 1,
             "maximum": 24
-     },
+        },
         "acc_ch_num": {
-        "type": "number",
-        "minimum": 1,
-        "maximum": 24
-    },
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
         "vb1_ch_num": {
-        "type": "number",
-        "minimum": 1,
-        "maximum": 24
-    },
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
         "vb2_ch_num": {
-        "type": "number",
-        "minimum": 1,
-        "maximum": 24
-    },
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
         "ai_ch_num": {
-        "type": "string"
-    
-    }
-
+            "type": "string"    
+        }
   }
 } 
