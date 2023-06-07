@@ -142,7 +142,7 @@ class QDAC:
                 # increment all channels
                 for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
                     voltages[i] += step_sizes[i]
-                    self.instr.setValue(self._qdac_channel_voltage_key(ch_id), np.abs(voltages[i]))
+                    self.instr.setValue(self._qdac_channel_voltage_key(ch_id), voltages[i])
                     # self.instr.getValue(self._qdac_channel_voltage_key(ch_id))
 
     def ramp_voltages(
