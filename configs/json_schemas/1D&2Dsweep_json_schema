@@ -2,7 +2,19 @@
     "$id": "configs/json_schemas/1D&2Dsweep_json_schema",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "1D & 2D sweep values",
-    "required" : ["fast_ch", "bias_v", "plunger_v", "acc_v", "vb1_v", "vb2_v", "fast_vstart", "fast_vend", "fast_steps", "fast_step_size", "fast_ch_name"],
+    "required" : [
+        "fast_ch",
+        "bias_v",
+        "plunger_v",
+        "acc_v",
+        "vb1_v",
+        "vb2_v",
+        "fast_vstart",
+        "fast_vend",
+        "fast_steps",
+        "fast_step_size",
+        "fast_ch_name"
+    ],
     "type": "object",
     "properties": {
         "slow_ch": {
