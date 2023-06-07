@@ -33,5 +33,5 @@
         "ai_ch_num": {
             "type": "string"    
         }
-  }
+    }
 } 

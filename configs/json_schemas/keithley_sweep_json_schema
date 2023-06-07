@@ -1,0 +1,35 @@
+{
+    "$id": "configs/json_schemas/keithley_sweep_json_schema",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "SET values",
+    "required" : ["bias_volt", "bias_ch_num", "slow_vstart", "slow_vend", "slow_steps", "step_length"],
+    "type": "object",
+    "properties": {
+        "bias_volt": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "bias_ch_num": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "slow_vstart": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "slow_vend": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "slow_steps": {
+            "type": "number"
+        },
+        "step_length": {
+            "type": "number"    
+        }
+    }
+} 
