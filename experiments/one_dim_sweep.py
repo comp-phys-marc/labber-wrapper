@@ -17,7 +17,7 @@ def one_dimensional_sweep(
         single_e_transistor,
         config,
         channel_generator_map,
-        gain=1e8,
+        gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
         v_max=1
