@@ -34,7 +34,7 @@ def one_dimensional_sweep(
     print(qdac.instr.getLocalInitValuesDict())
 
     # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages(
+    qdac.ramp_voltages_software(
         v_startlist=[],
         v_endlist=[
             config['bias_v'],
@@ -73,10 +73,11 @@ def one_dimensional_sweep(
         fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
 
     for vfast in vfast_list:
-        QDAC(client, fast_ramp_mapping).ramp_voltages(
+        fast_qdac = QDAC(client, fast_ramp_mapping)
+        fast_qdac.ramp_voltages_software(
             v_startlist=[],
             v_endlist=[vfast for _ in range(len(config['fast_ch']))],
-            ramp_time=0.005,
+            ramp_time=0.1,
             repetitions=1,
             step_length=config['fast_step_size']
         )
@@ -92,6 +93,9 @@ def one_dimensional_sweep(
         results = np.append(results, np.average(result))
     data = {'I': results}
     log.file.addEntry(data)
+
+    qdac.instr.stopInstrument()
+    fast_qdac.instr.stopInstrument()
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')

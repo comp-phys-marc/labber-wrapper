@@ -1,4 +1,5 @@
 import time
+import numpy as np
 
 class QDAC:
 
@@ -97,11 +98,15 @@ class QDAC:
             init = self.instr.getLocalInitValuesDict()
             for ch_id in list(self._channel_generator_map.keys()):
                 # should always work since channel modes set on init of this class
-                v_startlist.append(init[self._qdac_channel_offset_key(ch_id)])
+                mode = init[self._qdac_channel_mode_key(ch_id)]
+                if mode == "DC":
+                    v_startlist.append(init[self._qdac_channel_voltage_key(ch_id)])
+                else:
+                    v_startlist.append(init[self._qdac_channel_offset_key(ch_id)])
 
         return v_startlist
 
-    def ramp_voltages_DC(
+    def ramp_voltages_software(
             self,
             v_startlist,
             v_endlist,
@@ -119,7 +124,7 @@ class QDAC:
 
         for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
             amplitude = v_endlist[i] - v_startlist[i]
-            step_sizes[i] = amplitude / nsteps
+            step_sizes.append(amplitude / nsteps)
 
             self.instr.setValue(self._qdac_channel_mode_key(ch_id), 'DC')
 
@@ -127,19 +132,18 @@ class QDAC:
 
             # initialize
             for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
-                voltages[i] = v_startlist[i]
+                voltages.append(v_startlist[i])
                 self.instr.setValue(self._qdac_channel_voltage_key(ch_id), v_startlist[i])
 
             # loop
-            for step in range(nsteps):
+            for step in range(int(nsteps)):
                 time.sleep(step_length)
 
                 # increment all channels
                 for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
                     voltages[i] += step_sizes[i]
-                    self.instr.setValue(self._qdac_channel_voltage_key(ch_id), voltages[i])
-
-        self.instr.stopInstrument()
+                    self.instr.setValue(self._qdac_channel_voltage_key(ch_id), np.abs(voltages[i]))
+                    # self.instr.getValue(self._qdac_channel_voltage_key(ch_id))
 
     def ramp_voltages(
             self,
