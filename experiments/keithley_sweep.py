@@ -12,6 +12,7 @@ from labberwrapper.logging.log import Log
 V_LIMIT = 2.5
 
 
+# TODO: debug on lab computer
 def one_dimensional_sweep(
         single_e_transistor,
         config,
