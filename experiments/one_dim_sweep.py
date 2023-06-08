@@ -13,6 +13,7 @@ from labberwrapper.logging.log import Log
 V_LIMIT = 2.5
 
 
+# TODO: add one_dimensional_sweep_hardware
 def one_dimensional_sweep(
         single_e_transistor,
         config,
@@ -72,6 +73,7 @@ def one_dimensional_sweep(
     for i in range(len(config['fast_ch'])):
         fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
 
+    # TODO: call ramp_voltages_software once and remove this outer loop
     for vfast in vfast_list:
         fast_qdac = QDAC(client, fast_ramp_mapping)
         fast_qdac.ramp_voltages_software(
