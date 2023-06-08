@@ -7,6 +7,7 @@ from ..devices.NI_DAQ import NIDAQ
 from ..devices.QDevil_QDAC import QDAC
 from ..devices.SET import SET
 from ..logging import Log
+from jsonschema import validate
 
 
 V_LIMIT = 2.5
@@ -105,17 +106,21 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
+    jschema=json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
 
     # voltage safety check
-    if any(np.abs([
-                config['bias_v'],  # TODO: move out of config
-                config['plunger_v'],
-                config['acc_v'],
-                config['vb1_v'],
-                config['vb2_v'],
-                config['fast_vend']
-            ]) > V_LIMIT):
-        raise Exception("Voltage too high")
+    validate(instance=config, schema=jschema)  
+    
+    # old code - validation not using jsonschemas. # TODO: delete once sure of schema validation
+    #if any(np.abs([
+     #           config['bias_v'],  # TODO: move out of config
+     #           config['plunger_v'],
+     #           config['acc_v'],
+     #           config['vb1_v'],
+     #           config['vb2_v'],
+     #           config['fast_vend']
+     #           ]) > V_LIMIT):
+     #    raise Exception("Voltage too high")
 
     # perform the sweep
     one_dimensional_sweep(SET1, config, {
