@@ -1,0 +1,128 @@
+{
+    "$id": "json_schemas/device.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "device config values",
+    "type": "object",
+    "properties": {
+        "gate1": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate2": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate3": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate4": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate5": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate6": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24    
+        },
+        "gate7": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate8": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate9": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate10": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate11": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate12": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24    
+        },
+        "gate13": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate14": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate15": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate16": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate17": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate18": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24    
+        },
+        "gate19": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate20": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate21": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate22": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate23": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "gate24": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24    
+        }
+    }
+} 
