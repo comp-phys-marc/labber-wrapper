@@ -1,5 +1,5 @@
 {
-    "$id": "configs/json_schemas/keithley_sweep_json_schema",
+    "$id": "json_schemas/keithley_sweep.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "SET values",
     "required" : ["bias_volt", "bias_ch_num", "slow_vstart", "slow_vend", "slow_steps", "step_length"],

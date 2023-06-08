@@ -1,5 +1,5 @@
 {
-    "$id": "configs/json_schemas/1D&2Dsweep_json_schema",
+    "$id": "json_schemas/1D_&_2Dsweep.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "1D & 2D sweep values",
     "required" : [
