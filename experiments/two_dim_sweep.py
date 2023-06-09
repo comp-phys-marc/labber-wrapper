@@ -67,7 +67,7 @@ def two_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST2.hdf5",
+        "TEST2.hdf5",
         'I',
         'A',
         [Vx, Vy]
@@ -87,7 +87,9 @@ def two_dimensional_sweep(
     fast_qdac = QDAC(client, fast_ramp_mapping)
 
     for i, vslow in enumerate(vslow_list):
-        slow_qdac.ramp_voltages(
+        results = np.array([])
+        
+        slow_qdac.ramp_voltages_software(
             v_startlist=[],
             v_endlist=[vslow for _ in range(len(config['slow_ch']))],
             ramp_time=config['slow_step_size'] * config['slow_steps'],
@@ -116,13 +118,30 @@ def two_dimensional_sweep(
             sample_rate=sample_rate_per_channel
         )
 
-        data = {'I': result}
+        bins = config['fast_steps']
+        bin_size = int(num_samples_raw / bins)
+
+        i = 0
+        while i < bins:
+            bin = np.array([])
+            j = 0
+            while j < bin_size:
+                bin = np.append(bin, result[j])
+                j += 1
+            results = np.append(results, np.average(bin))
+            i += 1
+
+        data = {
+            'I': results,
+            'Vx': vfast_list,
+            'Vy': vslow
+        }
         log.file.addEntry(data)
 
         print(
             f'Time elapsed: {np.round(time.time() - start_time, 2)} sec. '
             f'Loop finished: {i + 1}/{config["slow_steps"]}.')
-
+    
     qdac.instr.stopInstrument()
     slow_qdac.instr.stopInstrument()
     fast_qdac.instr.stopInstrument()

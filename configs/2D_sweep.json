@@ -1,6 +1,6 @@
 {
-    "slow_ch": [12],
-    "fast_ch": [13],
+    "slow_ch": [2],
+    "fast_ch": [3],
     "bias_v": -10e-6,
     "plunger_v": -1.95,
     "acc_v": -2.4,

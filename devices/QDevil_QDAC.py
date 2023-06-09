@@ -171,15 +171,12 @@ class QDAC:
             if trigger is not None:
                 self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
             else:
-                trigger = 'None'
+                self.instr.setValue(self._qdac_generator_trigger_key(g_id), 'None')
 
             self.instr.setValue(self._qdac_generator_waveform_key(g_id), 'Stair case')
             # self.instr.setValue(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
             self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
-            self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
-
-        self.instr.stopInstrument()
 
         time_ramp = nsteps * step_length / 1000  # s
 
