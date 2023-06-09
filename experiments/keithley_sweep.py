@@ -13,11 +13,11 @@ V_LIMIT = 2.5
 
 
 # TODO: debug on lab computer
-def one_dimensional_sweep(
+def keithley_sweep(
         single_e_transistor,
         config,
         channel_generator_map,
-        gain=1e8,
+        gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
         v_max=1
@@ -45,18 +45,18 @@ def one_dimensional_sweep(
         ],
         ramp_time=1,
         repetitions=1,
-        step_length=config['fast_step_size']
+        step_length=config['step_length']
     )
     time.sleep(duration + 0.2)
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['fast_step_size'] * sample_rate_per_channel)
+    num_samples_raw = int(config['step_length'] * sample_rate_per_channel)
 
     vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
 
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230605_measurement/TEST3.hdf5",
+        "TEST3.hdf5",
         'NIai',
         'V',
         []
@@ -67,7 +67,7 @@ def one_dimensional_sweep(
 
     for vslow in vslow_list[1:]:
         keithley.set_voltage(vslow)
-        time.sleep(0.01)
+        time.sleep(config['step_length'])
         keith_cur = keithley.get_current()
 
         result = nidaq.read(
@@ -78,7 +78,7 @@ def one_dimensional_sweep(
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
-        data = {'NIai': result, 'Vg1': vslow, 'Ig': keith_cur}
+        data = {'NIai': np.average(result), 'Vg1': vslow, 'Ig': keith_cur}
         log.file.addEntry(data)
 
     keithley.instr.stopInstrument()
@@ -87,30 +87,21 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, 1)  # TODO: get from config
+    dev_config = json.load(open('../device_configs/SET.json', 'r'))
+    SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    config = json.load(open('../configs/keithley_sweep.json', 'r'))
 
     # voltage safety check
-    if any(np.abs([
-                config['bias_v'],  # TODO: move out of config
-                config['plunger_v'],
-                config['acc_v'],
-                config['vb1_v'],
-                config['vb2_v'],
-                config['fast_vend']
-            ]) > V_LIMIT):
+    if  config['bias_volt'] > V_LIMIT:
         raise Exception("Voltage too high")
 
     # perform the sweep
-    one_dimensional_sweep(SET1, config, {
-            SET1.bias_ch_num: 1,
-            SET1.plunger_ch_num: 2,
-            SET1.acc_ch_num: 3,
-            SET1.vb1_ch_num: 4,
-            SET1.vb2_ch_num: 5
+    keithley_sweep(SET1, config, {
+            SET1.bias_ch_num: 1
         },
         v_min=-10,
-        v_max=10
+        v_max=10,
+        sample_rate_per_channel=1e3
     )

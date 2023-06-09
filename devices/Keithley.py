@@ -19,7 +19,7 @@ class Keithley:
         return 'Measured current'
 
     def __init__(self, client):
-        self.instr = client.connectToInstrument('Keithley', dict(interface='GPIB', address='GPIB0::02::INSTR'))
+        self.instr = client.connectToInstrument('Keithley', dict(interface='GPIB', address='2'))
 
     def set_voltage(self, voltage):
         self.instr.setValue(self._keithley_src_status_key(), 'On')
