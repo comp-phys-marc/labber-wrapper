@@ -73,9 +73,10 @@ def one_dimensional_sweep(
     for i in range(len(config['fast_ch'])):
         fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
 
+    fast_qdac = QDAC(client, fast_ramp_mapping)
+
     # TODO: call ramp_voltages_software once and remove this outer loop
     for vfast in vfast_list:
-        fast_qdac = QDAC(client, fast_ramp_mapping)
         fast_qdac.ramp_voltages_software(
             v_startlist=[],
             v_endlist=[vfast for _ in range(len(config['fast_ch']))],

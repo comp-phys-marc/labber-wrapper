@@ -19,7 +19,7 @@ def two_dimensional_sweep(
         single_e_transistor,
         config,
         channel_generator_map,
-        gain=1e8,
+        gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
         v_max=1
@@ -73,8 +73,21 @@ def two_dimensional_sweep(
         [Vx, Vy]
     )
 
+    slow_ramp_mapping = {}
+
+    for i in range(len(config['slow_ch'])):
+        slow_ramp_mapping[config['slow_ch'][i]] = channel_generator_map[config['slow_ch'][i]]
+
+    fast_ramp_mapping = {}
+
+    for i in range(len(config['fast_ch'])):
+        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
+
+    slow_qdac = QDAC(client, slow_ramp_mapping)
+    fast_qdac = QDAC(client, fast_ramp_mapping)
+
     for i, vslow in enumerate(vslow_list):
-        qdac.ramp_voltages(
+        slow_qdac.ramp_voltages(
             v_startlist=[],
             v_endlist=[vslow for _ in range(len(config['slow_ch']))],
             ramp_time=config['slow_step_size'] * config['slow_steps'],
@@ -83,7 +96,8 @@ def two_dimensional_sweep(
         )
 
         qdac.sync(1, config['fast_ch'][0])
-        qdac.ramp_voltages(
+
+        fast_qdac.ramp_voltages(
             v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
             v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
             ramp_time=config['fast_step_size'] * config['fast_steps'],
@@ -92,8 +106,6 @@ def two_dimensional_sweep(
         )
 
         time.sleep(0.015)  # it usually takes about 2 ms for setting up the NIDAQ tasks
-
-        qdac.instr.startInstrument()  # ramp_voltages only sets config, we still have to start
 
         result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
@@ -104,14 +116,16 @@ def two_dimensional_sweep(
             sample_rate=sample_rate_per_channel
         )
 
-        qdac.instr.stopInstrument()
-
         data = {'I': result}
         log.file.addEntry(data)
 
         print(
             f'Time elapsed: {np.round(time.time() - start_time, 2)} sec. '
             f'Loop finished: {i + 1}/{config["slow_steps"]}.')
+
+    qdac.instr.stopInstrument()
+    slow_qdac.instr.stopInstrument()
+    fast_qdac.instr.stopInstrument()
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
@@ -120,7 +134,13 @@ def two_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, 0)  # TODO: get from config
+    dev_config = json.load(open('../device_configs/SET.json', 'r'))
+    SET1 = SET(dev_config["bias_ch_num"],
+               dev_config["plunger_ch_num"],
+               dev_config["acc_ch_num"],
+               dev_config["vb1_ch_num"],
+               dev_config["vb2_ch_num"],
+               dev_config["ai_ch_num"])
 
     # load the experiment config
     config = json.load(open('../configs/2D_sweep.json', 'r'))
