@@ -5,16 +5,24 @@ import numpy as np
 import time
 import json
 
+<<<<<<< HEAD:experiments/2D_sweep.py
 from ..devices.NI_DAQ import NIDAQ
 from ..devices.QDevil_QDAC import QDAC
 from ..devices.SET import SET
 from ..logging import Log
 from jsonschema import validate
+=======
+from labberwrapper.devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.SET import SET
+from labberwrapper.logging.log import Log
+>>>>>>> main:experiments/two_dim_sweep.py
 
 
 V_LIMIT = 2.5
 
 
+# TODO: debug on lab computer
 def two_dimensional_sweep(
         single_e_transistor,
         config,
@@ -120,7 +128,7 @@ def two_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0")  # TODO: get from config
+    SET1 = SET(9, 10, 11, 12, 13, 0)  # TODO: get from config
 
     # load the experiment config
     config = json.load(open('../configs/2D_sweep.json', 'r'))

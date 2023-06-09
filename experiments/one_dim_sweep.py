@@ -3,16 +3,15 @@ import numpy as np
 import time
 import json
 
-from ..devices.NI_DAQ import NIDAQ
-from ..devices.QDevil_QDAC import QDAC
-from ..devices.SET import SET
-from ..logging import Log
+__package__ = "C:/Users/Measurement1/Documents/Keysight/Labber/labber-wrapper"
 from jsonschema import validate
+from labberwrapper.devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.SET import SET
+from labberwrapper.logging.log import Log
 
 
-V_LIMIT = 2.5
-
-
+# TODO: add one_dimensional_sweep_hardware
 def one_dimensional_sweep(
         single_e_transistor,
         fast_ch,
@@ -27,7 +26,7 @@ def one_dimensional_sweep(
         fast_step_size,
         fast_ch_name,
         channel_generator_map,
-        gain=1e8,
+        gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
         v_max=1
@@ -44,7 +43,7 @@ def one_dimensional_sweep(
     print(qdac.instr.getLocalInitValuesDict())
 
     # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages(
+    qdac.ramp_voltages_software(
         v_startlist=[],
         v_endlist=[
             bias_v,
@@ -70,14 +69,22 @@ def one_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "C:/Users/Measurement1/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST.hdf5",
+        "TEST.hdf5",
         'I',
         'A',
         [Vx]
     )
 
+    fast_ramp_mapping = {}
+    results = np.array([])
+
+    for i in range(len(config['fast_ch'])):
+        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
+
+    # TODO: call ramp_voltages_software once and remove this outer loop
     for vfast in vfast_list:
-        qdac.ramp_voltages(
+        fast_qdac = QDAC(client, fast_ramp_mapping)
+        fast_qdac.ramp_voltages_software(
             v_startlist=[],
             v_endlist=[vfast for _ in range(len(fast_ch))],
             ramp_time=0.005,
@@ -93,8 +100,12 @@ def one_dimensional_sweep(
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
-        data = {'I': result}
-        log.file.addEntry(data)
+        results = np.append(results, np.average(result))
+    data = {'I': results}
+    log.file.addEntry(data)
+
+    qdac.instr.stopInstrument()
+    fast_qdac.instr.stopInstrument()
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
@@ -103,32 +114,22 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(bias_ch_num,
-               plunger_ch_num,
-               acc_ch_num,
-               vb1_ch_num,
-               vb2_ch_num,
-               ai_ch_num) 
+    SET1 = SET(dev_config["bias_ch_num"],
+               dev_config["plunger_ch_num"],
+               dev_config["acc_ch_num"],
+               dev_config["vb1_ch_num"],
+               dev_config["vb2_ch_num"],
+               dev_config["ai_ch_num"]) 
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
-    validate(instance=config, schema=jschema)  
-    
-    # old code - validation not using jsonschemas. # TODO: delete once sure of schema validation
-     #if any(np.abs([
-     #           config['bias_v'],  # TODO: move out of config
-     #           config['plunger_v'],
-     #           config['acc_v'],
-     #           config['vb1_v'],
-     #           config['vb2_v'],
-     #           config['fast_vend']
-     #           ]) > V_LIMIT):
-     #    raise Exception("Voltage too high")
+    validate(instance = config, schema = jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev)  
 
     # perform the sweep
     one_dimensional_sweep(SET1,

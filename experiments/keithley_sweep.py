@@ -3,16 +3,25 @@ import numpy as np
 import time
 import json
 
+<<<<<<< HEAD
 from ..devices.NI_DAQ import NIDAQ
 from ..devices.Keithley import Keithley
 from ..devices.QDevil_QDAC import QDAC
 from ..devices.SET import SET
 from ..logging import Log
 from jsonschema import validate
+=======
+from labberwrapper.devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.Keithley import Keithley
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.SET import SET
+from labberwrapper.logging.log import Log
+>>>>>>> main
 
 V_LIMIT = 2.5
 
 
+# TODO: debug on lab computer
 def one_dimensional_sweep(
         single_e_transistor,
         config,
@@ -87,7 +96,7 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0")  # TODO: get from config
+    SET1 = SET(9, 10, 11, 12, 13, 1)  # TODO: get from config
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
