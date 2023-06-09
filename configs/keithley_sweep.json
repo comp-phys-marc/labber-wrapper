@@ -1,7 +1,7 @@
 {
     "bias_volt": 0,
     "bias_ch_num": 1,
-    "slow_vstart": -15,
+    "slow_vstart": -1.5,
     "slow_vend": 0,
     "slow_steps": 100,
     "step_length": 0.05
