@@ -15,7 +15,17 @@ V_LIMIT = 2.5
 
 def one_dimensional_sweep(
         single_e_transistor,
-        config,
+        fast_ch,
+        bias_v,
+        plunger_v,
+        acc_v,
+        vb1_v,
+        vb2_v,
+        fast_vstart,
+        fast_vend,
+        fast_steps,
+        fast_step_size,
+        fast_ch_name,
         channel_generator_map,
         gain=1e8,
         sample_rate_per_channel=1e6,
@@ -37,26 +47,26 @@ def one_dimensional_sweep(
     qdac.ramp_voltages(
         v_startlist=[],
         v_endlist=[
-            config['bias_v'],
-            config['plunger_v'],
-            config['acc_v'],
-            config['vb1_v'],
-            config['vb2_v']
+            bias_v,
+            plunger_v,
+            acc_v,
+            vb1_v,
+            vb2_v
         ],
         ramp_time=1,
         repetitions=1,
-        step_length=config['fast_step_size']
+        step_length=fast_step_size
     )
     time.sleep(2)
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['fast_step_size'] * sample_rate_per_channel)
+    num_samples_raw = int(fast_step_size * sample_rate_per_channel)
 
     # collect data and save to database
     start_time = time.time()
 
-    vfast_list = np.linspace(config['fast_vstart'], config['fast_vend'], config['fast_steps'])
-    Vx = dict(name=config['fast_ch_name'], unit='V', values=vfast_list)
+    vfast_list = np.linspace(fast_vstart, fast_vend, fast_steps)
+    Vx = dict(name=fast_ch_name, unit='V', values=vfast_list)
 
     # initialize logging
     log = Log(
@@ -69,10 +79,10 @@ def one_dimensional_sweep(
     for vfast in vfast_list:
         qdac.ramp_voltages(
             v_startlist=[],
-            v_endlist=[vfast for _ in range(len(config['fast_ch']))],
+            v_endlist=[vfast for _ in range(len(fast_ch))],
             ramp_time=0.005,
             repetitions=1,
-            step_length=config['fast_step_size']
+            step_length=fast_step_size
         )
         time.sleep(0.005)
         result = nidaq.read(
@@ -95,24 +105,22 @@ if __name__ == '__main__':
     # define the SET to be measured
 
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(config["bias_ch_num"],
-               config["plunger_ch_num"],
-               config["acc_ch_num"],
-               config["vb1_ch_num"],
-               config["vb2_ch_num"],
-               config["ai_ch_num"])
-
-    #SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0") - old SET1 (without config)
+    SET1 = SET(bias_ch_num,
+               plunger_ch_num,
+               acc_ch_num,
+               vb1_ch_num,
+               vb2_ch_num,
+               ai_ch_num) 
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema=json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
 
     # voltage safety check
     validate(instance=config, schema=jschema)  
     
     # old code - validation not using jsonschemas. # TODO: delete once sure of schema validation
-    #if any(np.abs([
+     #if any(np.abs([
      #           config['bias_v'],  # TODO: move out of config
      #           config['plunger_v'],
      #           config['acc_v'],
@@ -123,10 +131,20 @@ if __name__ == '__main__':
      #    raise Exception("Voltage too high")
 
     # perform the sweep
-    one_dimensional_sweep(SET1, config, {
-        SET1.bias_ch_num: 1,
-        SET1.plunger_ch_num: 2,
-        SET1.acc_ch_num: 3,
-        SET1.vb1_ch_num: 4,
-        SET1.vb2_ch_num: 5
-    })
+    one_dimensional_sweep(SET1,
+                          config["fast_ch"],
+                          config[bias_v],
+                          config[plunger_v],
+                          config[acc_v],
+                          config[vb1_v],
+                          config[vb2_v],
+                          config[fast_vstart],
+                          config[fast_vend],
+                          config[fast_steps],
+                          config[fast_step_size],
+                          config[fast_ch_name],
+                          {SET1.bias_ch_num: 1,
+                          SET1.plunger_ch_num: 2,
+                          SET1.acc_ch_num: 3,
+                          SET1.vb1_ch_num: 4,
+                          SET1.vb2_ch_num: 5})
