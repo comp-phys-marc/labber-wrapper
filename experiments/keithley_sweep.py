@@ -53,22 +53,21 @@ def keithley_sweep(
     num_samples_raw = int(config['step_length'] * sample_rate_per_channel)
 
     vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
+    Vg1 = dict(name='Vg1', unit='V', values=vslow_list)
 
     # initialize logging
     log = Log(
         "TEST3.hdf5",
         'NIai',
         'V',
-        []
+        [Vg1]
     )
 
-    keithley.set_voltage(vslow_list[0])
-    keithley.instr.startInstrument()
+    results = np.array([])
 
-    for vslow in vslow_list[1:]:
+    for vslow in vslow_list:
         keithley.set_voltage(vslow)
         time.sleep(config['step_length'])
-        keith_cur = keithley.get_current()
 
         result = nidaq.read(
             ch_id=single_e_transistor.ai_ch_num,
@@ -78,8 +77,9 @@ def keithley_sweep(
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
-        data = {'NIai': np.average(result), 'Vg1': vslow, 'Ig': keith_cur}
-        log.file.addEntry(data)
+        results = np.append(results, np.average(result))
+    data = {'NIai': results}
+    log.file.addEntry(data)
 
     keithley.instr.stopInstrument()
 
