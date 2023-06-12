@@ -1,0 +1,94 @@
+{
+    "$id": "json_schemas/1D_&_2Dsweep.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "1D & 2D sweep values",
+    "required" : [
+        "fast_ch",
+        "bias_v",
+        "plunger_v",
+        "acc_v",
+        "vb1_v",
+        "vb2_v",
+        "fast_vstart",
+        "fast_vend",
+        "fast_steps",
+        "fast_step_size",
+        "fast_ch_name"
+    ],
+    "type": "object",
+    "properties": {
+        "slow_ch": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "fast_ch": {
+            "type": "number",
+            "minimum": 1,
+            "maximum": 24
+        },
+        "bias_v": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "plunger_v": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "acc_v": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "vb1_v": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "vb2_v": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5    
+        },
+        "fast_vstart": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "fast_vend": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "fast_steps": {
+            "type": "number"
+        },
+        "fast_step_size": {
+            "type": "number"
+        },
+        "fast_ch_name": {
+            "type": "string"
+        },
+        "slow_vstart": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "slow_vend": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "slow_steps": {
+            "type": "number"
+        },
+        "slow_step_size": {
+            "type": "number"
+        },
+        "slow_ch_name": {
+            "type": "string"
+        }   
+    }
+} 

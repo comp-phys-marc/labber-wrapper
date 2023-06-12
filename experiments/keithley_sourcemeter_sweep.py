@@ -4,7 +4,7 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from devices.Keithley_6430 import Keithley
+from devices.Keithley_2400 import Keithley
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
@@ -12,7 +12,7 @@ from labberwrapper.logging.log import Log
 V_LIMIT = 2.5
 
 
-def keithley_sweep(
+def keithley_sourcemeter_sweep(
         single_e_transistor,
         config,
         channel_generator_map,
