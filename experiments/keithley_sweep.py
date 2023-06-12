@@ -4,7 +4,7 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from labberwrapper.devices.Keithley import Keithley
+from devices.Keithley_6430 import Keithley
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
