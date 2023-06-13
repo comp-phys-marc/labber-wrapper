@@ -115,6 +115,8 @@ def two_dimensional_sweep(
             repetitions=1
         )
 
+        time.sleep(config['fast_step_size'])
+
         result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
             gain=gain
@@ -123,15 +125,8 @@ def two_dimensional_sweep(
         bins = config['fast_steps']
         bin_size = int(num_samples_raw / bins)
 
-        i = 0
-        while i < bins:
-            bin = np.array([])
-            j = 0
-            while j < bin_size:
-                bin = np.append(bin, result[j])
-                j += 1
-            results = np.append(results, np.average(bin))
-            i += 1
+        for i in range(bins):
+            results = np.append(results, np.average(result[i * bin_size:(i+1) * bin_size]))
 
         data = {
             'I': results,
