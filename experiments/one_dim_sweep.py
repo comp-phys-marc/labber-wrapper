@@ -83,13 +83,16 @@ def one_dimensional_sweep(
             step_length=config['fast_step_size']
         )
         time.sleep(0.005)
-        result = nidaq.read(
+        nidaq.configure_read(
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
             v_max=v_max,
-            gain=gain,
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
+        )
+        result = nidaq.read(
+            ch_id=single_e_transistor.ai_ch_num,
+            gain=gain
         )
         results = np.append(results, np.average(result))
     data = {'I': results}

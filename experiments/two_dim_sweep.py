@@ -99,6 +99,14 @@ def two_dimensional_sweep(
 
         qdac.sync(1, config['fast_ch'][0])
 
+        nidaq.configure_read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
+            ch_id=single_e_transistor.ai_ch_num,
+            v_min=v_min,
+            v_max=v_max,
+            num_samples=num_samples_raw,
+            sample_rate=sample_rate_per_channel
+        )
+
         fast_qdac.ramp_voltages(
             v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
             v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
@@ -109,11 +117,7 @@ def two_dimensional_sweep(
 
         result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
-            v_min=v_min,
-            v_max=v_max,
-            gain=gain,
-            num_samples=num_samples_raw,
-            sample_rate=sample_rate_per_channel
+            gain=gain
         )
 
         bins = config['fast_steps']
@@ -141,8 +145,6 @@ def two_dimensional_sweep(
             f'Loop finished: {i + 1}/{config["slow_steps"]}.')
     
     qdac.instr.stopInstrument()
-    slow_qdac.instr.stopInstrument()
-    fast_qdac.instr.stopInstrument()
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')

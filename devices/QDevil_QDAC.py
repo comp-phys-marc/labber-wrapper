@@ -171,6 +171,7 @@ class QDAC:
         v_startlist = self._ramp_setup(v_startlist, v_endlist, step_length)
 
         nsteps = ramp_time / step_length
+        time_ramp = nsteps * step_length  # s
 
         self.instr.startInstrument()
 
@@ -194,7 +195,6 @@ class QDAC:
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
 
             self.instr.setValue(self._qdac_run_key(g_id), True)
+            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
         
-        time_ramp = nsteps * step_length  # s
-
         return time_ramp
