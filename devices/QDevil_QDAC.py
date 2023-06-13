@@ -190,11 +190,11 @@ class QDAC:
             self.instr.setValue(self._qdac_generator_waveform_key(g_id), 'Stair case')
             # self.instr.setValue(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
             self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
-            self.instr.setValue(self._qdac_generator_step_length_key(g_id), step_length)
+            self.instr.setValue(self._qdac_generator_step_length_key(g_id), step_length * 1000)  # ms
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
 
             self.instr.setValue(self._qdac_run_key(g_id), True)
         
-        time_ramp = nsteps * step_length / 1000  # s
+        time_ramp = nsteps * step_length  # s
 
         return time_ramp
