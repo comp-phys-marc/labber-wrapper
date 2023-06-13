@@ -1,0 +1,148 @@
+{
+    "$id": "json_schemas/source_measurement_unit.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "source measurement unit values validation",
+    "type": "object",
+    "properties": {
+        "Source on_off": {
+            "type": "string"
+        },
+        "Source function": {
+            "type": "string"
+        },
+        "Voltage Amplitude": {
+            "type": "number"
+        },
+        "Measure Current": {
+            "type": "boolean"
+        },
+        "Current variable": {
+            "type": "number"
+        },
+        "Measure Voltage": {
+            "type": "boolean"
+        },
+        "Voltage variable": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "Measure Resistance": {
+            "type": "boolean"
+        },
+        "Resistance Measurement Mode": {
+            "type": "string"
+        },
+        "Resistance Offset Compensation": {
+            "type": "boolean"
+        },
+        "Resistance variable": {
+            "type": "number"
+        },
+        "Voltage Range Mode": {
+            "type": "string"
+        },
+        "Voltage Manual Range": {
+            "type": "number"
+        },
+        "Current Range Mode": {
+            "type": "string"
+        },
+        "Current Manual Range": {
+            "type": "number"
+        },
+        "NPLC": {
+            "type": "number"
+        },
+        "Auto zero": {
+            "type": "string"
+        },
+        "Auto Filter": {
+            "type": "boolean"
+        },
+        "Repeat Filter": {
+            "type": "number"
+        },
+        "Median Filter": {
+            "type": "number"
+        },
+        "Moving Filter": {
+            "type": "number"
+        },
+        "Advanced Moving Filter": {
+            "type": "boolean"
+        },
+        "Averaging Time": {
+            "type": "number"
+        },
+        "Source on_off - Sweep rate": {
+            "type": "number"
+        },
+        "Source function - Sweep rate": {
+            "type": "number"
+        },
+        "Voltage Amplitude - Sweep rate": {
+            "type": "number"
+        },
+        "Measure Current - Sweep rate": {
+            "type": "number"
+        },
+        "Current variable - Sweep rate": {
+            "type": "number"
+        },
+        "Measure Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "Voltage variable - Sweep rate": {
+            "type": "number"
+        },
+        "Measure Resistance - Sweep rate": {
+            "type": "number"
+        },
+        "Resistance Measurement Mode - Sweep rate": {
+            "type": "number"
+        },
+        "Resistance Offset Compensation - Sweep rate": {
+            "type": "number"
+        },
+        "Resistance variable - Sweep rate": {
+            "type": "number"
+        },
+        "Voltage Range Mode - Sweep rate": {
+            "type": "number"
+        },
+        "Voltage Manual Range - Sweep rate": {
+            "type": "number"
+        },
+        "Current Range Mode - Sweep rate": {
+            "type": "number"
+        },
+        "Current Manual Range - Sweep rate": {
+            "type": "number"
+        },
+        "NPLC - Sweep rate": {
+            "type": "number"
+        },
+        "Auto zero - Sweep rate": {
+            "type": "number"
+        },
+        "Auto Filter - Sweep rate": {
+            "type": "number"
+        },
+        "Repeat Filter - Sweep rate": {
+            "type": "number"
+        },
+        "Median Filter - Sweep rate": {
+            "type": "number"
+        },
+        "Moving Filter - Sweep rate": {
+            "type": "number"
+        },
+        "Advanced Moving Filter - Sweep rate": {
+            "type": "number"
+        },
+        "Averaging Time - Sweep rate": {
+            "type": "number"
+        }
+    }
+} 

@@ -1,0 +1,1442 @@
+{
+    "$id": "json_schemas/qdac.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "qdac values validation",
+    "type": "object",
+    "properties": {
+        "CH01 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH02 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH03 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH04 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH05 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH06 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH07 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH08 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH09 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH10 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH11 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH12 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH13 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH14 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH15 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH016 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH017 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH18 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH19 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH20 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH21 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH22 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH23 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH24 Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "CH01 Voltage-Range": {
+            "type": "number"
+        },
+        "CH02 Voltage-Range": {
+            "type": "number"
+        },
+        "CH03 Voltage-Range": {
+            "type": "number"
+        },
+        "CH04 Voltage-Range": {
+            "type": "number"
+        },
+        "CH05 Voltage-Range": {
+            "type": "number"
+        },
+        "CH06 Voltage-Range": {
+            "type": "number"
+        },
+        "CH07 Voltage-Range": {
+            "type": "number"
+        },
+        "CH08 Voltage-Range": {
+            "type": "number"
+        },
+        "CH09 Voltage-Range": {
+            "type": "number"
+        },
+        "CH10 Voltage-Range": {
+            "type": "number"
+        },
+        "CH11 Voltage-Range": {
+            "type": "number"
+        },
+        "CH12 Voltage-Range": {
+            "type": "number"
+        },
+        "CH13 Voltage-Range": {
+            "type": "number"
+        },
+        "CH14 Voltage-Range": {
+            "type": "number"
+        },
+        "CH15 Voltage-Range": {
+            "type": "number"
+        },
+        "CH016 Voltage-Range": {
+            "type": "number"
+        },
+        "CH017 Voltage-Range": {
+            "type": "number"
+        },
+        "CH18 Voltage-Range": {
+            "type": "number"
+        },
+        "CH19 Voltage-Range": {
+            "type": "number"
+        },
+        "CH20 Voltage-Range": {
+            "type": "number"
+        },
+        "CH21 Voltage-Range": {
+            "type": "number"
+        },
+        "CH22 Voltage-Range": {
+            "type": "number"
+        },
+        "CH23 Voltage-Range": {
+            "type": "number"
+        },
+        "CH24 Voltage-Range": {
+            "type": "number"
+        },
+        "CH01 Current": {
+            "type": "number"
+        },
+        "CH02 Current": {
+            "type": "number"
+        },
+        "CH03 Current": {
+            "type": "number"
+        },
+        "CH04 Current": {
+            "type": "number"
+        },
+        "CH05 Current": {
+            "type": "number"
+        },
+        "CH06 Current": {
+            "type": "number"
+        },
+        "CH07 Current": {
+            "type": "number"
+        },
+        "CH08 Current": {
+            "type": "number"
+        },
+        "CH09 Current": {
+            "type": "number"
+        },
+        "CH10 Current": {
+            "type": "number"
+        },
+        "CH11 Current": {
+            "type": "number"
+        },
+        "CH12 Current": {
+            "type": "number"
+        },
+        "CH13 Current": {
+            "type": "number"
+        },
+        "CH14 Current": {
+            "type": "number"
+        },
+        "CH15 Current": {
+            "type": "number"
+        },
+        "CH016 Current": {
+            "type": "number"
+        },
+        "CH017 Current": {
+            "type": "number"
+        },
+        "CH18 Current": {
+            "type": "number"
+        },
+        "CH19 Current": {
+            "type": "number"
+        },
+        "CH20 Current": {
+            "type": "number"
+        },
+        "CH21 Current": {
+            "type": "number"
+        },
+        "CH22 Current": {
+            "type": "number"
+        },
+        "CH23 Current": {
+            "type": "number"
+        },
+        "CH24 Current": {
+            "type": "number"
+        },
+        "CH01 Current-Range": {
+            "type": "number"
+        },
+        "CH02 Current-Range": {
+            "type": "number"
+        },
+        "CH03 Current-Range": {
+            "type": "number"
+        },
+        "CH04 Current-Range": {
+            "type": "number"
+        },
+        "CH05 Current-Range": {
+            "type": "number"
+        },
+        "CH06 Current-Range": {
+            "type": "number"
+        },
+        "CH07 Current-Range": {
+            "type": "number"
+        },
+        "CH08 Current-Range": {
+            "type": "number"
+        },
+        "CH09 Current-Range": {
+            "type": "number"
+        },
+        "CH10 Current-Range": {
+            "type": "number"
+        },
+        "CH11 Current-Range": {
+            "type": "number"
+        },
+        "CH12 Current-Range": {
+            "type": "number"
+        },
+        "CH13 Current-Range": {
+            "type": "number"
+        },
+        "CH14 Current-Range": {
+            "type": "number"
+        },
+        "CH15 Current-Range": {
+            "type": "number"
+        },
+        "CH016 Current-Range": {
+            "type": "number"
+        },
+        "CH017 Current-Range": {
+            "type": "number"
+        },
+        "CH18 Current-Range": {
+            "type": "number"
+        },
+        "CH19 Current-Range": {
+            "type": "number"
+        },
+        "CH20 Current-Range": {
+            "type": "number"
+        },
+        "CH21 Current-Range": {
+            "type": "number"
+        },
+        "CH22 Current-Range": {
+            "type": "number"
+        },
+        "CH23 Current-Range": {
+            "type": "number"
+        },
+        "CH24 Current-Range": {
+            "type": "number"
+        },
+        "CH01 Mode": {
+            "type": "string"
+        },
+        "CH02 Mode": {
+            "type": "string"
+        },
+        "CH03 Mode": {
+            "type": "string"
+        },
+        "CH04 Mode": {
+            "type": "string"
+        },
+        "CH05 Mode": {
+            "type": "string"
+        },
+        "CH06 Mode": {
+            "type": "string"
+        },
+        "CH07 Mode": {
+            "type": "string"
+        },
+        "CH08 Mode": {
+            "type": "string"
+        },
+        "CH09 Mode": {
+            "type": "string"
+        },
+        "CH10 Mode": {
+            "type": "string"
+        },
+        "CH11 Mode": {
+            "type": "string"
+        },
+        "CH12 Mode": {
+            "type": "string"
+        },
+        "CH13 Mode": {
+            "type": "string"
+        },
+        "CH14 Mode": {
+            "type": "string"
+        },
+        "CH15 Mode": {
+            "type": "string"
+        },
+        "CH016 Mode": {
+            "type": "string"
+        },
+        "CH017 Mode": {
+            "type": "string"
+        },
+        "CH18 Mode": {
+            "type": "string"
+        },
+        "CH19 Mode": {
+            "type": "string"
+        },
+        "CH20 Mode": {
+            "type": "string"
+        },
+        "CH21 Mode": {
+            "type": "string"
+        },
+        "CH22 Mode": {
+            "type": "string"
+        },
+        "CH23 Mode": {
+            "type": "string"
+        },
+        "CH24 Mode": {
+            "type": "string"
+        },
+        "CH01 Apply": {
+            "type": "boolean"
+        },
+        "CH02 Apply": {
+            "type": "boolean"
+        },
+        "CH03 Apply": {
+            "type": "boolean"
+        },
+        "CH04 Apply": {
+            "type": "boolean"
+        },
+        "CH05 Apply": {
+            "type": "boolean"
+        },
+        "CH06 Apply": {
+            "type": "boolean"
+        },
+        "CH07 Apply": {
+            "type": "boolean"
+        },
+        "CH08 Apply": {
+            "type": "boolean"
+        },
+        "CH09 Apply": {
+            "type": "boolean"
+        },
+        "CH10 Apply": {
+            "type": "boolean"
+        },
+        "CH11 Apply": {
+            "type": "boolean"
+        },
+        "CH12 Apply": {
+            "type": "boolean"
+        },
+        "CH13 Apply": {
+            "type": "boolean"
+        },
+        "CH14 Apply": {
+            "type": "boolean"
+        },
+        "CH15 Apply": {
+            "type": "boolean"
+        },
+        "CH016 Apply": {
+            "type": "boolean"
+        },
+        "CH017 Apply": {
+            "type": "boolean"
+        },
+        "CH18 Apply": {
+            "type": "boolean"
+        },
+        "CH19 Apply": {
+            "type": "boolean"
+        },
+        "CH20 Apply": {
+            "type": "boolean"
+        },
+        "CH21 Apply": {
+            "type": "boolean"
+        },
+        "CH22 Apply": {
+            "type": "boolean"
+        },
+        "CH23 Apply": {
+            "type": "boolean"
+        },
+        "CH24 Apply": {
+            "type": "boolean"
+        },
+        "CH01 AmplitudeV": {
+            "type": "number"
+        },
+        "CH03 AmplitudeV": {
+            "type": "number"
+        },
+        "CH09 AmplitudeV": {
+            "type": "number"
+        },
+        "CH10 AmplitudeV": {
+            "type": "number"
+        },
+        "CH11 AmplitudeV": {
+            "type": "number"
+        },
+        "CH12 AmplitudeV": {
+            "type": "number"
+        },
+        "CH13 AmplitudeV": {
+            "type": "number"
+        },
+        "CH01 OffsetV": {
+            "type": "number"
+        },
+        "CH03 OffsetV": {
+            "type": "number"
+        },
+        "CH09 OffsetV": {
+            "type": "number"
+        },
+        "CH10 OffsetV": {
+            "type": "number"
+        },
+        "CH11 OffsetV": {
+            "type": "number"
+        },
+        "CH12 OffsetV": {
+            "type": "number"
+        },
+        "CH13 OffsetV": {
+            "type": "number"
+        },
+        "G1 Waveform": {
+            "type": "string"
+        },
+        "G1 Steplength": {
+            "type": "number"
+        },
+        "G1 Steps": {
+            "type": "number"
+        },
+        "G1 Repetitions": {
+            "type": "number"
+        },
+        "G1 Trigger": {
+            "type": "string"
+        },
+        "G1 Run-Wait": {
+            "type": "boolean"
+        },
+        "G2 Waveform": {
+            "type": "string"
+        },
+        "G2 Steplength": {
+            "type": "number"
+        },
+        "G2 Steps": {
+            "type": "number"
+        },
+        "G2 Repetitions": {
+            "type": "number"
+        },
+        "G2 Trigger": {
+            "type": "string"
+        },
+        "G2 Run-Wait": {
+            "type": "boolean"
+        },
+        "G3 Waveform": {
+            "type": "string"
+        },
+        "G3 Steplength": {
+            "type": "number"
+        },
+        "G3 Steps": {
+            "type": "number"
+        },
+        "G3 Repetitions": {
+            "type": "number"
+        },
+        "G3 Trigger": {
+            "type": "string"
+        },
+        "G3 Run-Wait": {
+            "type": "boolean"
+        },
+        "G4 Waveform": {
+            "type": "string"
+        },
+        "G4 Steplength": {
+            "type": "number"
+        },
+        "G4 Steps": {
+            "type": "number"
+        },
+        "G4 Repetitions": {
+            "type": "number"
+        },
+        "G4 Trigger": {
+            "type": "string"
+        },
+        "G4 Run-Wait": {
+            "type": "boolean"
+        },
+        "G5 Waveform": {
+            "type": "string"
+        },
+        "G5 Steplength": {
+            "type": "number"
+        },
+        "G5 Steps": {
+            "type": "number"
+        },
+        "G5 Repetitions": {
+            "type": "number"
+        },
+        "G5 Trigger": {
+            "type": "string"
+        },
+        "G5 Run-Wait": {
+            "type": "boolean"
+        },
+        "G6 Waveform": {
+            "type": "string"
+        },
+        "G6 Period": {
+            "type": "number"
+        },
+        "G6 Repetitions": {
+            "type": "number"
+        },
+        "G6 Trigger": {
+            "type": "string"
+        },
+        "G6 Run-Wait": {
+            "type": "boolean"
+        },
+        "G7 Waveform": {
+            "type": "string"
+        },
+        "G7 Period": {
+            "type": "number"
+        },
+        "G7 Repetitions": {
+            "type": "number"
+        },
+        "G7 Trigger": {
+            "type": "string"
+        },
+        "G7 Run-Wait": {
+            "type": "boolean"
+        },
+        "G8 Waveform": {
+            "type": "string"
+        },
+        "G8 Period": {
+            "type": "number"
+        },
+        "G8 Repetitions": {
+            "type": "number"
+        },
+        "G8 Trigger": {
+            "type": "string"
+        },
+        "G8 Run-Wait": {
+            "type": "boolean"
+        },
+        "G9 File": {
+            "type": "string"
+        },
+        "G9 Signal": {
+            "type": "array"
+        },
+        "G9 Repetitions": {
+            "type": "number"
+        },
+        "G9 Trigger": {
+            "type": "string"
+        },
+        "G9 Run-Wait": {
+            "type": "boolean"
+        },
+        "G10 Trigger": {
+            "type": "string"
+        },
+        "G10 Run-Wait": {
+            "type": "boolean"
+        },
+        "G10 Repetitions": {
+            "type": "number"
+        },
+        "G10 LowLevel": {
+            "type": "number"
+        },
+        "G10 HighLevel": {
+            "type": "number"
+        },
+        "G10 LowTime": {
+            "type": "number"
+        },
+        "G10 HighTime": {
+            "type": "number"
+        },
+        "Syn1 Source":{
+            "type": "string"
+        },
+        "Syn1 Length":{
+            "type": "number"
+        },
+        "Syn1 Delay":{
+            "type": "number"
+        },
+        "Syn2 Source":{
+            "type": "string"
+        },
+        "Syn2 Length":{
+            "type": "number"
+        },
+        "Syn2 Delay":{
+            "type": "number"
+        },
+        "T1 Fire": {
+            "type": "boolean"
+        },
+        "T2 Fire": {
+            "type": "boolean"
+        },
+        "T3 Fire": {
+            "type": "boolean"
+        },
+        "T4 Fire": {
+            "type": "boolean"
+        },
+        "T5 Fire": {
+            "type": "boolean"
+        },
+        "T6 Fire": {
+            "type": "boolean"
+        },
+        "T7 Fire": {
+            "type": "boolean"
+        },
+        "T8 Fire": {
+            "type": "boolean"
+        },
+        "T9 Fire": {
+            "type": "boolean"
+        },
+        "T10 Fire": {
+            "type": "boolean"
+        },
+        "CH01 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH02 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH04 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH05 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH06 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH07 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH08 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH14 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH15 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH016 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH017 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH18 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH19 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH20 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH21 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH22 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH23 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH24 Voltage - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH02 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH04 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH05 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH06 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH07 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH08 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH14 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH15 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH016 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH017 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH18 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH19 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH20 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH21 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH22 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH23 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH24 Voltage-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH02 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH04 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH05 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH06 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH07 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH08 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH14 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH15 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH016 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH017 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH18 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH19 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH20 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH21 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH22 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH23 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH24 Current - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH02 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH04 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH05 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH06 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH07 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH08 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH14 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH15 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH016 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH017 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH18 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH19 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH20 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH21 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH22 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH23 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH24 Current-Range - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH02 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH04 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH05 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH06 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH07 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH08 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH14 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH15 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH016 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH017 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH18 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH19 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH20 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH21 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH22 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH23 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH24 Mode - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH02 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH04 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH05 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH06 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH07 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH08 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH14 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH15 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH016 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH017 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH18 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH19 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH20 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH21 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH22 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH23 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH24 Apply - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 AmplitudeV - Sweep rate": {
+            "type": "number"
+        },
+        "CH01 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "CH03 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "CH09 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "CH10 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "CH11 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "CH12 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "CH13 OffsetV - Sweep rate": {
+            "type": "number"
+        },
+        "G1 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G1 Steplength - Sweep rate": {
+            "type": "number"
+        },
+        "G1 Steps - Sweep rate": {
+            "type": "number"
+        },
+        "G1 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G1 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G1 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G2 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G2 Steplength - Sweep rate": {
+            "type": "number"
+        },
+        "G2 Steps - Sweep rate": {
+            "type": "number"
+        },
+        "G2 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G2 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G2 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G3 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G3 Steplength - Sweep rate": {
+            "type": "number"
+        },
+        "G3 Steps - Sweep rate": {
+            "type": "number"
+        },
+        "G3 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G3 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G3 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G4 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G4 Steplength - Sweep rate": {
+            "type": "number"
+        },
+        "G4 Steps - Sweep rate": {
+            "type": "number"
+        },
+        "G4 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G4 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G4 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G5 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G5 Steplength - Sweep rate": {
+            "type": "number"
+        },
+        "G5 Steps - Sweep rate": {
+            "type": "number"
+        },
+        "G5 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G5 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G5 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G6 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G6 Period - Sweep rate": {
+            "type": "number"
+        },
+        "G6 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G6 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G6 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G7 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G7 Period - Sweep rate": {
+            "type": "number"
+        },
+        "G7 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G7 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G7 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G8 Waveform - Sweep rate": {
+            "type": "number"
+        },
+        "G8 Period - Sweep rate": {
+            "type": "number"
+        },
+        "G8 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G8 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G8 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G9 File - Sweep rate": {
+            "type": "number"
+        },
+        "G9 Signal - Sweep rate": {
+            "type": "number"
+        },
+        "G9 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G9 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G9 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G10 Trigger - Sweep rate": {
+            "type": "number"
+        },
+        "G10 Run-Wait - Sweep rate": {
+            "type": "number"
+        },
+        "G10 Repetitions - Sweep rate": {
+            "type": "number"
+        },
+        "G10 LowLevel - Sweep rate": {
+            "type": "number"
+        },
+        "G10 HighLevel - Sweep rate": {
+            "type": "number"
+        },
+        "G10 LowTime - Sweep rate": {
+            "type": "number"
+        },
+        "G10 HighTime - Sweep rate": {
+            "type": "number"
+        },
+        "Syn1 Source - Sweep rate":{
+            "type": "number"
+        },
+        "Syn1 Length - Sweep rate":{
+            "type": "number"
+        },
+        "Syn1 Delay - Sweep rate":{
+            "type": "number"
+        },
+        "Syn2 Source - Sweep rate":{
+            "type": "number"
+        },
+        "Syn2 Length - Sweep rate":{
+            "type": "number"
+        },
+        "Syn2 Delay - Sweep rate":{
+            "type": "number"
+        },
+        "T1 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T2 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T3 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T4 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T5 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T6 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T7 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T8 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T9 Fire - Sweep rate": {
+            "type": "number"
+        },
+        "T10 Fire - Sweep rate": {
+            "type": "number"
+        }        
+    }
+} 

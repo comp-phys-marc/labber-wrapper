@@ -1,0 +1,158 @@
+{
+    "$id": "json_schemas/digitizer.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "digitizer values validation",
+    "type": "object",
+    "properties": {
+        "Ch1 - Enabled": {
+            "type": "boolean"
+        },
+        "Ch2 - Enabled": {
+            "type": "boolean"
+        },
+        "Ch3 - Enabled": {
+            "type": "boolean"
+        },
+        "Ch4 - Enabled": {
+            "type": "boolean"
+        },
+        "Ch1 - Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch2 - Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch3 - Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch4 - Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Trig I/O": {
+            "type": "string"
+        },
+        "Trig Sync Mode": {
+            "type": "string"
+        },
+        "Trig delay": {
+            "type": "number"
+        },
+        "Trig Mode": {
+            "type": "string"
+        },
+        "Trig I/O - Sweep Rate": {
+            "type": "number"    
+        },
+        "Trig Sync Mode - Sweep Rate": {
+            "type": "number"
+        },
+        "Trig delay - Sweep Rate": {
+            "type": "number"
+        },
+        "Trig Mode - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch1 - Coupling": {
+            "type": "string"
+        },
+        "Ch1 - Coupling - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch1 - Impedance ": {
+            "type": "string" 
+        },
+        "Ch1 - Impedance - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch1 - Range ": {
+            "type": "string" 
+        },
+        "Ch1 - Range - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch2 - Coupling": {
+            "type": "string"
+        },
+        "Ch2 - Coupling - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch2 - Impedance ": {
+            "type": "string" 
+        },
+        "Ch2 - Impedance - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch2 - Range ": {
+            "type": "string" 
+        },
+        "Ch2 - Range - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch3 - Coupling": {
+            "type": "string"
+        },
+        "Ch3 - Coupling - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch3 - Impedance ": {
+            "type": "string" 
+        },
+        "Ch3 - Impedance - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch3 - Range ": {
+            "type": "string" 
+        },
+        "Ch3 - Range - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch4 - Coupling": {
+            "type": "string"
+        },
+        "Ch4 - Coupling - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch4 - Impedance ": {
+            "type": "string" 
+        },
+        "Ch4 - Impedance - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch4 - Range ": {
+            "type": "string" 
+        },
+        "Ch4 - Range - Sweep Rate": {
+            "type": "number" 
+        },
+        "Ch1 - Signal": {
+            "type": "arrray"
+        },
+        "Ch1 - Signal - Sweep Rate": {
+            "type": "number"
+        },
+        "Records per Buffer": {
+            "type": "number" 
+        },
+        "Records per Buffer - Sweep Rate": {
+            "type": "number" 
+        },
+        "Number of samples": {
+            "type": "number" 
+        },
+        "Number of samples - Sweep Rate": {
+            "type": "number" 
+        },
+        "Number of records": {
+            "type": "number" 
+        },
+        "Number of records - Sweep Rate": {
+            "type": "number" 
+        },
+        "Number of averages": {
+            "type": "number" 
+        },
+        "Number of averages - Sweep Rate": {
+            "type": "number" 
+        }       
+    }
+} 
