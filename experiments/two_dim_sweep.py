@@ -35,22 +35,6 @@ def two_dimensional_sweep(
     # print QDAC overview
     print(qdac.instr.getLocalInitValuesDict())
 
-    # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages(
-        v_startlist=[],
-        v_endlist=[
-            config['bias_v'],
-            config['plunger_v'],
-            config['acc_v'],
-            config['vb1_v'],
-            config['vb2_v']
-        ],
-        ramp_time=1,
-        repetitions=1,
-        step_length=config['fast_step_size']
-    )
-    time.sleep(2)
-
     # NI_DAQ parameters calculation
     num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
 
