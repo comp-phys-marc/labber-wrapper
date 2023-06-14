@@ -17,7 +17,6 @@ V_LIMIT = 2.5
 def one_dimensional_sweep(
         single_e_transistor,
         config,
-        channel_generator_map,
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
@@ -31,7 +30,7 @@ def one_dimensional_sweep(
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    qdac = QDAC(client, channel_generator_map)
+    qdac = QDAC(client)
 
     if verbose:
         # print NIDAQ overview
@@ -57,21 +56,17 @@ def one_dimensional_sweep(
         [Vx]
     )
 
-    fast_ramp_mapping = {}
     results = np.array([])
-
-    for i in range(len(config['fast_ch'])):
-        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
 
     # TODO: call ramp_voltages_software once and remove this outer loop
     for vfast in vfast_list:
-        fast_qdac = QDAC(client, fast_ramp_mapping)
-        fast_qdac.ramp_voltages_software(
+        qdac.ramp_voltages_software(
             v_startlist=[],
             v_endlist=[vfast for _ in range(len(config['fast_ch']))],
             ramp_time=0.1,
             repetitions=1,
-            step_length=config['fast_step_size']
+            step_length=config['fast_step_size'],
+            channel_ids=config['fast_ch']
         )
         time.sleep(0.005)
         result = nidaq.read(
@@ -87,7 +82,6 @@ def one_dimensional_sweep(
     log.file.addEntry(data)
 
     qdac.instr.stopInstrument()
-    fast_qdac.instr.stopInstrument()
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')

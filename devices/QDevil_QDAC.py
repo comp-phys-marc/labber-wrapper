@@ -48,19 +48,19 @@ class QDAC:
     def _qdac_channel_mode_key(ch_id):
         return f'CH{str(ch_id).zfill(2)} Mode'
 
-    def __init__(self, client, channel_generator_map):
+    def __init__(self, client, channel_generator_map=None):
         self.instr = client.connectToInstrument('QDevil QDAC', dict(interface='Serial', address='3'))
 
         self.instr.startInstrument()
-        for i, ch_id in enumerate(list(channel_generator_map.keys())):
-            if ch_id > 24 or ch_id < 1:
-                raise Exception(f'QDAC channel {ch_id} out of range (1..24).')
-            if channel_generator_map[ch_id] > 10 or channel_generator_map[ch_id] < 1:
-                raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
 
-            self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
-        self.instr.stopInstrument()
+        if channel_generator_map is not None:
+            for i, ch_id in enumerate(list(channel_generator_map.keys())):
+                if ch_id > 24 or ch_id < 1:
+                    raise Exception(f'QDAC channel {ch_id} out of range (1..24).')
+                if channel_generator_map[ch_id] > 10 or channel_generator_map[ch_id] < 1:
+                    raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
 
+                self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
         self._channel_generator_map = channel_generator_map
 
     def sync(self, sync, channel):
@@ -112,8 +112,14 @@ class QDAC:
             v_endlist,
             ramp_time,
             step_length,
-            repetitions
+            repetitions,
+            channel_ids=None
     ):
+        if channel_ids is None and self._channel_generator_map is not None:
+            channel_ids = list(self._channel_generator_map.keys())
+        elif channel_ids is None and self._channel_generator_map is None:
+            raise Exception('must provide either a channel generator mapping or explicit channel ids.')
+
         v_startlist = self._ramp_setup(v_startlist, v_endlist, step_length)
 
         nsteps = ramp_time / step_length
@@ -122,7 +128,7 @@ class QDAC:
 
         self.instr.startInstrument()
 
-        for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
+        for i, ch_id in enumerate(channel_ids):
             amplitude = v_endlist[i] - v_startlist[i]
             step_sizes.append(amplitude / nsteps)
 
@@ -131,7 +137,7 @@ class QDAC:
         for r in range(repetitions):
 
             # initialize
-            for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
+            for i, ch_id in enumerate(channel_ids):
                 voltages.append(v_startlist[i])
                 self.instr.setValue(self._qdac_channel_voltage_key(ch_id), v_startlist[i])
 
@@ -140,10 +146,9 @@ class QDAC:
                 time.sleep(step_length)
 
                 # increment all channels
-                for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
+                for i, ch_id in enumerate(channel_ids):
                     voltages[i] += step_sizes[i]
                     self.instr.setValue(self._qdac_channel_voltage_key(ch_id), voltages[i])
-                    # self.instr.getValue(self._qdac_channel_voltage_key(ch_id))
 
     def ramp_voltages(
             self,
@@ -154,6 +159,10 @@ class QDAC:
             repetitions,
             trigger=None
     ):
+
+        if self._channel_generator_map is None:
+            raise Exception('You must provide a channel generator mapping in order to use a hardware sweep.')
+
         v_startlist = self._ramp_setup(v_startlist, v_endlist, step_length)
 
         nsteps = ramp_time / step_length
@@ -178,8 +187,6 @@ class QDAC:
             self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
             self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
-
-        self.instr.stopInstrument()
 
         time_ramp = nsteps * step_length / 1000  # s
 

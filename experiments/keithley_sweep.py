@@ -15,7 +15,6 @@ V_LIMIT = 2.5
 def keithley_sweep(
         single_e_transistor,
         config,
-        channel_generator_map,
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
@@ -29,15 +28,11 @@ def keithley_sweep(
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    qdac = QDAC(client, channel_generator_map)
     keithley = Keithley6430(client)
 
     if verbose:
         # print NIDAQ overview
         print(nidaq.instr.getLocalInitValuesDict())
-
-        # print QDAC overview
-        print(qdac.instr.getLocalInitValuesDict())
 
         # print Keithley overview
         print(keithley.instr.getLocalInitValuesDict())

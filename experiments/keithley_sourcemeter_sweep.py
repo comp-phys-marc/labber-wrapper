@@ -29,15 +29,11 @@ def keithley_sourcemeter_sweep(
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    qdac = QDAC(client, channel_generator_map)
     keithley = Keithley2400(client)
 
     if verbose:
         # print NIDAQ overview
-        print(qdac.instr.getLocalInitValuesDict())
-
-        # print QDAC overview
-        print(qdac.instr.getLocalInitValuesDict())
+        print(nidaq.instr.getLocalInitValuesDict())
 
         # print Keithley overview
         print(keithley.instr.getLocalInitValuesDict())
@@ -87,7 +83,7 @@ if __name__ == '__main__':
     config = json.load(open('../experiment_configs/keithley_sweep.json', 'r'))
 
     # voltage safety check
-    if  config['bias_volt'] > V_LIMIT:
+    if config['bias_volt'] > V_LIMIT:
         raise Exception("Voltage too high")
 
     # perform the sweep
