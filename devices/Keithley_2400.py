@@ -1,6 +1,6 @@
 
 
-class Keithley:
+class Keithley2400:
 
     @staticmethod
     def _keithley_src_status_key():

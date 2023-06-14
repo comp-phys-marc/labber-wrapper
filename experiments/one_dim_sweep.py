@@ -21,7 +21,9 @@ def one_dimensional_sweep(
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -31,24 +33,12 @@ def one_dimensional_sweep(
     nidaq = NIDAQ(client)
     qdac = QDAC(client, channel_generator_map)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
 
-    # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages_software(
-        v_startlist=[],
-        v_endlist=[
-            config['bias_v'],
-            config['plunger_v'],
-            config['acc_v'],
-            config['vb1_v'],
-            config['vb2_v']
-        ],
-        ramp_time=1,
-        repetitions=1,
-        step_length=config['fast_step_size']
-    )
-    time.sleep(2)
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = config['fast_steps']
@@ -61,7 +51,7 @@ def one_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "TEST.hdf5",
+        log_file,
         'I',
         'A',
         [Vx]
@@ -131,10 +121,14 @@ if __name__ == '__main__':
         raise Exception("Voltage too high")
 
     # perform the sweep
-    one_dimensional_sweep(SET1, config, {
-        SET1.bias_ch_num: 1,
-        SET1.plunger_ch_num: 2,
-        SET1.acc_ch_num: 3,
-        SET1.vb1_ch_num: 4,
-        SET1.vb2_ch_num: 5
-    })
+    one_dimensional_sweep(
+        SET1,
+        config,
+        {
+            SET1.bias_ch_num: 1,
+            SET1.plunger_ch_num: 2,
+            SET1.acc_ch_num: 3,
+            SET1.vb1_ch_num: 4,
+            SET1.vb2_ch_num: 5
+        }
+    )

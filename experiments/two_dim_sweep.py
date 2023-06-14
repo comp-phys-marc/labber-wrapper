@@ -22,7 +22,9 @@ def two_dimensional_sweep(
         gain=1e8,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -32,24 +34,12 @@ def two_dimensional_sweep(
     nidaq = NIDAQ(client)
     qdac = QDAC(client, channel_generator_map)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
 
-    # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages(
-        v_startlist=[],
-        v_endlist=[
-            config['bias_v'],
-            config['plunger_v'],
-            config['acc_v'],
-            config['vb1_v'],
-            config['vb2_v']
-        ],
-        ramp_time=1,
-        repetitions=1,
-        step_length=config['fast_step_size']
-    )
-    time.sleep(2)
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
@@ -64,10 +54,9 @@ def two_dimensional_sweep(
     vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
     Vy = dict(name=config['slow_ch_name'], unit='V', values=vslow_list)
 
-
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST2.hdf5",
+        log_file,
         'I',
         'A',
         [Vx, Vy]
@@ -120,7 +109,13 @@ def two_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, 0)  # TODO: get from config
+    dev_config = json.load(open('../device_configs/SET.json', 'r'))
+    SET1 = SET(dev_config["bias_ch_num"],
+               dev_config["plunger_ch_num"],
+               dev_config["acc_ch_num"],
+               dev_config["vb1_ch_num"],
+               dev_config["vb2_ch_num"],
+               dev_config["ai_ch_num"])
 
     # load the experiment config
     config = json.load(open('../configs/2D_sweep.json', 'r'))
@@ -138,10 +133,14 @@ if __name__ == '__main__':
         raise Exception("Voltage too high")
 
     # perform the sweep
-    two_dimensional_sweep(SET1, config, {
-        SET1.bias_ch_num: 1,
-        SET1.plunger_ch_num: 2,
-        SET1.acc_ch_num: 3,
-        SET1.vb1_ch_num: 4,
-        SET1.vb2_ch_num: 5
-    })
+    two_dimensional_sweep(
+        SET1,
+        config,
+        {
+            SET1.bias_ch_num: 1,
+            SET1.plunger_ch_num: 2,
+            SET1.acc_ch_num: 3,
+            SET1.vb1_ch_num: 4,
+            SET1.vb2_ch_num: 5
+        }
+    )

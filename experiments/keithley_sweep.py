@@ -4,7 +4,7 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from devices.Keithley_6430 import Keithley
+from devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
@@ -19,7 +19,9 @@ def keithley_sweep(
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -28,25 +30,17 @@ def keithley_sweep(
     # connect to instruments
     nidaq = NIDAQ(client)
     qdac = QDAC(client, channel_generator_map)
-    keithley = Keithley(client)
+    keithley = Keithley6430(client)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
 
-    # print Keithley overview
-    print(keithley.instr.getLocalInitValuesDict())
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
-    # ramp to initial voltages in 1 sec
-    duration = qdac.ramp_voltages(
-        v_startlist=[],
-        v_endlist=[
-            config['bias_volt']
-        ],
-        ramp_time=1,
-        repetitions=1,
-        step_length=config['step_length']
-    )
-    time.sleep(duration + 0.2)
+        # print Keithley overview
+        print(keithley.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(config['step_length'] * sample_rate_per_channel)
@@ -56,7 +50,7 @@ def keithley_sweep(
 
     # initialize logging
     log = Log(
-        "TEST3.hdf5",
+        log_file,
         'NIai',
         'V',
         [Vg1]
@@ -93,11 +87,14 @@ if __name__ == '__main__':
     config = json.load(open('../configs/keithley_sweep.json', 'r'))
 
     # voltage safety check
-    if  config['bias_volt'] > V_LIMIT:
+    if config['bias_volt'] > V_LIMIT:
         raise Exception("Voltage too high")
 
     # perform the sweep
-    keithley_sweep(SET1, config, {
+    keithley_sweep(
+        SET1,
+        config,
+        {
             SET1.bias_ch_num: 1
         },
         v_min=-10,
