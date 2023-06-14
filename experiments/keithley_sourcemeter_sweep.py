@@ -84,7 +84,7 @@ if __name__ == '__main__':
     SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/keithley_sweep.json', 'r'))
+    config = json.load(open('../experiment_configs/keithley_sweep.json', 'r'))
 
     # voltage safety check
     if  config['bias_volt'] > V_LIMIT:

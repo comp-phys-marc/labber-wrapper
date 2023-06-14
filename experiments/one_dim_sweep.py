@@ -104,10 +104,8 @@ if __name__ == '__main__':
                dev_config["vb2_ch_num"],
                dev_config["ai_ch_num"])
 
-    #SET1 = SET(9, 10, 11, 12, 13, 0) - old SET1 (without config)
-
     # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    config = json.load(open('../experiment_configs/1D_sweep.json', 'r'))
 
     # voltage safety check
     if any(np.abs([
