@@ -3,6 +3,7 @@ import numpy as np
 import time
 import json
 
+
 __package__ = "C:/Users/Measurement1/Documents/Keysight/Labber/labber-wrapper"
 from jsonschema import validate
 from labberwrapper.devices.NI_DAQ import NIDAQ
