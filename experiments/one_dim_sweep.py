@@ -91,6 +91,7 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
+    config = json.load(open('../configs/1D_sweep.json', 'r'))
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
     SET1 = SET(dev_config["bias_ch_num"],
                dev_config["plunger_ch_num"],
