@@ -58,9 +58,10 @@ def one_dimensional_sweep(
     for i in range(len(fast_ch)):
         fast_ramp_mapping[fast_ch[i]] = channel_generator_map[fast_ch[i]]
 
+    fast_qdac = QDAC(client, fast_ramp_mapping)
+
     # TODO: call ramp_voltages_software once and remove this outer loop
     for vfast in vfast_list:
-        fast_qdac = QDAC(client, fast_ramp_mapping)
         fast_qdac.ramp_voltages_software(
             v_startlist=[],
             v_endlist=[vfast for _ in range(len(fast_ch))],
@@ -69,13 +70,16 @@ def one_dimensional_sweep(
             step_length=fast_step_size
         )
         time.sleep(0.005)
-        result = nidaq.read(
+        nidaq.configure_read(
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
             v_max=v_max,
-            gain=gain,
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
+        )
+        result = nidaq.read(
+            ch_id=single_e_transistor.ai_ch_num,
+            gain=gain
         )
         results = np.append(results, np.average(result))
     data = {'I': results}

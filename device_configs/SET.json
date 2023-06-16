@@ -2,7 +2,7 @@
     "bias_ch_num": 9,
     "plunger_ch_num": 10,
     "acc_ch_num": 1,
-    "vb1_ch_num": 12,
-    "vb2_ch_num": 13,
+    "vb1_ch_num": 2,
+    "vb2_ch_num": 3,
     "ai_ch_num": 1
 }
