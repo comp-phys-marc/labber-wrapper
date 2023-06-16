@@ -91,18 +91,17 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
-    
+
     # voltage safety check
-    
     if any(np.abs([
-               config['bias_v'],  # TODO: move out of config
-               config['plunger_v'],
-               config['acc_v'],
-               config['vb1_v'],
-               config['vb2_v'],
-               config['fast_vend']
-           ]) > V_LIMIT):
-       raise Exception("Voltage too high")
+                config['bias_v'],  # TODO: move out of config
+                config['plunger_v'],
+                config['acc_v'],
+                config['vb1_v'],
+                config['vb2_v'],
+                config['fast_vend']
+            ]) > V_LIMIT):
+        raise Exception("Voltage too high")
 
     # perform the sweep
     one_dimensional_sweep(SET1, config, {

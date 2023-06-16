@@ -3,9 +3,6 @@ import numpy as np
 import time
 import json
 
-
-__package__ = "C:/Users/Measurement1/Documents/Keysight/Labber/labber-wrapper"
-from jsonschema import validate
 from labberwrapper.devices.NI_DAQ import NIDAQ
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
@@ -58,8 +55,8 @@ def one_dimensional_sweep(
     fast_ramp_mapping = {}
     results = np.array([])
 
-    for i in range(len(config['fast_ch'])):
-        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
+    for i in range(len(fast_ch)):
+        fast_ramp_mapping[fast_ch[i]] = channel_generator_map[fast_ch[i]]
 
     # TODO: call ramp_voltages_software once and remove this outer loop
     for vfast in vfast_list:
@@ -102,8 +99,6 @@ if __name__ == '__main__':
                dev_config["vb2_ch_num"],
                dev_config["ai_ch_num"]) 
 
-    # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
     # perform the sweep
     one_dimensional_sweep(SET1,
                           config["fast_ch"],
