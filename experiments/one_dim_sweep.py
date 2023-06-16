@@ -16,11 +16,6 @@ from labberwrapper.logging.log import Log
 def one_dimensional_sweep(
         single_e_transistor,
         fast_ch,
-        bias_v,
-        plunger_v,
-        acc_v,
-        vb1_v,
-        vb2_v,
         fast_vstart,
         fast_vend,
         fast_steps,
@@ -109,21 +104,9 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema_sweep = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
-    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
-
-    # voltage safety check
-    validate(instance = config, schema = jschema_sweep)
-    validate(instance = dev_config, schema = jschema_dev)  
-
     # perform the sweep
     one_dimensional_sweep(SET1,
                           config["fast_ch"],
-                          config[bias_v],
-                          config[plunger_v],
-                          config[acc_v],
-                          config[vb1_v],
-                          config[vb2_v],
                           config[fast_vstart],
                           config[fast_vend],
                           config[fast_steps],
