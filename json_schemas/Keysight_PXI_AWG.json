@@ -1,5 +1,5 @@
 {
-    "$id": "json_schemas/awg.json",
+    "$id": "json_schemas/Keysight_PXI_AWG.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "awg values validation",
     "type": "object",
