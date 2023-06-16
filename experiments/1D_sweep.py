@@ -106,10 +106,12 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema=json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
-    validate(instance=config, schema=jschema)  
+    validate(instance = config, schema = jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev)   
     
     # old code - validation not using jsonschemas. # TODO: delete once sure of schema validation
     #if any(np.abs([
