@@ -3,20 +3,11 @@ import numpy as np
 import time
 import json
 
-<<<<<<< HEAD
-from ..devices.NI_DAQ import NIDAQ
-from ..devices.Keithley import Keithley
-from ..devices.QDevil_QDAC import QDAC
-from ..devices.SET import SET
-from ..logging import Log
-from jsonschema import validate
-=======
 from labberwrapper.devices.NI_DAQ import NIDAQ
 from labberwrapper.devices.Keithley import Keithley
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
->>>>>>> main
 
 V_LIMIT = 2.5
 
@@ -100,21 +91,17 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
 
     # voltage safety check
-    validate(instance=config, schema=jschema)
-
-    #old code - validation not using jsonschemas. # TODO: delete once sure of schema validation
-    #if any(np.abs([
-    #            config['bias_v'],  # TODO: move out of config
-    #            config['plunger_v'],
-    #            config['acc_v'],
-    #            config['vb1_v'],
-    #            config['vb2_v'],
-    #            config['fast_vend']
-    #        ]) > V_LIMIT):
-    #    raise Exception("Voltage too high")
+    if any(np.abs([
+                config['bias_v'],  # TODO: move out of config
+                config['plunger_v'],
+                config['acc_v'],
+                config['vb1_v'],
+                config['vb2_v'],
+                config['fast_vend']
+            ]) > V_LIMIT):
+        raise Exception("Voltage too high")
 
     # perform the sweep
     one_dimensional_sweep(SET1, config, {
