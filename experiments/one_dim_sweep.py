@@ -42,22 +42,6 @@ def one_dimensional_sweep(
     # print QDAC overview
     print(qdac.instr.getLocalInitValuesDict())
 
-    # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages_software(
-        v_startlist=[],
-        v_endlist=[
-            bias_v,
-            plunger_v,
-            acc_v,
-            vb1_v,
-            vb2_v
-        ],
-        ramp_time=1,
-        repetitions=1,
-        step_length=fast_step_size
-    )
-    time.sleep(2)
-
     # NI_DAQ parameters calculation
     num_samples_raw = int(fast_step_size * sample_rate_per_channel)
 
