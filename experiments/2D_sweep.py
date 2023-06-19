@@ -11,10 +11,6 @@ from ..devices.SET import SET
 from ..logging import Log
 from jsonschema import validate
 
-
-V_LIMIT = 2.5
-
-
 def two_dimensional_sweep(
         single_e_transistor,
         config,
@@ -128,18 +124,6 @@ if __name__ == '__main__':
 
     # voltage safety check
     validate(instance=config, schema=jschema)
-
-    #old code - validation not using jsonschemas. # TODO: delete once sure of schema validation
-    #if any(np.abs([
-    #           config['bias_v'],  # TODO: move out of config
-    #           config['plunger_v'],
-    #           config['acc_v'],
-    #           config['vb1_v'],
-    #           config['vb2_v'],
-    #           config['slow_vend'],
-    #           config['fast_vend']
-    #      ]) > V_LIMIT):
-    #   raise Exception("Voltage too high")
 
     # perform the sweep
     two_dimensional_sweep(SET1, config, {
