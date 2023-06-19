@@ -10,16 +10,28 @@ from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 
-
-V_LIMIT = 2.5
-
-
 # TODO: debug on lab computer
 def two_dimensional_sweep(
         single_e_transistor,
-        config,
+        slow_ch,
+        fast_ch,
+        bias_v,
+        plunger_v,
+        acc_v,
+        vb1_v,
+        vb2_v,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        fast_vstart,
+        fast_vend,
+        fast_steps,
+        fast_step_size,
+        fast_ch_name,
+        slow_ch_name,
+        slow_step_size,
         channel_generator_map,
-        gain=1,
+        gain=1e8,
         sample_rate_per_channel=1e6,
         v_min=-1,
         v_max=1
@@ -35,95 +47,83 @@ def two_dimensional_sweep(
     # print QDAC overview
     print(qdac.instr.getLocalInitValuesDict())
 
+    # ramp to initial voltages in 1 sec
+    qdac.ramp_voltages(
+        v_startlist=[],
+        v_endlist=[
+            bias_v,
+            plunger_v,
+            acc_v,
+            vb1_v,
+            vb2_v
+        ],
+        ramp_time=1,
+        repetitions=1,
+        step_length=fast_step_size
+    )
+    time.sleep(2)
+
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
+    num_samples_raw = int(fast_steps * fast_step_size * sample_rate_per_channel)
 
     # collect data and save to database
     start_time = time.time()
 
     # setup logging parameters
-    vfast_list = np.linspace(config['fast_vstart'], config['fast_vend'], config['fast_steps'])
-    Vx = dict(name=config['fast_ch_name'], unit='V', values=vfast_list)
+    vfast_list = np.linspace(fast_vstart, fast_vend, fast_steps)
+    Vx = dict(name=fast_ch_name, unit='V', values=vfast_list)
 
-    vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
-    Vy = dict(name=config['slow_ch_name'], unit='V', values=vslow_list)
+    vslow_list = np.linspace(slow_vstart, slow_vend, slow_steps)
+    Vy = dict(name=slow_ch_name, unit='V', values=vslow_list)
 
 
     # initialize logging
     log = Log(
-        "TEST2.hdf5",
+        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST2.hdf5",
         'I',
         'A',
         [Vx, Vy]
     )
 
-    slow_ramp_mapping = {}
-
-    for i in range(len(config['slow_ch'])):
-        slow_ramp_mapping[config['slow_ch'][i]] = channel_generator_map[config['slow_ch'][i]]
-
-    fast_ramp_mapping = {}
-
-    for i in range(len(config['fast_ch'])):
-        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
-
-    slow_qdac = QDAC(client, slow_ramp_mapping)
-    fast_qdac = QDAC(client, fast_ramp_mapping)
-
     for i, vslow in enumerate(vslow_list):
-        results = np.array([])
-        
-        slow_qdac.ramp_voltages_software(
+        qdac.ramp_voltages(
             v_startlist=[],
-            v_endlist=[vslow for _ in range(len(config['slow_ch']))],
-            ramp_time=config['slow_step_size'] * config['slow_steps'],
+            v_endlist=[vslow for _ in range(len(slow_ch))],
+            ramp_time=slow_step_size * slow_steps,
             repetitions=1,
-            step_length=config['slow_step_size']
+            step_length=slow_step_size
         )
 
-        qdac.sync(1, config['fast_ch'][0])
+        qdac.sync(1, fast_ch[0])
+        qdac.ramp_voltages(
+            v_startlist=[fast_vstart for _ in range(len(fast_ch))],
+            v_endlist=[fast_vend for _ in range(len(fast_ch))],
+            ramp_time=fast_step_size * fast_steps,
+            step_length=fast_step_size,
+            repetitions=1
+        )
 
-        nidaq.configure_read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
+        time.sleep(0.015)  # it usually takes about 2 ms for setting up the NIDAQ tasks
+
+        qdac.instr.startInstrument()  # ramp_voltages only sets config, we still have to start
+
+        result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
             v_max=v_max,
+            gain=gain,
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
         )
 
-        fast_qdac.ramp_voltages(
-            v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
-            v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
-            ramp_time=config['fast_step_size'] * config['fast_steps'],
-            step_length=config['fast_step_size'],
-            repetitions=1
-        )
+        qdac.instr.stopInstrument()
 
-        time.sleep(config['fast_step_size'])
-
-        result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
-            ch_id=single_e_transistor.ai_ch_num,
-            gain=gain
-        )
-
-        bins = config['fast_steps']
-        bin_size = int(num_samples_raw / bins)
-
-        for i in range(bins):
-            results = np.append(results, np.average(result[i * bin_size:(i+1) * bin_size]))
-
-        data = {
-            'I': results,
-            'Vx': vfast_list,
-            'Vy': vslow
-        }
+        data = {'I': result}
         log.file.addEntry(data)
 
         print(
             f'Time elapsed: {np.round(time.time() - start_time, 2)} sec. '
-            f'Loop finished: {i + 1}/{config["slow_steps"]}.')
-    
-    qdac.instr.stopInstrument()
+            f'Loop finished: {i + 1}/{slow_steps}.')
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
@@ -131,35 +131,38 @@ def two_dimensional_sweep(
 
 if __name__ == '__main__':
 
-    # define the SET to be measured
+    config = json.load(open('../configs/2D_sweep.json', 'r'))
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
+
+    # define the SET to be measured
     SET1 = SET(dev_config["bias_ch_num"],
                dev_config["plunger_ch_num"],
                dev_config["acc_ch_num"],
                dev_config["vb1_ch_num"],
                dev_config["vb2_ch_num"],
-               dev_config["ai_ch_num"])
-
-    # load the experiment config
-    config = json.load(open('../configs/2D_sweep.json', 'r'))
-
-    # voltage safety check
-    if any(np.abs([
-                config['bias_v'],  # TODO: move out of config
-                config['plunger_v'],
-                config['acc_v'],
-                config['vb1_v'],
-                config['vb2_v'],
-                config['slow_vend'],
-                config['fast_vend']
-            ]) > V_LIMIT):
-        raise Exception("Voltage too high")
+               dev_config["ai_ch_num"]) 
 
     # perform the sweep
-    two_dimensional_sweep(SET1, config, {
-        SET1.bias_ch_num: 1,
-        SET1.plunger_ch_num: 2,
-        SET1.acc_ch_num: 3,
-        SET1.vb1_ch_num: 4,
-        SET1.vb2_ch_num: 5
-    })
+    two_dimensional_sweep(SET1,
+                          config[slow_ch],
+                          config[fast_ch],
+                          config[bias_v],
+                          config[plunger_v],
+                          config[acc_v],
+                          config[vb1_v],
+                          config[vb2_v],
+                          config[slow_vstart],
+                          config[slow_vend],
+                          config[slow_steps],
+                          config[fast_vstart],
+                          config[fast_vend],
+                          config[fast_steps],
+                          config[fast_step_size],
+                          config[fast_ch_name],
+                          config[slow_ch_name],
+                          config[slow_step_size],
+                          {SET1.bias_ch_num: 1,
+                           SET1.plunger_ch_num: 2,
+                           SET1.acc_ch_num: 3,
+                           SET1.vb1_ch_num: 4,
+                           SET1.vb2_ch_num: 5})
