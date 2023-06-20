@@ -4,15 +4,18 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from devices.Keithley_6430 import Keithley6430
+from devices.Keithley_2400 import Keithley2400
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
-from jsonschema import validate
 
-def keithley_sweep(
+V_LIMIT = 2.5
+
+
+def keithley_sourcemeter_sweep(
         single_e_transistor,
         config,
+        channel_generator_map,
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
@@ -26,7 +29,7 @@ def keithley_sweep(
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    keithley = Keithley6430(client)
+    keithley = Keithley2400(client)
 
     if verbose:
         # print NIDAQ overview
@@ -77,16 +80,14 @@ if __name__ == '__main__':
     SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema_Sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
-    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
+    config = json.load(open('../experiment_configs/keithley_sweep.json', 'r'))
 
     # voltage safety check
-    validate(instance=config, schema=jschema_sweep)
-    validate(instance = dev_config, schema = jschema_dev) 
+    if config['bias_volt'] > V_LIMIT:
+        raise Exception("Voltage too high")
 
     # perform the sweep
-    keithley_sweep(
+    keithley_sourcemeter_sweep(
         SET1,
         config,
         {

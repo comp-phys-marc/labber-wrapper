@@ -5,12 +5,13 @@ import numpy as np
 import time
 import json
 
-from ..devices.NI_DAQ import NIDAQ
-from ..devices.QDevil_QDAC import QDAC
-from ..devices.SET import SET
-from ..logging import Log
+from labberwrapper.devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.SET import SET
+from labberwrapper.logging.log import Log
 from jsonschema import validate
 
+# TODO: debug on lab computer
 def two_dimensional_sweep(
         single_e_transistor,
         config,
@@ -18,7 +19,9 @@ def two_dimensional_sweep(
         gain=1e8,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -28,24 +31,12 @@ def two_dimensional_sweep(
     nidaq = NIDAQ(client)
     qdac = QDAC(client, channel_generator_map)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
 
-    # ramp to initial voltages in 1 sec
-    qdac.ramp_voltages(
-        v_startlist=[],
-        v_endlist=[
-            config['bias_v'],
-            config['plunger_v'],
-            config['acc_v'],
-            config['vb1_v'],
-            config['vb2_v']
-        ],
-        ramp_time=1,
-        repetitions=1,
-        step_length=config['fast_step_size']
-    )
-    time.sleep(2)
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
@@ -60,10 +51,9 @@ def two_dimensional_sweep(
     vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
     Vy = dict(name=config['slow_ch_name'], unit='V', values=vslow_list)
 
-
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST2.hdf5",
+        log_file,
         'I',
         'A',
         [Vx, Vy]
@@ -116,20 +106,32 @@ def two_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    SET1 = SET(9, 10, 11, 12, 13, "Dev2/ai0")  # TODO: get from config
+    dev_config = json.load(open('../device_configs/SET.json', 'r'))
+    SET1 = SET(dev_config["bias_ch_num"],
+               dev_config["plunger_ch_num"],
+               dev_config["acc_ch_num"],
+               dev_config["vb1_ch_num"],
+               dev_config["vb2_ch_num"],
+               dev_config["ai_ch_num"])
 
     # load the experiment config
     config = json.load(open('../configs/2D_sweep.json', 'r'))
-    jschema = jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_sweep = jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
-    validate(instance=config, schema=jschema)
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev) 
 
     # perform the sweep
-    two_dimensional_sweep(SET1, config, {
-        SET1.bias_ch_num: 1,
-        SET1.plunger_ch_num: 2,
-        SET1.acc_ch_num: 3,
-        SET1.vb1_ch_num: 4,
-        SET1.vb2_ch_num: 5
-    })
+    two_dimensional_sweep(
+        SET1,
+        config,
+        {
+            SET1.bias_ch_num: 1,
+            SET1.plunger_ch_num: 2,
+            SET1.acc_ch_num: 3,
+            SET1.vb1_ch_num: 4,
+            SET1.vb2_ch_num: 5
+        }
+    )

@@ -4,12 +4,12 @@ from dataclasses import dataclass
 
 @dataclass
 class SET:
-    bias_ch_num: int
-    plunger_ch_num: int
-    acc_ch_num: int
-    vb1_ch_num: int
-    vb2_ch_num: int
-    ai_ch_num: str
+    bias_ch_num: int = 1
+    plunger_ch_num: int = 2
+    acc_ch_num: int = 3
+    vb1_ch_num: int = 4
+    vb2_ch_num: int = 5
+    ai_ch_num: str = 1
 
     def __repr__(self):
         return str(self)
