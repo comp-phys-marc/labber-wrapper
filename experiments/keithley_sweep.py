@@ -8,7 +8,13 @@ from devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
+<<<<<<< HEAD
 from jsonschema import validate
+=======
+
+V_LIMIT = 2.5
+
+>>>>>>> main
 
 def keithley_sweep(
         single_e_transistor,
@@ -55,13 +61,16 @@ def keithley_sweep(
         keithley.set_voltage(vslow)
         time.sleep(config['step_length'])
 
-        result = nidaq.read(
+        nidaq.configure_read(
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
             v_max=v_max,
-            gain=gain,
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
+        )
+        result = nidaq.read(
+            ch_id=single_e_transistor.ai_ch_num,
+            gain=gain
         )
         results = np.append(results, np.average(result))
     data = {'NIai': results}
@@ -77,6 +86,7 @@ if __name__ == '__main__':
     SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
+<<<<<<< HEAD
     config = json.load(open('../configs/1D_sweep.json', 'r'))
     jschema_Sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
     jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
@@ -84,6 +94,13 @@ if __name__ == '__main__':
     # voltage safety check
     validate(instance=config, schema=jschema_sweep)
     validate(instance = dev_config, schema = jschema_dev) 
+=======
+    config = json.load(open('../configs/keithley_sweep.json', 'r'))
+
+    # voltage safety check
+    if  config['bias_volt'] > V_LIMIT:
+        raise Exception("Voltage too high")
+>>>>>>> main
 
     # perform the sweep
     keithley_sweep(

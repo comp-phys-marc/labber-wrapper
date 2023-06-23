@@ -58,13 +58,16 @@ def keithley_sourcemeter_sweep(
         keithley.set_voltage(vslow)
         time.sleep(config['step_length'])
 
-        result = nidaq.read(
+        nidaq.configure_read(
             ch_id=single_e_transistor.ai_ch_num,
             v_min=v_min,
             v_max=v_max,
-            gain=gain,
             num_samples=num_samples_raw,
             sample_rate=sample_rate_per_channel
+        )
+        result = nidaq.read(
+            ch_id=single_e_transistor.ai_ch_num,
+            gain=gain
         )
         results = np.append(results, np.average(result))
     data = {'NIai': results}
