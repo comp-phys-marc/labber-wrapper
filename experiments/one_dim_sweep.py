@@ -9,8 +9,6 @@ from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 from jsonschema import validate
 
->>>>>>> main
-
 # TODO: add one_dimensional_sweep_hardware
 def one_dimensional_sweep(
         single_e_transistor,
@@ -39,6 +37,9 @@ def one_dimensional_sweep(
     if verbose:
         # print NIDAQ overview
         print(nidaq.instr.getLocalInitValuesDict())
+
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(fast_step_size * sample_rate_per_channel)
@@ -71,6 +72,7 @@ def one_dimensional_sweep(
             v_endlist=[vfast for _ in range(len(fast_ch))],
             ramp_time=0.005,
             repetitions=1,
+            channel_ids=fast_ch,
             step_length=fast_step_size
         )
         time.sleep(0.005)
@@ -98,7 +100,6 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
     SET1 = SET(dev_config["bias_ch_num"],
                dev_config["plunger_ch_num"],
@@ -117,9 +118,15 @@ if __name__ == '__main__':
     validate(instance = dev_config, schema = jschema_dev)   
 
     # perform the sweep
+    config = json.load(open('../configs/1D_sweep.json', 'r'))
     one_dimensional_sweep(
         SET1,
-        config,
+        config["fast_ch"],
+        config["fast_vstart"],
+        config["fast_vend"],
+        config["fast_steps"],
+        config["fast_step_size"],
+        config["fast_ch_name"],
         {
             SET1.bias_ch_num: 1,
             SET1.plunger_ch_num: 2,

@@ -65,20 +65,15 @@ class QDAC:
 
         self.instr.startInstrument()
 
-<<<<<<< HEAD
         if channel_generator_map is not None:
             for i, ch_id in enumerate(list(channel_generator_map.keys())):
                 if ch_id > 24 or ch_id < 1:
                     raise Exception(f'QDAC channel {ch_id} out of range (1..24).')
                 if channel_generator_map[ch_id] > 10 or channel_generator_map[ch_id] < 1:
                     raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
-=======
-            self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
-            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
-        self.instr.stopInstrument()
->>>>>>> main
 
                 self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
+                self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
         self._channel_generator_map = channel_generator_map
 
     def sync(self, sync, channel):

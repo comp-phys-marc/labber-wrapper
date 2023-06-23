@@ -35,6 +35,9 @@ def two_dimensional_sweep(
         # print NIDAQ overview
         print(nidaq.instr.getLocalInitValuesDict())
 
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
+
     # NI_DAQ parameters calculation
     num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
 
@@ -50,7 +53,7 @@ def two_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "TEST2.hdf5",
+        log_file,
         'I',
         'A',
         [Vx, Vy]
