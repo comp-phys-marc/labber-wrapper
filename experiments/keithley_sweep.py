@@ -45,18 +45,18 @@ def one_dimensional_sweep(
         v_endlist=[bias_volt],
         ramp_time=1,
         repetitions=1,
-        step_length=fast_step_size
+        step_length=step_length
     )
     time.sleep(duration + 0.2)
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(fast_step_size * sample_rate_per_channel)
+    num_samples_raw = int(step_length * sample_rate_per_channel)
 
     vslow_list = np.linspace(slow_vstart, slow_vend, slow_steps)
 
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230605_measurement/TEST3.hdf5",
+        "TEST3.hdf5",
         'NIai',
         'V',
         []

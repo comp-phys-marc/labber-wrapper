@@ -15,11 +15,6 @@ def two_dimensional_sweep(
         single_e_transistor,
         slow_ch,
         fast_ch,
-        bias_v,
-        plunger_v,
-        acc_v,
-        vb1_v,
-        vb2_v,
         slow_vstart,
         slow_vend,
         slow_steps,
@@ -79,11 +74,13 @@ def two_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "C:/Users/Measurement2/OneDrive/GroupShared/Data/QSim/20230530_measurement/TEST2.hdf5",
+        "TEST2.hdf5",
         'I',
         'A',
         [Vx, Vy]
     )
+
+    slow_ramp_mapping = {}
 
     for i, vslow in enumerate(vslow_list):
         qdac.ramp_voltages(
