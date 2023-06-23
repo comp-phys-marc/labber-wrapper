@@ -29,7 +29,9 @@ def two_dimensional_sweep(
         gain=1e8,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -39,8 +41,12 @@ def two_dimensional_sweep(
     nidaq = NIDAQ(client)
     qdac = QDAC(client, channel_generator_map)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
+
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # ramp to initial voltages in 1 sec
     qdac.ramp_voltages(
@@ -71,10 +77,9 @@ def two_dimensional_sweep(
     vslow_list = np.linspace(slow_vstart, slow_vend, slow_steps)
     Vy = dict(name=slow_ch_name, unit='V', values=vslow_list)
 
-
     # initialize logging
     log = Log(
-        "TEST2.hdf5",
+        log_file,
         'I',
         'A',
         [Vx, Vy]

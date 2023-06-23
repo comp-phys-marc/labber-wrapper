@@ -4,13 +4,13 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from labberwrapper.devices.Keithley import Keithley
+from devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 
 # TODO: debug on lab computer
-def one_dimensional_sweep(
+def keithley_sweep(
         single_e_transistor,
         bias_volt,
         bias_ch_num,
@@ -18,11 +18,12 @@ def one_dimensional_sweep(
         slow_vend,
         slow_steps,
         step_length,
-        channel_generator_map,
         gain=1e8,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -30,24 +31,14 @@ def one_dimensional_sweep(
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    qdac = QDAC(client, channel_generator_map)
-    keithley = Keithley(client)
+    keithley = Keithley6430(client)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
 
-    # print Keithley overview
-    print(keithley.instr.getLocalInitValuesDict())
-
-    # ramp to initial voltages in 1 sec
-    duration = qdac.ramp_voltages(
-        v_startlist=[],
-        v_endlist=[bias_volt],
-        ramp_time=1,
-        repetitions=1,
-        step_length=step_length
-    )
-    time.sleep(duration + 0.2)
+        # print Keithley overview
+        print(keithley.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(step_length * sample_rate_per_channel)
@@ -56,7 +47,7 @@ def one_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "TEST3.hdf5",
+        log_file,
         'NIai',
         'V',
         []
@@ -98,17 +89,14 @@ if __name__ == '__main__':
               dev_config["ai_ch_num"])
 
     # perform the sweep
-    keithley_sweep(SET1,
-                   config[bias_volt],
-                   config[bias_ch_num],
-                   config[slow_vstart],
-                   config[slow_vend],
-                   config[slow_steps],
-                   config[step_length], 
-                   {SET1.bias_ch_num: 1,
-                    SET1.plunger_ch_num: 2,
-                    SET1.acc_ch_num: 3,
-                    SET1.vb1_ch_num: 4,
-                    SET1.vb2_ch_num: 5},
-                    v_min=-10,
-                    v_max=10)
+    keithley_sweep(
+        SET1,
+        config[bias_volt],
+        config[bias_ch_num],
+        config[slow_vstart],
+        config[slow_vend],
+        config[slow_steps],
+        config[step_length],
+        v_min=-10,
+        v_max=10
+    )
