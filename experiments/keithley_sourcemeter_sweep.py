@@ -4,7 +4,7 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from devices.Keithley_6430 import Keithley
+from devices.Keithley_2400 import Keithley
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
@@ -12,7 +12,7 @@ from labberwrapper.logging.log import Log
 V_LIMIT = 2.5
 
 
-def keithley_sweep(
+def keithley_sourcemeter_sweep(
         single_e_transistor,
         config,
         channel_generator_map,
@@ -93,24 +93,10 @@ if __name__ == '__main__':
     SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
-<<<<<<< HEAD
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
-
-    # voltage safety check
-    if any(np.abs([
-                config['bias_v'],  # TODO: move out of config
-                config['plunger_v'],
-                config['acc_v'],
-                config['vb1_v'],
-                config['vb2_v'],
-                config['fast_vend']
-            ]) > V_LIMIT):
-=======
     config = json.load(open('../configs/keithley_sweep.json', 'r'))
 
     # voltage safety check
     if  config['bias_volt'] > V_LIMIT:
->>>>>>> main
         raise Exception("Voltage too high")
 
     # perform the sweep

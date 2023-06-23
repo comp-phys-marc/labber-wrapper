@@ -9,6 +9,14 @@ class QDAC:
     #   can we somehow use QCodes' driver on top of Labber?
 
     @staticmethod
+    def _qdac_mode_apply_key(ch_id):
+        return f'CH{str(ch_id).zfill(2)} Apply'
+    
+    @staticmethod
+    def _qdac_run_key(g_id):
+        return f'G{g_id} Run-Wait'
+
+    @staticmethod
     def _qdac_sync_key(sync):
         return f'Syn{sync} Source'
 
@@ -27,6 +35,10 @@ class QDAC:
     @staticmethod
     def _qdac_generator_reps_key(g_id):
         return f'G{g_id} Repetitions'
+    
+    @staticmethod
+    def _qdac_generator_step_length_key(g_id):
+        return f'G{g_id} Steplength'
 
     @staticmethod
     def _qdac_generator_steps_key(g_id):
@@ -59,6 +71,7 @@ class QDAC:
                 raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
 
             self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
+            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
         self.instr.stopInstrument()
 
         self._channel_generator_map = channel_generator_map
@@ -127,6 +140,7 @@ class QDAC:
             step_sizes.append(amplitude / nsteps)
 
             self.instr.setValue(self._qdac_channel_mode_key(ch_id), 'DC')
+            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
 
         for r in range(repetitions):
 
@@ -157,6 +171,7 @@ class QDAC:
         v_startlist = self._ramp_setup(v_startlist, v_endlist, step_length)
 
         nsteps = ramp_time / step_length
+        time_ramp = nsteps * step_length  # s
 
         self.instr.startInstrument()
 
@@ -171,16 +186,18 @@ class QDAC:
             if trigger is not None:
                 self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
             else:
-                trigger = 'None'
+                self.instr.setValue(self._qdac_generator_trigger_key(g_id), 'None')
 
             self.instr.setValue(self._qdac_generator_waveform_key(g_id), 'Stair case')
             # self.instr.setValue(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
             self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
+            self.instr.setValue(self._qdac_generator_step_length_key(g_id), step_length * 1000)  # ms
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
-            self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
-
-        self.instr.stopInstrument()
-
-        time_ramp = nsteps * step_length / 1000  # s
-
+        
+        # Run the generators at as close to the same time as possible
+        for ch_id in list(self._channel_generator_map.keys()):
+            g_id = self._channel_generator_map[ch_id]
+            self.instr.setValue(self._qdac_run_key(g_id), True)
+            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
+        
         return time_ramp

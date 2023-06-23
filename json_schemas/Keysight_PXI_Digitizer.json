@@ -1,5 +1,5 @@
 {
-    "$id": "json_schemas/digitizer.json",
+    "$id": "json_schemas/Keysight_PXI_Digitizer.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "digitizer values validation",
     "type": "object",

@@ -22,7 +22,7 @@ class NIDAQ:
     def __init__(self, client):
         self.instr = client.connectToInstrument('NI DAQ', dict(interface='PXI', address='Dev1'))
 
-    def read(self, ch_id, gain, num_samples, sample_rate, v_min=-10, v_max=10, trigger=None):
+    def configure_read(self, ch_id, num_samples, sample_rate, v_min=-10, v_max=10, trigger=None):
 
         self.instr.startInstrument()
 
@@ -41,8 +41,8 @@ class NIDAQ:
         if trigger is not None:
             self.instr.setValue(self._ni_trig_key, trigger)
 
+    def read(self, ch_id, gain):
         # make measurement
         result = self.instr.getValue(self._ni_data_key(ch_id))['y'] / gain
-        self.instr.stopInstrument()
 
         return result
