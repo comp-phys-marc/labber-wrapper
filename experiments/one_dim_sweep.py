@@ -24,7 +24,9 @@ def one_dimensional_sweep(
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -32,10 +34,14 @@ def one_dimensional_sweep(
 
     # connect to instruments
     nidaq = NIDAQ(client)
-    qdac = QDAC(client, channel_generator_map)
+    qdac = QDAC(client)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
+
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = config['fast_steps']
@@ -48,13 +54,12 @@ def one_dimensional_sweep(
 
     # initialize logging
     log = Log(
-        "TEST.hdf5",
+        log_file,
         'I',
         'A',
         [Vx]
     )
 
-    fast_ramp_mapping = {}
     results = np.array([])
 
     for i in range(len(fast_ch)):
@@ -69,7 +74,12 @@ def one_dimensional_sweep(
             v_endlist=[vfast for _ in range(len(config['fast_ch']))],
             ramp_time=0.1,
             repetitions=1,
+<<<<<<< HEAD
             step_length=config['fast_step_size']
+=======
+            channel_ids=fast_ch,
+            step_length=fast_step_size
+>>>>>>> main
         )
         time.sleep(0.005)
         nidaq.configure_read(
@@ -88,7 +98,6 @@ def one_dimensional_sweep(
     log.file.addEntry(data)
 
     qdac.instr.stopInstrument()
-    fast_qdac.instr.stopInstrument()
 
     end_time = time.time()
     print(f'Time elapsed: {np.round(end_time - start_time, 2)} sec.')
@@ -97,8 +106,8 @@ def one_dimensional_sweep(
 if __name__ == '__main__':
 
     # define the SET to be measured
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
+<<<<<<< HEAD
     SET1 = SET(dev_config["bias_ch_num"],
                dev_config["plunger_ch_num"],
                dev_config["acc_ch_num"],
@@ -121,3 +130,32 @@ if __name__ == '__main__':
                           SET1.acc_ch_num: 3,
                           SET1.vb1_ch_num: 4,
                           SET1.vb2_ch_num: 5})
+=======
+    SET1 = SET(
+        dev_config["bias_ch_num"],
+        dev_config["plunger_ch_num"],
+        dev_config["acc_ch_num"],
+        dev_config["vb1_ch_num"],
+        dev_config["vb2_ch_num"],
+        dev_config["ai_ch_num"]
+    )
+
+    # perform the sweep
+    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    one_dimensional_sweep(
+        SET1,
+        config["fast_ch"],
+        config["fast_vstart"],
+        config["fast_vend"],
+        config["fast_steps"],
+        config["fast_step_size"],
+        config["fast_ch_name"],
+        {
+            SET1.bias_ch_num: 1,
+            SET1.plunger_ch_num: 2,
+            SET1.acc_ch_num: 3,
+            SET1.vb1_ch_num: 4,
+            SET1.vb2_ch_num: 5
+        }
+    )
+>>>>>>> main

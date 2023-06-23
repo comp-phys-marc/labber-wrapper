@@ -22,7 +22,9 @@ def two_dimensional_sweep(
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
-        v_max=1
+        v_max=1,
+        log_file='TEST.hdf5',
+        verbose=True
 ):
 
     # connect to instrument server
@@ -32,8 +34,12 @@ def two_dimensional_sweep(
     nidaq = NIDAQ(client)
     qdac = QDAC(client, channel_generator_map)
 
-    # print QDAC overview
-    print(qdac.instr.getLocalInitValuesDict())
+    if verbose:
+        # print NIDAQ overview
+        print(nidaq.instr.getLocalInitValuesDict())
+
+        # print QDAC overview
+        print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
     num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
@@ -48,10 +54,9 @@ def two_dimensional_sweep(
     vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
     Vy = dict(name=config['slow_ch_name'], unit='V', values=vslow_list)
 
-
     # initialize logging
     log = Log(
-        "TEST2.hdf5",
+        log_file,
         'I',
         'A',
         [Vx, Vy]
@@ -141,7 +146,7 @@ if __name__ == '__main__':
                dev_config["ai_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/2D_sweep.json', 'r'))
+    config = json.load(open('../experiment_configs/2D_sweep.json', 'r'))
 
     # voltage safety check
     if any(np.abs([
@@ -156,10 +161,14 @@ if __name__ == '__main__':
         raise Exception("Voltage too high")
 
     # perform the sweep
-    two_dimensional_sweep(SET1, config, {
-        SET1.bias_ch_num: 1,
-        SET1.plunger_ch_num: 2,
-        SET1.acc_ch_num: 3,
-        SET1.vb1_ch_num: 4,
-        SET1.vb2_ch_num: 5
-    })
+    two_dimensional_sweep(
+        SET1,
+        config,
+        {
+            SET1.bias_ch_num: 1,
+            SET1.plunger_ch_num: 2,
+            SET1.acc_ch_num: 3,
+            SET1.vb1_ch_num: 4,
+            SET1.vb2_ch_num: 5
+        }
+    )
