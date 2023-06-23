@@ -207,13 +207,6 @@ class QDAC:
             self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
             self.instr.setValue(self._qdac_generator_step_length_key(g_id), step_length * 1000)  # ms
             self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
-<<<<<<< HEAD
-            self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
-
-        time_ramp = nsteps * step_length / 1000  # s
-
-        return time_ramp
-=======
         
         # Run the generators at as close to the same time as possible
         for ch_id in list(self._channel_generator_map.keys()):
@@ -222,4 +215,3 @@ class QDAC:
             self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
         
         return time_ramp
->>>>>>> main
