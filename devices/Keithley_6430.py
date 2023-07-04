@@ -1,6 +1,7 @@
+from .BaseDevice import BaseDevice
 
 
-class Keithley6430:
+class Keithley6430(BaseDevice):
 
     @staticmethod
     def _keithley_src_status_key():
@@ -19,7 +20,8 @@ class Keithley6430:
         return 'Measured current'
 
     def __init__(self, client):
-        self.instr = client.connectToInstrument('Keithley 6430 Source Measurement Unit', dict(interface='GPIB', address='2'))
+        schema = open("json_schemas/Keithley_6430_SourceMeter.json", "r").readlines()
+        super().__init__('Keithley 6430 Source Measurement Unit', dict(interface='GPIB', address='2'), client, schema)
 
     def set_voltage(self, voltage):
         self.instr.startInstrument()

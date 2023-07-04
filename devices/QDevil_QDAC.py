@@ -1,12 +1,10 @@
 import time
-import numpy as np
+from .BaseDevice import BaseDevice
 
-class QDAC:
+
+class QDAC(BaseDevice):
 
     # TODO: make use of QCodes with Labber (translate between their msgs and labber setValues statements?)
-    # TODO: use JSONSchema to keep track of all these strings
-    # TODO: our wrapper is beginning to duplicate QCodes' driver as Labber has a less full-featured driver for the QDAC.
-    #   can we somehow use QCodes' driver on top of Labber?
 
     @staticmethod
     def _qdac_mode_apply_key(ch_id):
@@ -61,7 +59,8 @@ class QDAC:
         return f'CH{str(ch_id).zfill(2)} Mode'
 
     def __init__(self, client, channel_generator_map=None):
-        self.instr = client.connectToInstrument('QDevil QDAC', dict(interface='Serial', address='3'))
+        schema = open("json_schemas/QDevil_QDAC.json", "r").readlines()
+        super().__init__('QDevil QDAC', dict(interface='Serial', address='3'), client, schema)
 
         self.instr.startInstrument()
 
