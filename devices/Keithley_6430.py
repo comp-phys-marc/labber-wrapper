@@ -25,7 +25,7 @@ class Keithley6430(BaseDevice):
 
     def set_voltage(self, voltage):
         self.instr.startInstrument()
-        self.instr.setValue(self._keithley_src_status_key(), 'On')
-        self.instr.setValue(self._keithley_src_func_key(), 'Voltage')
-        self.instr.setValue(self._keithley_src_volt_key(), voltage)
+        self.set_value(self._keithley_src_status_key(), 'On')
+        self.set_value(self._keithley_src_func_key(), 'Voltage')
+        self.set_value(self._keithley_src_volt_key(), voltage)
 

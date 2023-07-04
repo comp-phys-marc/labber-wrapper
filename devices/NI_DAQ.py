@@ -31,19 +31,19 @@ class NIDAQ(BaseDevice):
         self.instr.startInstrument()
 
         # configure sampling
-        self.instr.setValue(self._ni_num_sames_key, num_samples)
-        self.instr.setValue(self._ni_sample_rate_key, sample_rate)
+        self.set_value(self._ni_num_sames_key, num_samples)
+        self.set_value(self._ni_sample_rate_key, sample_rate)
 
         # enable channel
-        self.instr.setValue(self._ni_enable_key(ch_id), True)
+        self.set_value(self._ni_enable_key(ch_id), True)
 
         # configure range
-        self.instr.setValue(self._ni_high_range_key(ch_id), v_max)
-        self.instr.setValue(self._ni_low_range_key(ch_id), v_min)
+        self.set_value(self._ni_high_range_key(ch_id), v_max)
+        self.set_value(self._ni_low_range_key(ch_id), v_min)
 
         # optionally use triggering
         if trigger is not None:
-            self.instr.setValue(self._ni_trig_key, trigger)
+            self.set_value(self._ni_trig_key, trigger)
 
     def read(self, ch_id, gain):
         # make measurement

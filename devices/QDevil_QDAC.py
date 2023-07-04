@@ -71,8 +71,8 @@ class QDAC(BaseDevice):
                 if channel_generator_map[ch_id] > 10 or channel_generator_map[ch_id] < 1:
                     raise Exception(f'QDAC generator {channel_generator_map[ch_id]} out of range (1..10).')
 
-                self.instr.setValue(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
-                self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
+                self.set_value(self._qdac_channel_mode_key(ch_id), f'Generator {channel_generator_map[ch_id]}')
+                self.set_value(self._qdac_mode_apply_key(ch_id), True)
         self._channel_generator_map = channel_generator_map
 
     def sync(self, sync, channel):
@@ -83,7 +83,7 @@ class QDAC(BaseDevice):
             raise Exception(f'There are 24 channels labelled 1-24. {channel} specified.')
 
         generator = self._channel_generator_map[channel]
-        self.instr.setValue(self._qdac_sync_key(sync), f'Generator {generator}')
+        self.set_value(self._qdac_sync_key(sync), f'Generator {generator}')
 
     def _ramp_setup(
         self,
@@ -144,15 +144,15 @@ class QDAC(BaseDevice):
             amplitude = v_endlist[i] - v_startlist[i]
             step_sizes.append(amplitude / nsteps)
 
-            self.instr.setValue(self._qdac_channel_mode_key(ch_id), 'DC')
-            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
+            self.set_value(self._qdac_channel_mode_key(ch_id), 'DC')
+            self.set_value(self._qdac_mode_apply_key(ch_id), True)
 
         for r in range(repetitions):
 
             # initialize
             for i, ch_id in enumerate(channel_ids):
                 voltages.append(v_startlist[i])
-                self.instr.setValue(self._qdac_channel_voltage_key(ch_id), v_startlist[i])
+                self.set_value(self._qdac_channel_voltage_key(ch_id), v_startlist[i])
 
             # loop
             for step in range(int(nsteps)):
@@ -161,7 +161,7 @@ class QDAC(BaseDevice):
                 # increment all channels
                 for i, ch_id in enumerate(channel_ids):
                     voltages[i] += step_sizes[i]
-                    self.instr.setValue(self._qdac_channel_voltage_key(ch_id), voltages[i])
+                    self.set_value(self._qdac_channel_voltage_key(ch_id), voltages[i])
 
     def ramp_voltages(
             self,
@@ -186,26 +186,26 @@ class QDAC(BaseDevice):
         for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
             amplitude = v_endlist[i] - v_startlist[i]
 
-            self.instr.setValue(self._qdac_channel_amplitude_key(ch_id), amplitude)
-            self.instr.setValue(self._qdac_channel_offset_key(ch_id), v_startlist[i])
+            self.set_value(self._qdac_channel_amplitude_key(ch_id), amplitude)
+            self.set_value(self._qdac_channel_offset_key(ch_id), v_startlist[i])
 
             g_id = self._channel_generator_map[ch_id]
 
             if trigger is not None:
-                self.instr.setValue(self._qdac_generator_trigger_key(g_id), trigger)
+                self.set_value(self._qdac_generator_trigger_key(g_id), trigger)
             else:
-                self.instr.setValue(self._qdac_generator_trigger_key(g_id), 'None')
+                self.set_value(self._qdac_generator_trigger_key(g_id), 'None')
 
-            self.instr.setValue(self._qdac_generator_waveform_key(g_id), 'Stair case')
-            # self.instr.setValue(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
-            self.instr.setValue(self._qdac_generator_steps_key(g_id), nsteps)
-            self.instr.setValue(self._qdac_generator_step_length_key(g_id), step_length * 1000)  # ms
-            self.instr.setValue(self._qdac_generator_reps_key(g_id), repetitions)
+            self.set_value(self._qdac_generator_waveform_key(g_id), 'Stair case')
+            # self.set_value(self._qdac_generator_sweep_rate_key(g_id), step_length * nsteps)
+            self.set_value(self._qdac_generator_steps_key(g_id), nsteps)
+            self.set_value(self._qdac_generator_step_length_key(g_id), step_length * 1000)  # ms
+            self.set_value(self._qdac_generator_reps_key(g_id), repetitions)
         
         # Run the generators at as close to the same time as possible
         for ch_id in list(self._channel_generator_map.keys()):
             g_id = self._channel_generator_map[ch_id]
-            self.instr.setValue(self._qdac_run_key(g_id), True)
-            self.instr.setValue(self._qdac_mode_apply_key(ch_id), True)
+            self.set_value(self._qdac_run_key(g_id), True)
+            self.set_value(self._qdac_mode_apply_key(ch_id), True)
         
         return time_ramp
