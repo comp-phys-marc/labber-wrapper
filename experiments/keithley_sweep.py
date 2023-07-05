@@ -12,7 +12,10 @@ from jsonschema import validate
 
 def keithley_sweep(
         single_e_transistor,
-        config,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        step_length
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
@@ -36,9 +39,9 @@ def keithley_sweep(
         print(keithley.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['step_length'] * sample_rate_per_channel)
+    num_samples_raw = int(step_length * sample_rate_per_channel)
 
-    vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
+    vslow_list = np.linspace(slow_vstart, slow_vend, slow_steps)
     Vg1 = dict(name='Vg1', unit='V', values=vslow_list)
 
     # initialize logging
@@ -53,7 +56,7 @@ def keithley_sweep(
 
     for vslow in vslow_list:
         keithley.set_voltage(vslow)
-        time.sleep(config['step_length'])
+        time.sleep(step_length)
 
         nidaq.configure_read(
             ch_id=single_e_transistor.ai_ch_num,
@@ -80,8 +83,8 @@ if __name__ == '__main__':
     SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema_Sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
+    config = json.load(open('../experiment_configs/keithley_sweep.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
     jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
@@ -91,7 +94,11 @@ if __name__ == '__main__':
     # perform the sweep
     keithley_sweep(
         SET1,
-        config,
+        bias_volt,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        step_length,
         {
             SET1.bias_ch_num: 1
         },

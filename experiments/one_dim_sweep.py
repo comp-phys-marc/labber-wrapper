@@ -109,8 +109,8 @@ if __name__ == '__main__':
                dev_config["ai_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
-    jschema_sweep = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    config = json.load(open('../experiment_configs/1D_sweep.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/1D_&_2Dsweep.json', 'r'))
     jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
@@ -118,7 +118,7 @@ if __name__ == '__main__':
     validate(instance = dev_config, schema = jschema_dev)   
 
     # perform the sweep
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    config = json.load(open('../experiment_configs/1D_sweep.json', 'r'))
     one_dimensional_sweep(
         SET1,
         config["fast_ch"],
