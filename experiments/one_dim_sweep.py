@@ -7,9 +7,7 @@ from labberwrapper.devices.NI_DAQ import NIDAQ
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
-
-V_LIMIT = 2.5
-
+from jsonschema import validate
 
 # TODO: add one_dimensional_sweep_hardware
 def one_dimensional_sweep(
@@ -44,13 +42,13 @@ def one_dimensional_sweep(
         print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
-    num_samples_raw = config['fast_steps']
+    num_samples_raw = int(fast_step_size * sample_rate_per_channel)
 
     # collect data and save to database
     start_time = time.time()
 
-    vfast_list = np.linspace(config['fast_vstart'], config['fast_vend'], config['fast_steps'])
-    Vx = dict(name=config['fast_ch_name'], unit='V', values=vfast_list)
+    vfast_list = np.linspace(fast_vstart, fast_vend, fast_steps)
+    Vx = dict(name=fast_ch_name, unit='V', values=vfast_list)
 
     # initialize logging
     log = Log(
@@ -71,15 +69,11 @@ def one_dimensional_sweep(
     for vfast in vfast_list:
         fast_qdac.ramp_voltages_software(
             v_startlist=[],
-            v_endlist=[vfast for _ in range(len(config['fast_ch']))],
-            ramp_time=0.1,
+            v_endlist=[vfast for _ in range(len(fast_ch))],
+            ramp_time=0.005,
             repetitions=1,
-<<<<<<< HEAD
-            step_length=config['fast_step_size']
-=======
             channel_ids=fast_ch,
             step_length=fast_step_size
->>>>>>> main
         )
         time.sleep(0.005)
         nidaq.configure_read(
@@ -107,7 +101,6 @@ if __name__ == '__main__':
 
     # define the SET to be measured
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
-<<<<<<< HEAD
     SET1 = SET(dev_config["bias_ch_num"],
                dev_config["plunger_ch_num"],
                dev_config["acc_ch_num"],
@@ -115,30 +108,14 @@ if __name__ == '__main__':
                dev_config["vb2_ch_num"],
                dev_config["ai_ch_num"])
 
-    #SET1 = SET(9, 10, 11, 12, 13, 0) - old SET1 (without config)
+    # load the experiment config
+    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
-    # perform the sweep
-    one_dimensional_sweep(SET1,
-                          config["fast_ch"],
-                          config["fast_vstart"],
-                          config["fast_vend"],
-                          config["fast_steps"],
-                          config["fast_step_size"],
-                          config["fast_ch_name"],
-                          {SET1.bias_ch_num: 1,
-                          SET1.plunger_ch_num: 2,
-                          SET1.acc_ch_num: 3,
-                          SET1.vb1_ch_num: 4,
-                          SET1.vb2_ch_num: 5})
-=======
-    SET1 = SET(
-        dev_config["bias_ch_num"],
-        dev_config["plunger_ch_num"],
-        dev_config["acc_ch_num"],
-        dev_config["vb1_ch_num"],
-        dev_config["vb2_ch_num"],
-        dev_config["ai_ch_num"]
-    )
+    # voltage safety check
+    validate(instance = config, schema = jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev)   
 
     # perform the sweep
     config = json.load(open('../configs/1D_sweep.json', 'r'))
@@ -158,4 +135,3 @@ if __name__ == '__main__':
             SET1.vb2_ch_num: 5
         }
     )
->>>>>>> main

@@ -8,9 +8,7 @@ from devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
-
-V_LIMIT = 2.5
-
+from jsonschema import validate
 
 def keithley_sweep(
         single_e_transistor,
@@ -82,29 +80,13 @@ if __name__ == '__main__':
     SET1 = SET(dev_config["bias_ch_num"])
 
     # load the experiment config
-<<<<<<< HEAD
-<<<<<<< HEAD
     config = json.load(open('../configs/1D_sweep.json', 'r'))
+    jschema_Sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
-    if any(np.abs([
-                config['bias_v'],  # TODO: move out of config
-                config['plunger_v'],
-                config['acc_v'],
-                config['vb1_v'],
-                config['vb2_v'],
-                config['fast_vend']
-            ]) > V_LIMIT):
-=======
-    config = json.load(open('../configs/keithley_sweep.json', 'r'))
-
-    # voltage safety check
-    if  config['bias_volt'] > V_LIMIT:
-        config = json.load(open('../experiment_configs/keithley_sweep.json', 'r'))
-
-    # voltage safety check
-    if config['bias_volt'] > V_LIMIT:
-        raise Exception("Voltage too high")
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev) 
 
     # perform the sweep
     keithley_sweep(

@@ -9,10 +9,7 @@ from labberwrapper.devices.NI_DAQ import NIDAQ
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
-
-
-V_LIMIT = 2.5
-
+from jsonschema import validate
 
 # TODO: debug on lab computer
 def two_dimensional_sweep(
@@ -146,19 +143,13 @@ if __name__ == '__main__':
                dev_config["ai_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../experiment_configs/2D_sweep.json', 'r'))
+    config = json.load(open('../configs/2D_sweep.json', 'r'))
+    jschema_sweep = jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
-    if any(np.abs([
-                config['bias_v'],  # TODO: move out of config
-                config['plunger_v'],
-                config['acc_v'],
-                config['vb1_v'],
-                config['vb2_v'],
-                config['slow_vend'],
-                config['fast_vend']
-            ]) > V_LIMIT):
-        raise Exception("Voltage too high")
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev) 
 
     # perform the sweep
     two_dimensional_sweep(
