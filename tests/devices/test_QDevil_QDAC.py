@@ -22,6 +22,62 @@ class TestQDAC(unittest.TestCase):
         assert hasattr(self.device, 'instr')
         self.assertIsNotNone(self.device.instr)
 
+        cases = [
+            (
+                Labber.connectToServer('localhost'),
+                {
+                    1: 2,
+                    2: 3,
+                    3: 4,
+                    4: 5
+                }
+            ),
+            (
+                Labber.connectToServer('localhost'),
+                {
+                    1: 3,
+                    2: 4,
+                    3: 5,
+                    4: 6
+                }
+            ),
+            (
+                Labber.connectToServer('localhost'),
+                {
+                    1: 0,
+                    2: 3,
+                    3: 4,
+                    4: 10
+                }
+            ),
+            (
+                Labber.connectToServer('localhost'),
+                {
+                    22: 2,
+                    23: 3,
+                    24: 4,
+                    25: 5
+                }
+            ),
+            (Labber.connectToServer('localhost'), None)
+        ]
+
+        for case in cases:
+            if case[1] is not None:
+                for ch_id in list(case[1].keys()):
+                    if ch_id > 24 or ch_id < 1 or case[1][ch_id] > 10 or case[1][ch_id] < 1:
+                        self.assertRaises(Exception, QDAC, case)
+
+                    # could be optimized
+                    else:
+                        device = QDAC(*case)
+                        config = device.instr.getLocalInitValuesDict()
+
+                        self.assertEqual(config[device._qdac_channel_mode_key(ch_id)], f'Generator {case[1][ch_id]}')
+                        self.assertEqual(config[device._qdac_mode_apply_key(ch_id)], True)
+
+                        self.assertEqual(device._channel_generator_map, case[1])
+
     def test_sync(self):
         self.device.instr.setValue = MagicMock()
 
