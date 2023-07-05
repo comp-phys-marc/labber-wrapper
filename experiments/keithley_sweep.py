@@ -8,12 +8,10 @@ from devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
+from jsonschema import validate
 
-# TODO: debug on lab computer
 def keithley_sweep(
         single_e_transistor,
-        bias_volt,
-        bias_ch_num,
         slow_vstart,
         slow_vend,
         slow_steps,
@@ -87,6 +85,14 @@ if __name__ == '__main__':
               dev_config["vb1_ch_num"],
               dev_config["vb2_ch_num"],
               dev_config["ai_ch_num"])
+    # load the experiment config
+    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    jschema_Sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
+
+    # voltage safety check
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev) 
 
     # perform the sweep
     keithley_sweep(
@@ -98,5 +104,6 @@ if __name__ == '__main__':
         config[slow_steps],
         config[step_length],
         v_min=-10,
-        v_max=10
+        v_max=10,
+        sample_rate_per_channel=1e3
     )

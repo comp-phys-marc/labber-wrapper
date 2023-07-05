@@ -9,6 +9,10 @@ from labberwrapper.devices.NI_DAQ import NIDAQ
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
+<<<<<<< HEAD
+=======
+from jsonschema import validate
+>>>>>>> main
 
 # TODO: debug on lab computer
 def two_dimensional_sweep(
@@ -142,7 +146,20 @@ if __name__ == '__main__':
                dev_config["acc_ch_num"],
                dev_config["vb1_ch_num"],
                dev_config["vb2_ch_num"],
+<<<<<<< HEAD
                dev_config["ai_ch_num"]) 
+=======
+               dev_config["ai_ch_num"])
+
+    # load the experiment config
+    config = json.load(open('../configs/2D_sweep.json', 'r'))
+    jschema_sweep = jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
+
+    # voltage safety check
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev) 
+>>>>>>> main
 
     # perform the sweep
     two_dimensional_sweep(SET1,
