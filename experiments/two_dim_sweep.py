@@ -14,7 +14,18 @@ from jsonschema import validate
 # TODO: debug on lab computer
 def two_dimensional_sweep(
         single_e_transistor,
-        config,
+        slow_ch,
+        fast_ch,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        fast_vstart,
+        fast_vend,
+        fast_steps,
+        fast_step_size,
+        fast_ch_name,
+        slow_ch_name,
+        slow_step_size,
         channel_generator_map,
         gain=1,
         sample_rate_per_channel=1e6,
@@ -39,17 +50,17 @@ def two_dimensional_sweep(
         print(qdac.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['fast_steps'] * config['fast_step_size'] * sample_rate_per_channel)
+    num_samples_raw = int(fast_steps * fast_step_size * sample_rate_per_channel)
 
     # collect data and save to database
     start_time = time.time()
 
     # setup logging parameters
-    vfast_list = np.linspace(config['fast_vstart'], config['fast_vend'], config['fast_steps'])
-    Vx = dict(name=config['fast_ch_name'], unit='V', values=vfast_list)
+    vfast_list = np.linspace(fast_vstart, fast_vend, fast_steps)
+    Vx = dict(name=fast_ch_name, unit='V', values=vfast_list)
 
-    vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
-    Vy = dict(name=config['slow_ch_name'], unit='V', values=vslow_list)
+    vslow_list = np.linspace(slow_vstart, slow_vend, slow_steps)
+    Vy = dict(name=slow_ch_name, unit='V', values=vslow_list)
 
     # initialize logging
     log = Log(
@@ -61,13 +72,13 @@ def two_dimensional_sweep(
 
     slow_ramp_mapping = {}
 
-    for i in range(len(config['slow_ch'])):
-        slow_ramp_mapping[config['slow_ch'][i]] = channel_generator_map[config['slow_ch'][i]]
+    for i in range(len(slow_ch)):
+        slow_ramp_mapping[slow_ch[i]] = channel_generator_map[slow_ch[i]]
 
     fast_ramp_mapping = {}
 
-    for i in range(len(config['fast_ch'])):
-        fast_ramp_mapping[config['fast_ch'][i]] = channel_generator_map[config['fast_ch'][i]]
+    for i in range(len(fast_ch)):
+        fast_ramp_mapping[fast_ch[i]] = channel_generator_map[fast_ch[i]]
 
     slow_qdac = QDAC(client, slow_ramp_mapping)
     fast_qdac = QDAC(client, fast_ramp_mapping)
@@ -77,13 +88,13 @@ def two_dimensional_sweep(
         
         slow_qdac.ramp_voltages_software(
             v_startlist=[],
-            v_endlist=[vslow for _ in range(len(config['slow_ch']))],
-            ramp_time=config['slow_step_size'] * config['slow_steps'],
+            v_endlist=[vslow for _ in range(len(slow_ch))],
+            ramp_time=slow_step_size * slow_steps,
             repetitions=1,
-            step_length=config['slow_step_size']
+            step_length=slow_step_size
         )
 
-        qdac.sync(1, config['fast_ch'][0])
+        qdac.sync(1, fast_ch[0])
 
         nidaq.configure_read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
@@ -94,21 +105,21 @@ def two_dimensional_sweep(
         )
 
         fast_qdac.ramp_voltages(
-            v_startlist=[config['fast_vstart'] for _ in range(len(config['fast_ch']))],
-            v_endlist=[config['fast_vend'] for _ in range(len(config['fast_ch']))],
-            ramp_time=config['fast_step_size'] * config['fast_steps'],
-            step_length=config['fast_step_size'],
+            v_startlist= fast_vstart for _ in range(len(fast_ch)),
+            v_endlist=fast_vend for _ in range(len(fast_ch)),
+            ramp_time=fast_step_size * fast_steps,
+            step_length=fast_step_size,
             repetitions=1
         )
 
-        time.sleep(config['fast_step_size'])
+        time.sleep(fast_step_size)
 
         result = nidaq.read(  # this read is not precise - it will just take num_samples_raw samples over the ramp time
             ch_id=single_e_transistor.ai_ch_num,
             gain=gain
         )
 
-        bins = config['fast_steps']
+        bins = fast_steps
         bin_size = int(num_samples_raw / bins)
 
         for i in range(bins):
@@ -123,7 +134,7 @@ def two_dimensional_sweep(
 
         print(
             f'Time elapsed: {np.round(time.time() - start_time, 2)} sec. '
-            f'Loop finished: {i + 1}/{config["slow_steps"]}.')
+            f'Loop finished: {i + 1}/{slow_steps}.')
     
     qdac.instr.stopInstrument()
 
@@ -143,8 +154,8 @@ if __name__ == '__main__':
                dev_config["ai_ch_num"])
 
     # load the experiment config
-    config = json.load(open('../configs/2D_sweep.json', 'r'))
-    jschema_sweep = jschema = json.load(open('../json_schemas/1d_&_2Dsweeps.json', 'r'))
+    config = json.load(open('../experiment_configs/2D_sweep.json', 'r'))
+    jschema_sweep = jschema = json.load(open('../json_schemas/1D_&_2Dsweeps.json', 'r'))
     jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
@@ -154,7 +165,23 @@ if __name__ == '__main__':
     # perform the sweep
     two_dimensional_sweep(
         SET1,
-        config,
+        slow_ch,
+        fast_ch,
+        bias_v,
+        plunger_v,
+        acc_v,
+        vb1_v,
+        vb2_v,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        fast_vstart,
+        fast_vend,
+        fast_steps,
+        fast_step_size,
+        fast_ch_name,
+        slow_ch_name,
+        slow_step_size
         {
             SET1.bias_ch_num: 1,
             SET1.plunger_ch_num: 2,
