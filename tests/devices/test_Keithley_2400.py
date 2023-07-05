@@ -1,9 +1,7 @@
 import Labber
 import unittest
 from unittest.mock import MagicMock
-
 from jsonschema import ValidationError
-
 from ...devices.Keithley_2400 import Keithley2400
 
 
@@ -34,4 +32,6 @@ class TestKeithley2400(unittest.TestCase):
             device.set_value.assert_called_with(device._keithley_src_status_key(), True)
             device.set_value.assert_called_with(device._keithley_src_func_key(), 'Voltage')
             device.set_value.assert_called_with(device._keithley_src_volt_key(), v)
+            device.instr.setValue.assert_called_with(device._keithley_src_volt_key(), v)
+
 

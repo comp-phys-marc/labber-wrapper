@@ -31,3 +31,4 @@ class TestKeithley6430(unittest.TestCase):
             device.set_value.assert_called_with(device._keithley_src_status_key(), 'On')
             device.set_value.assert_called_with(device._keithley_src_func_key(), 'Voltage')
             device.set_value.assert_called_with(device._keithley_src_volt_key(), v)
+            device.instr.setValue.assert_called_with(device._keithley_src_volt_key(), v)
