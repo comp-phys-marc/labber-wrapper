@@ -1,12 +1,7 @@
 import time
-import numpy as np
+
 
 class QDAC:
-
-    # TODO: make use of QCodes with Labber (translate between their msgs and labber setValues statements?)
-    # TODO: use JSONSchema to keep track of all these strings
-    # TODO: our wrapper is beginning to duplicate QCodes' driver as Labber has a less full-featured driver for the QDAC.
-    #   can we somehow use QCodes' driver on top of Labber?
 
     @staticmethod
     def _qdac_mode_apply_key(ch_id):

@@ -1,4 +1,3 @@
-import time
 from dataclasses import dataclass
 
 
@@ -9,7 +8,7 @@ class SET:
     acc_ch_num: int = 3
     vb1_ch_num: int = 4
     vb2_ch_num: int = 5
-    ai_ch_num: str = 1
+    ai_ch_num: int = 1
 
     def __repr__(self):
         return str(self)

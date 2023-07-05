@@ -7,15 +7,16 @@ from ...devices.NI_DAQ import NIDAQ
 
 class TestNIDAQ(unittest.TestCase):
 
+    def setUp(self):
+        self.device = NIDAQ(Labber.connectToServer('localhost'))
+
     def test_init(self):
-        device = NIDAQ(Labber.connectToServer('localhost'))
-        self.assertIsInstance(device, NIDAQ)
-        assert hasattr(device, 'instr')
-        self.assertIsNotNone(device.instr)
+        self.assertIsInstance(self.device, NIDAQ)
+        assert hasattr(self.device, 'instr')
+        self.assertIsNotNone(self.device.instr)
 
     def test_configure_read(self):
-        device = NIDAQ(Labber.connectToServer('localhost'))
-        device.instr.setValue = MagicMock()
+        self.device.instr.setValue = MagicMock()
 
         cases = [
             dict(
@@ -45,24 +46,23 @@ class TestNIDAQ(unittest.TestCase):
         ]
 
         for data in cases:
-            device.configure_read(**data)
+            self.device.configure_read(**data)
 
-            device.instr.setValue.assert_called_with(device._ni_num_sames_key, data['num_samples'])
-            device.instr.setValue.assert_called_with(device._ni_sample_rate_key, data['sample_rate'])
-            device.instr.setValue.assert_called_with(device._ni_enable_key(data['ch_id']), True)
-            device.instr.setValue.assert_called_with(device._ni_high_range_key(data['ch_id']), data['v_max'])
-            device.instr.setValue.assert_called_with(device._ni_low_range_key(data['ch_id']), data['v_min'])
+            self.device.instr.setValue.assert_called_with(self.device._ni_num_sames_key, data['num_samples'])
+            self.device.instr.setValue.assert_called_with(self.device._ni_sample_rate_key, data['sample_rate'])
+            self.device.instr.setValue.assert_called_with(self.device._ni_enable_key(data['ch_id']), True)
+            self.device.instr.setValue.assert_called_with(self.device._ni_high_range_key(data['ch_id']), data['v_max'])
+            self.device.instr.setValue.assert_called_with(self.device._ni_low_range_key(data['ch_id']), data['v_min'])
 
             if data['trigger'] is not None:
-                device.instr.setValue.assert_called_with(device._ni_trig_key, data['trigger'])
+                self.device.instr.setValue.assert_called_with(self.device._ni_trig_key, data['trigger'])
 
     def test_read(self):
-        device = NIDAQ(Labber.connectToServer('localhost'))
 
         for (ch_id, gain) in [(0, 1e8), (1, 2e6), (8, -3e5)]:
-            device.instr.getValue = MagicMock(return_value={'y': np.array([i for i in range(ch_id)])})
+            self.device.instr.getValue = MagicMock(return_value={'y': np.array([i for i in range(ch_id)])})
 
-            res = device.read(ch_id, gain)
+            res = self.device.read(ch_id, gain)
 
-            device.instr.getValue.assert_called_with(device._ni_data_key(ch_id))
-            self.assertEqual(res, device.instr.getValue(device._ni_data_key(ch_id))['y'] / gain)
+            self.device.instr.getValue.assert_called_with(self.device._ni_data_key(ch_id))
+            self.assertEqual(res, self.device.instr.getValue(self.device._ni_data_key(ch_id))['y'] / gain)
