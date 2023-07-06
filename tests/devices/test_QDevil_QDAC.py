@@ -1,7 +1,7 @@
 import Labber
 import unittest
 from ...devices.QDevil_QDAC import QDAC
-from unittest.mock import MagicMock
+from unittest.mock import MagicMock, call
 
 
 class TestQDAC(unittest.TestCase):
@@ -140,20 +140,57 @@ class TestQDAC(unittest.TestCase):
 
     def test_ramp_voltages_software(self):
 
-        self.device.ramp_voltages_software(
+        v_startlists = [
             [0, 0, 1],
-            [1, 1, 0],
+            [1, 2, 1],
+            [-2, 1, -1]
+        ]
+
+        ramp_times = [
             0.2,
+            0.4,
+            0.8
+        ]
+
+        step_lengths = [
             0.1,
-            2,
-            self.device._channel_generator_map.keys()
-        )
+            0.2,
+            0.4
+        ]
 
-        self.device.setValue = MagicMock()
+        v_endlist = [1, 1, 0]
 
-        # check that all configured channels are in DC mode
-        for i, ch_id in enumerate(self.device._channel_generator_map.keys()):
-            self.assertEqual(self.device.instr.getValue(self.device._qdac_channel_mode_key(ch_id)), 'DC')
-            self.assertEqual(self.device.instr.getValue(self.device._qdac_mode_apply_key(ch_id)), True)
+        for i, v_startlist in enumerate(v_startlists):
 
-        self.assertEqual(self.device.setValue.mock_calls, [])
+            self.device.ramp_voltages_software(
+                v_startlist,
+                v_endlist,
+                ramp_times[i],
+                step_lengths[i],
+                1,
+                self.device._channel_generator_map.keys()
+            )
+
+            self.device.setValue = MagicMock()
+
+            # check that all configured channels are in DC mode
+            for ch_id in [1, 2, 3]:
+                self.assertEqual(self.device.instr.getValue(self.device._qdac_channel_mode_key(ch_id)), 'DC')
+                self.assertEqual(self.device.instr.getValue(self.device._qdac_mode_apply_key(ch_id)), True)
+
+            # check that each channel has a starting voltage
+            self.device.setValue.assert_has_calls([
+                call(self.device._qdac_channel_voltage_key(k + 1), v_startlist[k]) for k in [0, 1, 2]
+            ])
+
+            # check that each device has a stepped voltage
+            voltages = [
+                v_startlist[j] + (v_endlist[j] - v_startlist[j] / (ramp_times[i] / step_lengths[i])) for j in [0, 1, 2]
+            ]
+
+            calls = []
+
+            for i, voltage in enumerate(voltages):
+                calls.append(call(self.device._qdac_channel_voltage_key(i + 1), voltage))
+
+            self.device.setValue.assert_has_calls(calls)
