@@ -91,3 +91,69 @@ class TestQDAC(unittest.TestCase):
 
             generator = case[1] + 1
             self.device.instr.setValue.assert_called_with(self.device._qdac_sync_key(case[0]), f'Generator {generator}')
+
+    def test_ramp_setup(self):
+
+        cases = [
+            (
+                [0, 0, 1],
+                [1, 1, 0],
+                0.1
+            ),
+            (
+                [-1, -1, 10],
+                [0, 0, 0],
+                0.05
+            ),
+            (
+                [9, -10, -10],
+                [1, 0.5, 0],
+                0.0
+            ),
+            (
+                [],
+                [1, 0.5, 0],
+                0.0
+            ),
+        ]
+
+        for case in cases:
+            if case[2] < 0.001 or \
+                    not (len(case[1]) == len(list(self.device._channel_generator_map.keys()))) or \
+                    len(list(self.device._channel_generator_map.keys())) > 10 or \
+                    len(case[0]) != len(list(self.device._channel_generator_map.keys())) and len(case[0]) != 0:
+
+                self.assertRaises(Exception, self.device._ramp_setup, case)
+
+            v_startlist = self.device._ramp_setup(*case)
+
+            if len(case[0]) == 0:
+                init = self.device.instr.getLocalInitValuesDict()
+                for ch_id in list(self.device._channel_generator_map.keys()):
+                    mode = init[self.device._qdac_channel_mode_key(ch_id)]
+                    if mode == "DC":
+                        self.assertEqual([init[self.device._qdac_channel_voltage_key(ch_id)]], v_startlist)
+                    else:
+                        self.assertEqual([init[self.device._qdac_channel_offset_key(ch_id)]], v_startlist)
+            else:
+                self.assertEqual(v_startlist, case[0])
+
+    def test_ramp_voltages_software(self):
+
+        self.device.ramp_voltages_software(
+            [0, 0, 1],
+            [1, 1, 0],
+            0.2,
+            0.1,
+            2,
+            self.device._channel_generator_map.keys()
+        )
+
+        self.device.setValue = MagicMock()
+
+        # check that all configured channels are in DC mode
+        for i, ch_id in enumerate(self.device._channel_generator_map.keys()):
+            self.assertEqual(self.device.instr.getValue(self.device._qdac_channel_mode_key(ch_id)), 'DC')
+            self.assertEqual(self.device.instr.getValue(self.device._qdac_mode_apply_key(ch_id)), True)
+
+        self.assertEqual(self.device.setValue.mock_calls, [])
