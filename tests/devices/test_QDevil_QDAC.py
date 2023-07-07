@@ -1,6 +1,6 @@
 import Labber
 import unittest
-from ...devices.QDevil_QDAC import QDAC
+from devices.QDevil_QDAC import QDAC
 from unittest.mock import MagicMock, call
 
 

@@ -2,7 +2,7 @@ import Labber
 import unittest
 from unittest.mock import MagicMock
 from jsonschema import ValidationError
-from ...devices.Keithley_2400 import Keithley2400
+from devices.Keithley_2400 import Keithley2400
 
 
 class TestKeithley2400(unittest.TestCase):

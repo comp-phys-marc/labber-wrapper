@@ -2,7 +2,7 @@ import Labber
 import unittest
 import numpy as np
 from unittest.mock import MagicMock
-from ...devices.NI_DAQ import NIDAQ
+from devices.NI_DAQ import NIDAQ
 
 
 class TestNIDAQ(unittest.TestCase):

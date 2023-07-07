@@ -1,7 +1,7 @@
 import Labber
 import unittest
 from unittest.mock import MagicMock
-from ...devices.Keithley_6430 import Keithley6430
+from devices.Keithley_6430 import Keithley6430
 
 
 class TestKeithley6430(unittest.TestCase):
