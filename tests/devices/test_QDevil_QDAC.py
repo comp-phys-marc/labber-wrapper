@@ -194,3 +194,114 @@ class TestQDAC(unittest.TestCase):
                 calls.append(call(self.device._qdac_channel_voltage_key(i + 1), voltage))
 
             self.device.setValue.assert_has_calls(calls)
+
+    def test_ramp_voltages(self):
+
+        # device with no channel generator mapping
+        device = QDAC(Labber.connectToServer('localhost'))
+
+        v_startlists = [
+            [0, 0, 1],
+            [1, 2, 1],
+            [-2, 1, -1]
+        ]
+
+        ramp_times = [
+            0.2,
+            0.4,
+            0.8
+        ]
+
+        step_lengths = [
+            0.1,
+            0.2,
+            0.4
+        ]
+
+        v_endlist = [1, 1, 0]
+
+        repetitions = [1, 3, 2]
+
+        triggers = ['Channel 1', 'Channel 2', None]
+
+        # a channel generator mapping is necessary for a hardware sweep
+        self.assertRaises(
+            Exception,
+            device.ramp_voltages,
+            (
+                v_startlists[0],
+                v_endlist,
+                ramp_times[0],
+                step_lengths[0],
+                1
+            )
+        )
+
+        # setup mocks
+        self.device._ramp_setup = MagicMock(return_value=v_startlists[i])
+        self.device.instr.startInstrument = MagicMock()
+        self.device.instr.setValue = MagicMock()
+
+        # iterate over test inputs
+        for i in range(3):
+
+            self.device.ramp_voltages(
+                v_startlists[i],
+                v_endlist,
+                ramp_times[i],
+                step_lengths[i],
+                repetitions[i],
+                triggers[i]
+            )
+
+            nsteps = ramp_times[i] / step_lengths[i]
+
+            self.device.instr.startInstrument.assert_called()
+
+            for j, ch_id in enumerate(list(self.device._channel_generator_map.keys())):
+                amplitude = v_endlist[j] - v_startlists[i][j]
+
+                self.device.instr.setValue.assert_called_with(
+                    self.device._qdac_channel_amplitude_key(ch_id),
+                    amplitude
+                )
+                self.device.instr.setValue.assert_called_with(
+                    self.device._qdac_channel_offset_key(ch_id),
+                    v_startlists[i][j]
+                )
+
+                g_id = self.device._channel_generator_map[ch_id]
+
+                if triggers[i] is not None:
+                    self.device.instr.setValue.assert_called_with(
+                        self.device._qdac_generator_trigger_key(g_id),
+                        triggers[i]
+                    )
+                else:
+                    self.device.instr.setValue.assert_called_with(
+                        self.device._qdac_generator_trigger_key(g_id),
+                        'None'
+                    )
+
+                self.device.instr.setValue.assert_called_with(
+                    self.device._qdac_generator_waveform_key(g_id),
+                    'Stair case'
+                )
+                self.device.instr.setValue.assert_called_with(
+                    self.device._qdac_generator_steps_key(g_id),
+                    nsteps
+                )
+                self.device.instr.setValue.assert_called_with(
+                    self.device._qdac_generator_step_length_key(g_id),
+                    step_lengths[i] * 1000
+                )
+                self.device.instr.setValue.assert_called_with(
+                    self.device._qdac_generator_reps_key(g_id),
+                    repetitions[i]
+                )
+
+            for ch_id in list(self.device._channel_generator_map.keys()):
+                g_id = self.device._channel_generator_map[ch_id]
+                self.device.instr.setValue.assert_called_with(self.device._qdac_run_key(g_id), True)
+                self.device.instr.setValue.assert_called_with(self.device._qdac_mode_apply_key(ch_id), True)
+
