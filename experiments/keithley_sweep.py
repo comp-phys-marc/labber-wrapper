@@ -10,12 +10,13 @@ from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 from jsonschema import validate
 
+
 def keithley_sweep(
         single_e_transistor,
         slow_vstart,
         slow_vend,
         slow_steps,
-        step_length
+        step_length,
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
