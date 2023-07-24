@@ -18,28 +18,33 @@ class Piece(object):
     volts: float
     time_ns: float
     ramp_time_ns: Optional[float] = None
+    length: Optional[int] = None
 
 
 class Piecewise(object):
 
     def __init__(self, pieces, ramp_time_ns, repeat=1, resolution_ns=1):
-        for piece in pieces:
+        for i, piece in enumerate(pieces):
             assert isinstance(piece, Piece)
-            if piece.ramp_time_ns is None:
+            if piece.ramp_time_ns is None and i != len(pieces) - 1:
                 piece.ramp_time_ns = ramp_time_ns
+            elif piece.ramp_time_ns is None and i == len(pieces) - 1:
+                piece.ramp_time_ns = 0
+            if piece.length is None:
+                piece.length = floor((piece.time_ns + piece.ramp_time_ns) / resolution_ns)
 
         self._pieces = pieces
         self._ramp_time = ramp_time_ns
         self._piece_index = 0
         self._raster_index = 0
-        self._repeat = repeat
         self._repeat_index = 0
+        self._repeat = repeat
         self.resolution = resolution_ns
 
         waveform_length = 0
         for i, piece in enumerate(pieces):
             if i != len(pieces) - 1:
-                waveform_length += floor(piece.time_ns / resolution_ns) + floor(piece.ramp_time_ns / resolution_ns)
+                waveform_length += floor((piece.time_ns + piece.ramp_time_ns) / resolution_ns)
             else:
                 waveform_length += floor(piece.time_ns / resolution_ns)
 
@@ -67,20 +72,24 @@ class Piecewise(object):
         return self
 
     def __next__(self):
+
         # conditionally move to next piece
-        if self._piece_index < len(self._pieces) and self._raster_index == self.length / len(self._pieces):
+        if self._piece_index < len(self._pieces) - 1 and self._raster_index == self._pieces[self._piece_index].length:
             self._piece_index += 1
             self._raster_index = 0
 
         # conditionally repeat the waveform from the start
-        elif self._repeat_index < self._repeat and self._raster_index * (self._piece_index + 1) == self.length:
+        elif self._repeat_index < self._repeat - 1 and self._raster_index == self._pieces[self._piece_index].length and self._piece_index == len(self._pieces) - 1:
             self._repeat_index += 1
             self._piece_index = 0
             self._raster_index = 0
 
         # end the iteration when we finish the last piece
-        elif self._repeat_index == self._repeat and self._piece_index == len(self._pieces) - 1 \
-            and self._raster_index * (self._piece_index + 1) == self.length:
+        elif self._repeat_index == self._repeat - 1 and self._piece_index == len(self._pieces) - 1 \
+            and self._raster_index == self._pieces[self._piece_index].length:
+            self._piece_index = 0
+            self._raster_index = 0
+            self._repeat_index = 0
             raise StopIteration
 
         # get the current piece
@@ -92,7 +101,7 @@ class Piecewise(object):
             return piece.volts
 
         # raster the ramp between pieces
-        elif self._raster_index < floor(piece.ramp_time_ns / self.resolution):
+        elif self._raster_index < floor(piece.time_ns / self.resolution) + floor(piece.ramp_time_ns / self.resolution):
             curr_raster = self._raster_index
             self._raster_index += 1
 
@@ -160,7 +169,7 @@ def software_piecewise_microwave(
         awg.set_voltage(single_electron_transistor.bias_ch_num, volt)
         time.sleep(piecewise.resolution * 10e-9)
         values = digitizer.get_voltage(single_electron_transistor.ai_ch_num)
-        np.append(reads, values['y'].max())
+        reads = np.append(reads, values['y'].max())
 
     data = {'ai': reads}
     log.file.addEntry(data)
@@ -236,50 +245,47 @@ def hardware_piecewise_microwave(
     client.close()
 
 
-if __name__ == '__main__':
-    # define the SET to be measured
-    dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(dev_config["bias_ch_num"])
+# if __name__ == '__main__':
+    # # define the SET to be measured
+    # SET1 = SET(1)
 
-    # load the experiment config
-    config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
-    jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
-    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
+    # # load the experiment config
+    # config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
+    # jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
 
-    # TODO: range safety checks should include checks for the min, max resolutions
-    # Do we want separate schemas for software and hardware implementations?
-    validate(instance=config, schema=jschema_mw)
-    validate(instance=dev_config, schema=jschema_dev)
+    # # TODO: range safety checks should include checks for the min, max resolutions
+    # # Do we want separate schemas for software and hardware implementations?
+    # validate(instance=config, schema=jschema_mw)
 
-    # generate the waveform
-    software_piecewise_microwave(
-        single_electron_transistor=SET1,
-        piecewise=Piecewise(
-            pieces=[
-                Piece(volts=1, time_ns=10),
-                Piece(volts=2, time_ns=10),
-                Piece(volts=1, time_ns=10)
-            ],
-            ramp_time_ns=config['ramp_time']
-        ),
-        samples=config['samples'],
-        records=config['records'],
-        averages=config['averages'],
-        buffer_size=config['buffer_size']
-    )
+    # # generate the waveform
+    # software_piecewise_microwave(
+    #     single_electron_transistor=SET1,
+    #     piecewise=Piecewise(
+    #         pieces=[
+    #             Piece(volts=1, time_ns=10),
+    #             Piece(volts=2, time_ns=10),
+    #             Piece(volts=1, time_ns=10)
+    #         ],
+    #         ramp_time_ns=config['ramp_time']
+    #     ),
+    #     samples=config['samples'],
+    #     records=config['records'],
+    #     averages=config['averages'],
+    #     buffer_size=config['buffer_size']
+    # )
 
-    hardware_piecewise_microwave(
-        single_electron_transistor=SET1,
-        piecewise=Piecewise(
-            pieces=[
-                Piece(volts=1, time_ns=10),
-                Piece(volts=2, time_ns=10),
-                Piece(volts=1, time_ns=10)
-            ],
-            ramp_time_ns=config['ramp_time']
-        ),
-        samples=config['samples'],
-        records=config['records'],
-        averages=config['averages'],
-        buffer_size=config['buffer_size']
-    )
+    # hardware_piecewise_microwave(
+    #     single_electron_transistor=SET1,
+    #     piecewise=Piecewise(
+    #         pieces=[
+    #             Piece(volts=1, time_ns=10),
+    #             Piece(volts=2, time_ns=10),
+    #             Piece(volts=1, time_ns=10)
+    #         ],
+    #         ramp_time_ns=config['ramp_time']
+    #     ),
+    #     samples=config['samples'],
+    #     records=config['records'],
+    #     averages=config['averages'],
+    #     buffer_size=config['buffer_size']
+    # )

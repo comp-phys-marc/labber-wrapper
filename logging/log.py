@@ -14,11 +14,17 @@ class Log:
             found = path.is_file()
 
             i = 1
-            while found:
-                log_file_path = f'{path.parent}/{path.name}{i}{path.suffix}'
+            while found and i < 10:
+                if i > 1:
+                    log_file_path = f'{path.parent}/{path.name.split(".")[0][:-1]}{i}{path.suffix}'
+                else:
+                    log_file_path = f'{path.parent}/{path.name.split(".")[0]}{i}{path.suffix}'
                 path = Path(log_file_path)
                 found = path.is_file()
                 i += 1
+
+            if found and i == 10:
+                raise Exception(f'Too many log files: {i}')
 
         # create log file
         self.file = Labber.createLogFile_ForData(log_file_path, log, params, use_database=False)

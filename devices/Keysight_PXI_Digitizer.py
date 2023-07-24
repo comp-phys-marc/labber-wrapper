@@ -34,4 +34,4 @@ class KeysightPXIDigitizer:
 
     def get_voltage(self, channel):
         self.instr.startInstrument()
-        self.instr.setValue(self._keysight_signal_key(channel))
+        return self.instr.getValue(self._keysight_signal_key(channel))
