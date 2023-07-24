@@ -90,19 +90,15 @@ if __name__ == '__main__':
 
     # voltage safety check
     validate(instance=config, schema=jschema_sweep)
-    validate(instance = dev_config, schema = jschema_dev) 
+    validate(instance=dev_config, schema=jschema_dev)
 
     # perform the sweep
     keithley_sweep(
         SET1,
-        bias_volt,
-        slow_vstart,
-        slow_vend,
-        slow_steps,
-        step_length,
-        {
-            SET1.bias_ch_num: 1
-        },
+        slow_vstart=config['slow_vstart'],
+        slow_vend=config['slow_vend'],
+        slow_steps=config['slow_steps'],
+        step_length=config['step_length'],
         v_min=-10,
         v_max=10,
         sample_rate_per_channel=1e3

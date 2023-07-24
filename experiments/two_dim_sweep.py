@@ -146,12 +146,14 @@ if __name__ == '__main__':
 
     # define the SET to be measured
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(dev_config["bias_ch_num"],
-               dev_config["plunger_ch_num"],
-               dev_config["acc_ch_num"],
-               dev_config["vb1_ch_num"],
-               dev_config["vb2_ch_num"],
-               dev_config["ai_ch_num"])
+    SET1 = SET(
+        dev_config["bias_ch_num"],
+        dev_config["plunger_ch_num"],
+        dev_config["acc_ch_num"],
+        dev_config["vb1_ch_num"],
+        dev_config["vb2_ch_num"],
+        dev_config["ai_ch_num"]
+    )
 
     # load the experiment config
     config = json.load(open('../experiment_configs/2D_sweep.json', 'r'))
