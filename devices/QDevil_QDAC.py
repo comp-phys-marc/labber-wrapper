@@ -1,5 +1,5 @@
 import time
-from .BaseDevice import BaseDevice
+from labberwrapper.devices.BaseDevice import BaseDevice
 
 
 class QDAC(BaseDevice):

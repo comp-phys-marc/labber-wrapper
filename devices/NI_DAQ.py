@@ -1,4 +1,4 @@
-from .BaseDevice import BaseDevice
+from labberwrapper.devices.BaseDevice import BaseDevice
 
 
 class NIDAQ(BaseDevice):
@@ -23,7 +23,7 @@ class NIDAQ(BaseDevice):
         return f'Ch{ch_id}: Low range'
 
     def __init__(self, client):
-        schema = open("json_schemas/NI_DAQ.json", "r").readlines()
+        schema = open("../json_schemas/NI_DAQ.json", "r").readlines()
         super().__init__('NI DAQ', dict(interface='PXI', address='Dev1'), client, schema)
 
     def configure_read(self, ch_id, num_samples, sample_rate, v_min=-10, v_max=10, trigger=None):

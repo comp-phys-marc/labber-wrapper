@@ -1,4 +1,4 @@
-from .BaseDevice import BaseDevice
+from labberwrapper.devices.BaseDevice import BaseDevice
 
 
 class Keithley2400(BaseDevice):
