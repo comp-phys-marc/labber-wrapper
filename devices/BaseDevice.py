@@ -14,13 +14,14 @@ class BaseDevice:
         # check that the provided schema matches the provided device definition
         validate(schema=self.schema, instance=self.config)
 
-    def set_value(self, key, val):
+    def set_value(self, key, val, validating=False):
         previous = self.config[key]
         self.config[key] = val
 
         # check that the proposed change is compliant with the schema
         try:
-            validate(schema=self.schema, instance=self.config)
+            if validating:
+                validate(schema=self.schema, instance=self.config)
             self.instr.setValue(key, val)
         except ValidationError as e:
             # gracefully recover from errors i.e. trying to set voltages too high
