@@ -129,8 +129,6 @@ if __name__ == "__main__":
     config = json.load(open('./labberwrapper/experiment_configs/mw_experiment.json', 'r'))
     jschema_mw = json.load(open('./labberwrapper/json_schemas/mw_experiment.json', 'r'))
 
-    # TODO: range safety checks should include checks for the min, max resolutions
-    # Do we want separate schemas for software and hardware implementations?
     validate(instance=config, schema=jschema_mw)
 
     # generate the waveform

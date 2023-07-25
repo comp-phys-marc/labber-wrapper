@@ -20,6 +20,9 @@ class Piece(object):
     ramp_time_ns: Optional[float] = None
     length: Optional[int] = None
 
+    def __len__(self):
+        return self.length
+
 
 class Piecewise(object):
 
@@ -28,10 +31,12 @@ class Piecewise(object):
             assert isinstance(piece, Piece)
             if piece.time_ns < 2 * resolution_ns:
                 print(f'WARNING: piecewise function segment of length {piece.time_ns}ns depends on sampling beyond the Nyquist frequency.')
-            if piece.ramp_time_ns is None and i != len(pieces) - 1:
+            if piece.ramp_time_ns is None and i != 0:
                 piece.ramp_time_ns = ramp_time_ns
-            elif piece.ramp_time_ns is None and i == len(pieces) - 1:
+            elif piece.ramp_time_ns is None and repeat == 1 and i == 0:
                 piece.ramp_time_ns = 0
+            elif piece.ramp_time_ns is None and repeat != 1 and i == 0:
+                piece.ramp_time_ns = ramp_time_ns
             if piece.length is None:
                 piece.length = floor((piece.time_ns + piece.ramp_time_ns) / resolution_ns)
 
@@ -76,19 +81,20 @@ class Piecewise(object):
     def __next__(self):
 
         # conditionally move to next piece
-        if self._piece_index < len(self._pieces) - 1 and self._raster_index == self._pieces[self._piece_index].length:
+        if self._piece_index < len(self._pieces) - 1 and self._raster_index == len(self._pieces[self._piece_index]):
             self._piece_index += 1
             self._raster_index = 0
 
         # conditionally repeat the waveform from the start
-        elif self._repeat_index < self._repeat - 1 and self._raster_index == self._pieces[self._piece_index].length and self._piece_index == len(self._pieces) - 1:
+        elif self._repeat_index < self._repeat - 1 and self._raster_index == len(self._pieces[self._piece_index]) \
+                and self._piece_index == len(self._pieces) - 1:
             self._repeat_index += 1
             self._piece_index = 0
             self._raster_index = 0
 
         # end the iteration when we finish the last piece
         elif self._repeat_index == self._repeat - 1 and self._piece_index == len(self._pieces) - 1 \
-            and self._raster_index == self._pieces[self._piece_index].length:
+            and self._raster_index == len(self._pieces[self._piece_index]):
             self._piece_index = 0
             self._raster_index = 0
             self._repeat_index = 0
@@ -97,30 +103,35 @@ class Piecewise(object):
         # get the current piece
         piece = self._pieces[self._piece_index]
 
-        # raster the piece
-        if self._raster_index < floor(piece.time_ns / self.resolution):
-            self._raster_index += 1
-            return piece.volts
-
         # raster the ramp between pieces
-        elif self._raster_index < floor(piece.time_ns / self.resolution) + floor(piece.ramp_time_ns / self.resolution):
+        if self._raster_index < floor(piece.ramp_time_ns / self.resolution):
             curr_raster = self._raster_index
             self._raster_index += 1
 
+            # get the starting voltage
+            if self._piece_index != 0:
+                target = self._pieces[self._piece_index - 1].volts
+            elif self._repeat_index != 0:
+                target = self._pieces[len(self._pieces) - 1].volts
+
             # calculate the slope
-            target = self._pieces[self._piece_index + 1].volts
-            slope = (target - piece.volts) / floor(piece.ramp_time_ns / self.resolution)
-            x = curr_raster - floor(piece.time_ns / self.resolution)
+            slope = (piece.volts - target) / floor(piece.ramp_time_ns / self.resolution)
+            x = curr_raster
 
             # get the voltage at this instant
-            y = slope * x + piece.volts
+            y = slope * x + target
             return y
+
+        # raster the piece
+        elif self._raster_index < floor((piece.time_ns + piece.ramp_time_ns) / self.resolution):
+            self._raster_index += 1
+            return piece.volts
 
 
 def software_piecewise_microwave(
     single_electron_transistor,
     piecewise,
-    samples,
+    num_samples,
     records,
     averages,
     buffer_size,
@@ -134,7 +145,7 @@ def software_piecewise_microwave(
     stop = time.time()
     per_step = (stop - start) / 100
 
-    if piecewise.resolution * 10e-9 < per_step:
+    if piecewise.resolution * 1e-9 < per_step:
         raise Exception('Piecewise signal resolution is beyond this computer\'s iteration speed.')
 
     # connect to server
@@ -165,11 +176,11 @@ def software_piecewise_microwave(
 
     reads = np.array([])
 
-    digitizer.configure_acquisition(samples, records, averages, buffer_size)
+    digitizer.configure_acquisition(num_samples, records, averages, buffer_size)
 
     for volt in piecewise:
         awg.set_voltage(single_electron_transistor.bias_ch_num, volt)
-        time.sleep(piecewise.resolution * 10e-9)
+        time.sleep(piecewise.resolution * 1e-9)
         values = digitizer.get_voltage(single_electron_transistor.ai_ch_num)
         reads = np.append(reads, values['y'].max())
 
@@ -186,7 +197,7 @@ def software_piecewise_microwave(
 def hardware_piecewise_microwave(
     single_electron_transistor,
     piecewise,
-    samples,
+    num_samples,
     records,
     averages,
     buffer_size,
@@ -226,7 +237,7 @@ def hardware_piecewise_microwave(
 
     results = np.array([])
 
-    digitizer.configure_acquisition(samples, records, averages, buffer_size)
+    digitizer.configure_acquisition(num_samples, records, averages, buffer_size)
 
     # See https://rfmw.em.keysight.com/wireless/helpfiles/m31xx_m33xxa_awg/Content/M3201A_M3202A_PXIe_AWG_Users_Guide/10%20Overview%20of%20M3201A%20M3202A%20PXIe%20AWGs%20and%20Theory.html#AWG_Prescaler_and_Sampling_Rate
     # Memory sampling rate is either 1 GS/s, 200 MS/s or 100/n MS/s. Defaults to 1 GS/s which is the clock speed for the M2202A.
@@ -236,10 +247,10 @@ def hardware_piecewise_microwave(
     
     read = digitizer.get_voltage(single_electron_transistor.ai_ch_num)['y']
 
-    time.sleep(piecewise.length * piecewise.resolution * 10e-9)
+    time.sleep(piecewise.length * piecewise.resolution * 1e-9)
 
     bins = len(piecewise)
-    bin_size = int(samples / bins)
+    bin_size = int(num_samples / bins)
 
     for i in range(bins):
         results = np.append(results, np.average(read[i * bin_size:(i + 1) * bin_size]))
@@ -256,15 +267,16 @@ def hardware_piecewise_microwave(
 
 if __name__ == '__main__':
     # define the SET to be measured
-    SET1 = SET(1)
+    dev_config = json.load(open('../device_configs/SET.json', 'r'))
+    SET1 = SET(dev_config['bias_ch_num'])
 
     # load the experiment config
     config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
     jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
+    jschema_set = json.load(open('../json_schemas/AWG_SET.json', 'r'))
 
-    # TODO: range safety checks should include checks for the min, max resolutions
-    # Do we want separate schemas for software and hardware implementations?
     validate(instance=config, schema=jschema_mw)
+    validate(instance=dev_config, schema=jschema_set)
 
     # generate the waveform
     software_piecewise_microwave(
@@ -278,7 +290,7 @@ if __name__ == '__main__':
             ramp_time_ns=config['ramp_time'],
             resolution_ns=100
         ),
-        samples=config['samples'],
+        num_samples=config['samples'],
         records=config['records'],
         averages=config['averages'],
         buffer_size=config['buffer_size']
@@ -295,7 +307,7 @@ if __name__ == '__main__':
             ramp_time_ns=config['ramp_time'],
             resolution_ns=1
         ),
-        samples=config['samples'],
+        num_samples=config['samples'],
         records=config['records'],
         averages=config['averages'],
         buffer_size=config['buffer_size']
