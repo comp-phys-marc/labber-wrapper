@@ -26,6 +26,8 @@ class Piecewise(object):
     def __init__(self, pieces, ramp_time_ns, repeat=1, resolution_ns=1):
         for i, piece in enumerate(pieces):
             assert isinstance(piece, Piece)
+            if piece.time_ns < 2 * resolution_ns:
+                print(f'WARNING: piecewise function segment of length {piece.time_ns}ns depends on sampling beyond the Nyquist frequency.')
             if piece.ramp_time_ns is None and i != len(pieces) - 1:
                 piece.ramp_time_ns = ramp_time_ns
             elif piece.ramp_time_ns is None and i == len(pieces) - 1:
@@ -192,6 +194,9 @@ def hardware_piecewise_microwave(
     verbose=True
 ):
 
+    if piecewise.resolution != 1:
+        raise Exception('Piecewise function resolution must match the memory sampling rate of 1 GS/s. Please use 1ns.')
+
     # connect to server
     client = Labber.connectToServer('localhost')
 
@@ -219,12 +224,16 @@ def hardware_piecewise_microwave(
         [Vg1]
     )
 
-    results =np.array([])
+    results = np.array([])
 
     digitizer.configure_acquisition(samples, records, averages, buffer_size)
 
-    # TODO: what is the resolution on this?
+    # See https://rfmw.em.keysight.com/wireless/helpfiles/m31xx_m33xxa_awg/Content/M3201A_M3202A_PXIe_AWG_Users_Guide/10%20Overview%20of%20M3201A%20M3202A%20PXIe%20AWGs%20and%20Theory.html#AWG_Prescaler_and_Sampling_Rate
+    # Memory sampling rate is either 1 GS/s, 200 MS/s or 100/n MS/s. Defaults to 1 GS/s which is the clock speed for the M2202A.
+    # Therefore we have a 1 ns resolution and Labber does not give us control of this sampling rate.
+    # The Nyquist frequency is half of the sampling rate from memory. This will be left to the user to consider.
     awg.set_waveform(single_electron_transistor.bias_ch_num, volts)
+    
     read = digitizer.get_voltage(single_electron_transistor.ai_ch_num)['y']
 
     time.sleep(piecewise.length * piecewise.resolution * 10e-9)
@@ -245,47 +254,49 @@ def hardware_piecewise_microwave(
     client.close()
 
 
-# if __name__ == '__main__':
-    # # define the SET to be measured
-    # SET1 = SET(1)
+if __name__ == '__main__':
+    # define the SET to be measured
+    SET1 = SET(1)
 
-    # # load the experiment config
-    # config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
-    # jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
+    # load the experiment config
+    config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
+    jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
 
-    # # TODO: range safety checks should include checks for the min, max resolutions
-    # # Do we want separate schemas for software and hardware implementations?
-    # validate(instance=config, schema=jschema_mw)
+    # TODO: range safety checks should include checks for the min, max resolutions
+    # Do we want separate schemas for software and hardware implementations?
+    validate(instance=config, schema=jschema_mw)
 
-    # # generate the waveform
-    # software_piecewise_microwave(
-    #     single_electron_transistor=SET1,
-    #     piecewise=Piecewise(
-    #         pieces=[
-    #             Piece(volts=1, time_ns=10),
-    #             Piece(volts=2, time_ns=10),
-    #             Piece(volts=1, time_ns=10)
-    #         ],
-    #         ramp_time_ns=config['ramp_time']
-    #     ),
-    #     samples=config['samples'],
-    #     records=config['records'],
-    #     averages=config['averages'],
-    #     buffer_size=config['buffer_size']
-    # )
+    # generate the waveform
+    software_piecewise_microwave(
+        single_electron_transistor=SET1,
+        piecewise=Piecewise(
+            pieces=[
+                Piece(volts=1, time_ns=1000),
+                Piece(volts=2, time_ns=1000),
+                Piece(volts=1, time_ns=1000)
+            ],
+            ramp_time_ns=config['ramp_time'],
+            resolution_ns=100
+        ),
+        samples=config['samples'],
+        records=config['records'],
+        averages=config['averages'],
+        buffer_size=config['buffer_size']
+    )
 
-    # hardware_piecewise_microwave(
-    #     single_electron_transistor=SET1,
-    #     piecewise=Piecewise(
-    #         pieces=[
-    #             Piece(volts=1, time_ns=10),
-    #             Piece(volts=2, time_ns=10),
-    #             Piece(volts=1, time_ns=10)
-    #         ],
-    #         ramp_time_ns=config['ramp_time']
-    #     ),
-    #     samples=config['samples'],
-    #     records=config['records'],
-    #     averages=config['averages'],
-    #     buffer_size=config['buffer_size']
-    # )
+    hardware_piecewise_microwave(
+        single_electron_transistor=SET1,
+        piecewise=Piecewise(
+            pieces=[
+                Piece(volts=1, time_ns=10),
+                Piece(volts=2, time_ns=10),
+                Piece(volts=1, time_ns=10)
+            ],
+            ramp_time_ns=config['ramp_time'],
+            resolution_ns=1
+        ),
+        samples=config['samples'],
+        records=config['records'],
+        averages=config['averages'],
+        buffer_size=config['buffer_size']
+    )
