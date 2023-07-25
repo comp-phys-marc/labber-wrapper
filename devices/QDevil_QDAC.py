@@ -1,4 +1,6 @@
 import time
+import os
+from pathlib import PurePath
 from labberwrapper.devices.BaseDevice import BaseDevice
 
 
@@ -59,7 +61,8 @@ class QDAC(BaseDevice):
         return f'CH{str(ch_id).zfill(2)} Mode'
 
     def __init__(self, client, channel_generator_map=None):
-        schema = open("json_schemas/QDevil_QDAC.json", "r").readlines()
+        wd = PurePath(os.path.dirname(os.path.realpath(__file__))).parent
+        schema = ''.join(open(PurePath(wd).joinpath("json_schemas/QDevil_QDAC.json"), "r").readlines())
         super().__init__('QDevil QDAC', dict(interface='Serial', address='3'), client, schema)
 
         self.instr.startInstrument()

@@ -1,3 +1,5 @@
+import os
+from pathlib import PurePath
 from labberwrapper.devices.BaseDevice import BaseDevice
 
 
@@ -20,7 +22,8 @@ class Keithley6430(BaseDevice):
         return 'Measured current'
 
     def __init__(self, client):
-        schema = open("json_schemas/Keithley_6430_SourceMeter.json", "r").readlines()
+        wd = PurePath(os.path.dirname(os.path.realpath(__file__))).parent
+        schema = ''.join(open(PurePath(wd).joinpath("json_schemas/Keithley_6430_SourceMeter.json"), "r").readlines())
         super().__init__('Keithley 6430 Source Measurement Unit', dict(interface='GPIB', address='2'), client, schema)
 
     def set_voltage(self, voltage):

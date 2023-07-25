@@ -11,17 +11,17 @@ from labberwrapper.logging.log import Log
 from jsonschema import validate
 
 def keithley_sweep(
-        single_e_transistor,
-        slow_vstart,
-        slow_vend,
-        slow_steps,
-        step_length
-        gain=1,
-        sample_rate_per_channel=1e6,
-        v_min=-1,
-        v_max=1,
-        log_file='TEST.hdf5',
-        verbose=True
+    single_e_transistor,
+    slow_vstart,
+    slow_vend,
+    slow_steps,
+    step_length,
+    gain=1,
+    sample_rate_per_channel=1e6,
+    v_min=-1,
+    v_max=1,
+    log_file='TEST.hdf5',
+    verbose=True
 ):
 
     # connect to instrument server
@@ -94,11 +94,10 @@ if __name__ == '__main__':
     # perform the sweep
     keithley_sweep(
         SET1,
-        bias_volt,
-        slow_vstart,
-        slow_vend,
-        slow_steps,
-        step_length,
+        config['slow_vstart'],
+        config['slow_vend'],
+        config['slow_steps'],
+        config['step_length'],
         {
             SET1.bias_ch_num: 1
         },
