@@ -1,0 +1,66 @@
+{
+    "$id": "json_schemas/Keithley_2400_SourceMeter.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "sourcemeter values validation",
+    "type": "object",
+    "properties": {
+        "Source Type": {
+            "type": "string"
+        },
+        "Current Limit": {
+            "type": "number"
+        },
+        "Source voltage auto-range": {
+            "type": "boolean"
+        },
+        "Source Voltage": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "Output on": {
+            "type": "boolean"
+        },
+        "Measurement Type": {
+            "type": "string"
+        },
+        "Current auto-range": {
+            "type": "boolean"
+        },
+        "Current": {
+            "type": "number"
+        },
+        "Integration Time (I)": {
+            "type": "number"
+        },
+        "Source Type - Sweep rate": {
+            "type": "number"
+        },
+        "Current Limit - Sweep rate": {
+            "type": "number"
+        },
+        "Source voltage auto-range - Sweep rate": {
+            "type": "number"
+        },
+        "Source Voltage - Sweep rate": {
+            "type": "number",
+            "minimum": -2.5,
+            "maximum": 2.5
+        },
+        "Output on - Sweep rate": {
+            "type": "number"
+        },
+        "Measurement Type - Sweep rate": {
+            "type": "number"
+        },
+        "Current auto-range - Sweep rate": {
+            "type": "number"
+        },
+        "Current - Sweep rate": {
+            "type": "number"
+        },
+        "Integration Time (I) - Sweep rate": {
+            "type": "number"
+        }
+    }
+} 
