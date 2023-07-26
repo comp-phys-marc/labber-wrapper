@@ -59,13 +59,13 @@
             "type": "number"
         },
         "Ch1: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch1: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch1: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch1: Low range - Sweep Rate": {
             "type": "number"
@@ -77,13 +77,13 @@
             "type": "number"
         },
         "Ch2: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch2: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch2: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch2: Low range - Sweep Rate": {
             "type": "number"
@@ -95,13 +95,13 @@
             "type": "number"
         },
         "Ch3: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch3: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch3: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch3: Low range - Sweep Rate": {
             "type": "number"
@@ -113,13 +113,13 @@
             "type": "number"
         },
         "Ch4: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch4: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch4: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch4: Low range - Sweep Rate": {
             "type": "number"
@@ -131,13 +131,13 @@
             "type": "number"
         },
         "Ch5: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch5: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch5: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch5: Low range - Sweep Rate": {
             "type": "number"
@@ -149,13 +149,13 @@
             "type": "number"
         },
         "Ch6: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch6: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch6: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch6: Low range - Sweep Rate": {
             "type": "number"
@@ -167,13 +167,13 @@
             "type": "number"
         },
         "Ch7: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch7: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch7: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch7: Low range - Sweep Rate": {
             "type": "number"
@@ -185,13 +185,13 @@
             "type": "number"
         },
         "Ch8: High range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch8: High range - Sweep Rate": {
             "type": "number"
         },
         "Ch8: Low range": {
-            "type": "array"
+            "type": "number"
         },
         "Ch8: Low range - Sweep Rate": {
             "type": "number"
