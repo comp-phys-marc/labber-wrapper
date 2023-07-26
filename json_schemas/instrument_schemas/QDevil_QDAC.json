@@ -1,5 +1,5 @@
 {
-    "$id": "json_schemas/QDevil_QDAC.json",
+    "$id": "json_schemas/instrument_schemas/QDevil_QDAC.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "qdac values validation",
     "type": "object",

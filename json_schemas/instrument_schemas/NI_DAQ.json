@@ -1,5 +1,5 @@
 {
-    "$id": "json_schemas/NI_DAQ.json",
+    "$id": "json_schemas/instrument_schemas/NI_DAQ.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
     "title" : "nidaq values validation",
     "type": "object",
