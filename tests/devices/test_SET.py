@@ -1,5 +1,5 @@
 import unittest
-from devices.SET import SET
+from labberwrapper.devices.SET import SET
 
 
 class TestSET(unittest.TestCase):

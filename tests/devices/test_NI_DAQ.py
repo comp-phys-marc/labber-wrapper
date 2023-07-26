@@ -1,14 +1,16 @@
 import Labber
 import unittest
 import numpy as np
+from functools import partial
 from unittest.mock import MagicMock
-from devices.NI_DAQ import NIDAQ
+from labberwrapper.devices.NI_DAQ import NIDAQ
 
 
 class TestNIDAQ(unittest.TestCase):
 
     def setUp(self):
         self.device = NIDAQ(Labber.connectToServer('localhost'))
+        self.device.set_value = partial(self.device.set_value, validating=True)
 
     def test_init(self):
         self.assertIsInstance(self.device, NIDAQ)

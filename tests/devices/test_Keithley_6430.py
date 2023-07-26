@@ -1,13 +1,15 @@
 import Labber
 import unittest
 from unittest.mock import MagicMock
-from devices.Keithley_6430 import Keithley6430
+from functools import partial
+from labberwrapper.devices.Keithley_6430 import Keithley6430
 
 
 class TestKeithley6430(unittest.TestCase):
 
     def setUp(self):
         self.device = Keithley6430(Labber.connectToServer('localhost'))
+        self.device.set_value = partial(self.device.set_value, validating=True)
 
     def test_init(self):
         self.assertIsInstance(self.device, Keithley6430)

@@ -1,6 +1,7 @@
 import Labber
 import unittest
-from devices.QDevil_QDAC import QDAC
+from labberwrapper.devices.QDevil_QDAC import QDAC
+from functools import partial
 from unittest.mock import MagicMock, call
 
 
@@ -16,6 +17,7 @@ class TestQDAC(unittest.TestCase):
                 4: 5
             }
         )
+        self.device.set_value = partial(self.device.set_value, validating=True)
 
     def test_init(self):
         self.assertIsInstance(self.device, QDAC)
