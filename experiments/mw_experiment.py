@@ -103,6 +103,10 @@ class Piecewise(object):
         # get the current piece
         piece = self._pieces[self._piece_index]
 
+        # skip the ramp on the first piece of the first iteration
+        if self._repeat_index == 0 and self._piece_index == 0:
+            self._raster_index += floor(piece.ramp_time_ns / self.resolution)
+
         # raster the ramp between pieces
         if self._raster_index < floor(piece.ramp_time_ns / self.resolution):
             curr_raster = self._raster_index
