@@ -3,7 +3,7 @@ import unittest
 import numpy as np
 from functools import partial
 from unittest.mock import MagicMock
-from labberwrapper.devices.NI_DAQ import NIDAQ
+from devices.NI_DAQ import NIDAQ
 
 
 class TestNIDAQ(unittest.TestCase):
