@@ -7,7 +7,7 @@ from labberwrapper.devices.NI_DAQ import NIDAQ
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
-
+from jsonschema import validate
 
 # TODO: add one_dimensional_sweep_hardware
 def one_dimensional_sweep(
@@ -101,17 +101,24 @@ if __name__ == '__main__':
 
     # define the SET to be measured
     dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(
-        dev_config["bias_ch_num"],
-        dev_config["plunger_ch_num"],
-        dev_config["acc_ch_num"],
-        dev_config["vb1_ch_num"],
-        dev_config["vb2_ch_num"],
-        dev_config["ai_ch_num"]
-    )
+    SET1 = SET(dev_config["bias_ch_num"],
+               dev_config["plunger_ch_num"],
+               dev_config["acc_ch_num"],
+               dev_config["vb1_ch_num"],
+               dev_config["vb2_ch_num"],
+               dev_config["ai_ch_num"])
+
+    # load the experiment config
+    config = json.load(open('../experiment_configs/1D_sweep.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/1D_&_2Dsweep.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
+
+    # voltage safety check
+    validate(instance = config, schema = jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev)   
 
     # perform the sweep
-    config = json.load(open('../configs/1D_sweep.json', 'r'))
+    config = json.load(open('../experiment_configs/1D_sweep.json', 'r'))
     one_dimensional_sweep(
         SET1,
         config["fast_ch"],

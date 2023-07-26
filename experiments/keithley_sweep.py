@@ -8,13 +8,14 @@ from devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
-
-V_LIMIT = 2.5
-
+from jsonschema import validate
 
 def keithley_sweep(
         single_e_transistor,
-        config,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        step_length
         gain=1,
         sample_rate_per_channel=1e6,
         v_min=-1,
@@ -38,9 +39,9 @@ def keithley_sweep(
         print(keithley.instr.getLocalInitValuesDict())
 
     # NI_DAQ parameters calculation
-    num_samples_raw = int(config['step_length'] * sample_rate_per_channel)
+    num_samples_raw = int(step_length * sample_rate_per_channel)
 
-    vslow_list = np.linspace(config['slow_vstart'], config['slow_vend'], config['slow_steps'])
+    vslow_list = np.linspace(slow_vstart, slow_vend, slow_steps)
     Vg1 = dict(name='Vg1', unit='V', values=vslow_list)
 
     # initialize logging
@@ -55,7 +56,7 @@ def keithley_sweep(
 
     for vslow in vslow_list:
         keithley.set_voltage(vslow)
-        time.sleep(config['step_length'])
+        time.sleep(step_length)
 
         nidaq.configure_read(
             ch_id=single_e_transistor.ai_ch_num,
@@ -83,15 +84,21 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../experiment_configs/keithley_sweep.json', 'r'))
+    jschema_sweep = json.load(open('../json_schemas/keithley_sweep.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/SET.json', 'r'))
 
     # voltage safety check
-    if config['bias_volt'] > V_LIMIT:
-        raise Exception("Voltage too high")
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance = dev_config, schema = jschema_dev) 
 
     # perform the sweep
     keithley_sweep(
         SET1,
-        config,
+        bias_volt,
+        slow_vstart,
+        slow_vend,
+        slow_steps,
+        step_length,
         {
             SET1.bias_ch_num: 1
         },
