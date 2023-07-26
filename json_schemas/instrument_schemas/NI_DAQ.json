@@ -1,0 +1,218 @@
+{
+    "$id": "json_schemas/NI_DAQ.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "nidaq values validation",
+    "type": "object",
+    "properties": {
+        "Ch1:  Enabled": {
+            "type": "boolean"
+        },
+        "Ch2: Enabled": {
+            "type": "boolean"
+        },
+        "Ch3: Enabled": {
+            "type": "boolean"
+        },
+        "Ch4: Enabled": {
+            "type": "boolean"
+        },
+        "Ch1: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch2: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch3 - Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch4: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch5: Enabled": {
+            "type": "boolean"
+        },
+        "Ch6: Enabled": {
+            "type": "boolean"
+        },
+        "Ch7: Enabled": {
+            "type": "boolean"
+        },
+        "Ch8: Enabled": {
+            "type": "boolean"
+        },
+        "Ch5: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch6: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch7: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch8: Enabled - Sweep rate": {
+            "type": "number"
+        },
+        "Ch1: Data": {
+            "type": "array"
+        },
+        "Ch1: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch1: High range": {
+            "type": "array"
+        },
+        "Ch1: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch1: Low range": {
+            "type": "array"
+        },
+        "Ch1: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch2: Data": {
+            "type": "array"
+        },
+        "Ch2: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch2: High range": {
+            "type": "array"
+        },
+        "Ch2: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch2: Low range": {
+            "type": "array"
+        },
+        "Ch2: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch3: Data": {
+            "type": "array"
+        },
+        "Ch3: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch3: High range": {
+            "type": "array"
+        },
+        "Ch3: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch3: Low range": {
+            "type": "array"
+        },
+        "Ch3: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch4: Data": {
+            "type": "array"
+        },
+        "Ch4: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch4: High range": {
+            "type": "array"
+        },
+        "Ch4: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch4: Low range": {
+            "type": "array"
+        },
+        "Ch4: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch5: Data": {
+            "type": "array"
+        },
+        "Ch5: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch5: High range": {
+            "type": "array"
+        },
+        "Ch5: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch5: Low range": {
+            "type": "array"
+        },
+        "Ch5: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch6: Data": {
+            "type": "array"
+        },
+        "Ch6: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch6: High range": {
+            "type": "array"
+        },
+        "Ch6: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch6: Low range": {
+            "type": "array"
+        },
+        "Ch6: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch7: Data": {
+            "type": "array"
+        },
+        "Ch7: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch7: High range": {
+            "type": "array"
+        },
+        "Ch7: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch7: Low range": {
+            "type": "array"
+        },
+        "Ch7: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch8: Data": {
+            "type": "array"
+        },
+        "Ch8: Data - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch8: High range": {
+            "type": "array"
+        },
+        "Ch8: High range - Sweep Rate": {
+            "type": "number"
+        },
+        "Ch8: Low range": {
+            "type": "array"
+        },
+        "Ch8: Low range - Sweep Rate": {
+            "type": "number"
+        },
+        "Number of samples": {
+            "type": "number" 
+        },
+        "Number of samples - Sweep Rate": {
+            "type": "number" 
+        },
+        "Sample Rate": {
+            "type": "number" 
+        },
+        "Sample Rate - Sweep Rate": {
+            "type": "number" 
+        },
+        "Trig source": {
+            "type": "string" 
+        },
+        "Trig source - Sweep Rate": {
+            "type": "number" 
+        }       
+    }
+} 
