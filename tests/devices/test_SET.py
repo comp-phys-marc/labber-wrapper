@@ -16,7 +16,7 @@ class TestSET(unittest.TestCase):
         self.assertEqual(device.vb2_ch_num, 5)
         self.assertEqual(device.ai_ch_num, 1)
 
-        for i in range(len(4)):
+        for i in range(4):
             bias_ch_num = i
             plunger_ch_num = i
             acc_ch_num = i

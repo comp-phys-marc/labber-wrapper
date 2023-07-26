@@ -67,4 +67,4 @@ class TestNIDAQ(unittest.TestCase):
             res = self.device.read(ch_id, gain)
 
             self.device.instr.getValue.assert_called_with(self.device._ni_data_key(ch_id))
-            self.assertEqual(res, self.device.instr.getValue(self.device._ni_data_key(ch_id))['y'] / gain)
+            np.testing.assert_array_equal(res, self.device.instr.getValue(self.device._ni_data_key(ch_id))['y'] / gain)
