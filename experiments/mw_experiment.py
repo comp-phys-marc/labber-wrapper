@@ -104,7 +104,7 @@ class Piecewise(object):
         piece = self._pieces[self._piece_index]
 
         # skip the ramp on the first piece of the first iteration
-        if self._repeat_index == 0 and self._piece_index == 0:
+        if self._repeat_index == 0 and self._piece_index == 0 and self._raster_index == 0:
             self._raster_index += floor(piece.ramp_time_ns / self.resolution)
 
         # raster the ramp between pieces
@@ -269,50 +269,50 @@ def hardware_piecewise_microwave(
     client.close()
 
 
-if __name__ == '__main__':
-    # define the SET to be measured
-    dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(dev_config['bias_ch_num'])
-
-    # load the experiment config
-    config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
-    jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
-    jschema_set = json.load(open('../json_schemas/AWG_SET.json', 'r'))
-
-    validate(instance=config, schema=jschema_mw)
-    validate(instance=dev_config, schema=jschema_set)
-
-    # generate the waveform
-    software_piecewise_microwave(
-        single_electron_transistor=SET1,
-        piecewise=Piecewise(
-            pieces=[
-                Piece(volts=1, time_ns=1000),
-                Piece(volts=2, time_ns=1000),
-                Piece(volts=1, time_ns=1000)
-            ],
-            ramp_time_ns=config['ramp_time'],
-            resolution_ns=100
-        ),
-        num_samples=config['samples'],
-        records=config['records'],
-        averages=config['averages'],
-        buffer_size=config['buffer_size']
-    )
-
-    hardware_piecewise_microwave(
-        single_electron_transistor=SET1,
-        piecewise=Piecewise(
-            pieces=[
-                Piece(volts=1, time_ns=10),
-                Piece(volts=2, time_ns=10),
-                Piece(volts=1, time_ns=10)
-            ],
-            ramp_time_ns=config['ramp_time'],
-            resolution_ns=1
-        ),
-        num_samples=config['samples'],
-        records=config['records'],
-        averages=config['averages'],
-        buffer_size=config['buffer_size']
-    )
+# if __name__ == '__main__':
+    # # define the SET to be measured
+    # dev_config = json.load(open('../device_configs/SET.json', 'r'))
+    # SET1 = SET(dev_config['bias_ch_num'])
+    #
+    # # load the experiment config
+    # config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
+    # jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
+    # jschema_set = json.load(open('../json_schemas/AWG_SET.json', 'r'))
+    #
+    # validate(instance=config, schema=jschema_mw)
+    # validate(instance=dev_config, schema=jschema_set)
+    #
+    # # generate the waveform
+    # software_piecewise_microwave(
+    #     single_electron_transistor=SET1,
+    #     piecewise=Piecewise(
+    #         pieces=[
+    #             Piece(volts=1, time_ns=1000),
+    #             Piece(volts=2, time_ns=1000),
+    #             Piece(volts=1, time_ns=1000)
+    #         ],
+    #         ramp_time_ns=config['ramp_time'],
+    #         resolution_ns=100
+    #     ),
+    #     num_samples=config['samples'],
+    #     records=config['records'],
+    #     averages=config['averages'],
+    #     buffer_size=config['buffer_size']
+    # )
+    #
+    # hardware_piecewise_microwave(
+    #     single_electron_transistor=SET1,
+    #     piecewise=Piecewise(
+    #         pieces=[
+    #             Piece(volts=1, time_ns=10),
+    #             Piece(volts=2, time_ns=10),
+    #             Piece(volts=1, time_ns=10)
+    #         ],
+    #         ramp_time_ns=config['ramp_time'],
+    #         resolution_ns=1
+    #     ),
+    #     num_samples=config['samples'],
+    #     records=config['records'],
+    #     averages=config['averages'],
+    #     buffer_size=config['buffer_size']
+    # )
