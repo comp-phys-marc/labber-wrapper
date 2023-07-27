@@ -8,6 +8,7 @@ from labberwrapper.experiments.keithley_sweep import keithley_sweep
 from labberwrapper.experiments.keithley_sourcemeter_sweep import keithley_sourcemeter_sweep
 from jsonschema import validate
 from labberwrapper.devices.SET import SET
+from labberwrapper.devices.AWG_SET import SET as AWG_SET
 
 V_LIMIT = 2.5
 
@@ -123,7 +124,7 @@ if __name__ == "__main__":
     # MICROWAVE EXPERIMENT
 
     # define the SET to be measured
-    SET1 = SET(1)
+    SET1 = AWG_SET(1)
 
     # load the experiment config
     config = json.load(open('./labberwrapper/experiment_configs/mw_experiment.json', 'r'))

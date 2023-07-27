@@ -10,7 +10,7 @@ from jsonschema import validate
 from labberwrapper.devices.Keysight_PXI_AWG import KeysightPXIAWG
 from labberwrapper.devices.Keysight_PXI_Digitizer import KeysightPXIDigitizer
 from labberwrapper.logging.log import Log
-from labberwrapper.devices.SET import SET
+from labberwrapper.devices.AWG_SET import SET
 
 
 @dataclass
@@ -183,7 +183,7 @@ def software_piecewise_microwave(
     digitizer.configure_acquisition(num_samples, records, averages, buffer_size)
 
     for volt in piecewise:
-        awg.set_voltage(single_electron_transistor.bias_ch_num, volt)
+        awg.set_voltage(single_electron_transistor.plunger_1, volt)
         time.sleep(piecewise.resolution * 1e-9)
         values = digitizer.get_voltage(single_electron_transistor.ai_ch_num)
         reads = np.append(reads, values['y'].max())
@@ -247,7 +247,7 @@ def hardware_piecewise_microwave(
     # Memory sampling rate is either 1 GS/s, 200 MS/s or 100/n MS/s. Defaults to 1 GS/s which is the clock speed for the M2202A.
     # Therefore we have a 1 ns resolution and Labber does not give us control of this sampling rate.
     # The Nyquist frequency is half of the sampling rate from memory. This will be left to the user to consider.
-    awg.set_waveform(single_electron_transistor.bias_ch_num, volts)
+    awg.set_waveform(single_electron_transistor.plunger_1, volts)
     
     read = digitizer.get_voltage(single_electron_transistor.ai_ch_num)['y']
 
@@ -271,8 +271,8 @@ def hardware_piecewise_microwave(
 
 if __name__ == '__main__':
     # define the SET to be measured
-    dev_config = json.load(open('../device_configs/SET.json', 'r'))
-    SET1 = SET(dev_config['bias_ch_num'])
+    dev_config = json.load(open('../device_configs/AWG_SET.json', 'r'))
+    SET1 = SET(dev_config['plunger_1'])
 
     # load the experiment config
     config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
