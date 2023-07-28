@@ -4,7 +4,7 @@ import time
 import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
-from devices.Keithley_6430 import Keithley6430
+from labberwrapper.devices.Keithley_6430 import Keithley6430
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 from jsonschema import validate
