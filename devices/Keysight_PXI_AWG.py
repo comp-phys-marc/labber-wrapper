@@ -27,13 +27,13 @@ class KeysightPXIAWG:
 
     def set_voltage(self, channel, voltage):
         self.instr.startInstrument()
-        self.instr.setValue(self._keysight_offset_key(channel), voltage)
-        self.instr.setValue(self._keysight_enabled_key(channel), True)
         self.instr.setValue(self._keysight_function_key(channel), 'DC')
+        self.instr.setValue(self._keysight_enabled_key(channel), 'On')
+        self.instr.setValue(self._keysight_offset_key(channel), voltage)
 
     def set_waveform(self, channel, voltages):
         self.instr.startInstrument()
-        self.instr.setValue(self._keysight_waveform_key(channel), voltages)
-        self.instr.setValue(self._keysight_enabled_key(channel), True)
         self.instr.setValue(self._keysight_function_key(channel), 'AWG')
+        self.instr.setValue(self._keysight_enabled_key(channel), True)
+        self.instr.setValue(self._keysight_waveform_key(channel), voltages)
         self.instr.setValue(self._keysight_run_key(), True)
