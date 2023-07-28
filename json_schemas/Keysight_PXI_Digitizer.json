@@ -125,7 +125,7 @@
             "type": "number" 
         },
         "Ch1 - Signal": {
-            "type": "arrray"
+            "type": "array"
         },
         "Ch1 - Signal - Sweep Rate": {
             "type": "number"
