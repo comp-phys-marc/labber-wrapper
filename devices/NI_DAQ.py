@@ -1,4 +1,9 @@
-class NIDAQ:
+import os
+from pathlib import PurePath
+from labberwrapper.devices.BaseDevice import BaseDevice
+
+
+class NIDAQ(BaseDevice):
     _ni_num_sames_key = 'Number of samples'
     _ni_sample_rate_key = 'Sample rate'
     _ni_trig_key = 'Trig source'
@@ -20,26 +25,28 @@ class NIDAQ:
         return f'Ch{ch_id}: Low range'
 
     def __init__(self, client):
-        self.instr = client.connectToInstrument('NI DAQ', dict(interface='PXI', address='Dev1'))
+        wd = PurePath(os.path.dirname(os.path.realpath(__file__))).parent
+        schema = ''.join(open(PurePath(wd).joinpath("json_schemas/NI_DAQ.json"), "r").readlines())
+        super().__init__('NI DAQ', dict(interface='PXI', address='Dev1'), client, schema)
 
     def configure_read(self, ch_id, num_samples, sample_rate, v_min=-10, v_max=10, trigger=None):
 
         self.instr.startInstrument()
 
         # configure sampling
-        self.instr.setValue(self._ni_num_sames_key, num_samples)
-        self.instr.setValue(self._ni_sample_rate_key, sample_rate)
+        self.set_value(self._ni_num_sames_key, num_samples)
+        self.set_value(self._ni_sample_rate_key, sample_rate)
 
         # enable channel
-        self.instr.setValue(self._ni_enable_key(ch_id), True)
+        self.set_value(self._ni_enable_key(ch_id), True)
 
         # configure range
-        self.instr.setValue(self._ni_high_range_key(ch_id), v_max)
-        self.instr.setValue(self._ni_low_range_key(ch_id), v_min)
+        self.set_value(self._ni_high_range_key(ch_id), v_max)
+        self.set_value(self._ni_low_range_key(ch_id), v_min)
 
         # optionally use triggering
         if trigger is not None:
-            self.instr.setValue(self._ni_trig_key, trigger)
+            self.set_value(self._ni_trig_key, trigger)
 
     def read(self, ch_id, gain):
         # make measurement

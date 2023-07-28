@@ -5,24 +5,23 @@ import json
 
 from labberwrapper.devices.NI_DAQ import NIDAQ
 from devices.Keithley_6430 import Keithley6430
-from labberwrapper.devices.QDevil_QDAC import QDAC
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 from jsonschema import validate
 
 
 def keithley_sweep(
-        single_e_transistor,
-        slow_vstart,
-        slow_vend,
-        slow_steps,
-        step_length,
-        gain=1,
-        sample_rate_per_channel=1e6,
-        v_min=-1,
-        v_max=1,
-        log_file='TEST.hdf5',
-        verbose=True
+    single_e_transistor,
+    slow_vstart,
+    slow_vend,
+    slow_steps,
+    step_length,
+    gain=1,
+    sample_rate_per_channel=1e6,
+    v_min=-1,
+    v_max=1,
+    log_file='TEST.hdf5',
+    verbose=True
 ):
 
     # connect to instrument server
