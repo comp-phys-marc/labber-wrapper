@@ -6,7 +6,10 @@
         "samples",
         "records",
         "averages",
-        "buffer_size"
+        "buffer_size",
+        "impedance",
+        "coupling",
+        "range"
     ],
     "type": "object",
     "properties": {
@@ -21,6 +24,15 @@
         },
         "buffer_size": {
             "type": "number"
+        },
+        "impedance": {
+            "type": "string"
+        },
+        "coupling": {
+            "type": "string"
+        },
+        "range": {
+            "type": "string"
         }
     }
 }

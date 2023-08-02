@@ -139,6 +139,9 @@ def software_piecewise_microwave(
     records,
     averages,
     buffer_size,
+    impedance,
+    coupling,
+    rng,
     log_file='MW_TEST.hdf5',
     verbose=True
 ):
@@ -180,7 +183,16 @@ def software_piecewise_microwave(
 
     reads = np.array([])
 
-    digitizer.configure_acquisition(num_samples, records, averages, buffer_size)
+    digitizer.configure_acquisition(
+        num_samples,
+        records,
+        averages,
+        buffer_size,
+        single_electron_transistor.ai_ch_num,
+        impedance,
+        coupling,
+        rng
+    )
 
     for volt in piecewise:
         awg.set_voltage(single_electron_transistor.plunger_1, volt)
@@ -205,6 +217,9 @@ def hardware_piecewise_microwave(
     records,
     averages,
     buffer_size,
+    impedance,
+    coupling,
+    rng,
     log_file='MW_HW_TEST.hdf5',
     verbose=True
 ):
@@ -241,16 +256,23 @@ def hardware_piecewise_microwave(
 
     results = np.array([])
 
-    digitizer.configure_acquisition(num_samples, records, averages, buffer_size)
+    digitizer.configure_acquisition(
+        num_samples,
+        records,
+        averages,
+        buffer_size,
+        single_electron_transistor.ai_ch_num,
+        impedance,
+        coupling,
+        rng
+    )
 
     # See https://rfmw.em.keysight.com/wireless/helpfiles/m31xx_m33xxa_awg/Content/M3201A_M3202A_PXIe_AWG_Users_Guide/10%20Overview%20of%20M3201A%20M3202A%20PXIe%20AWGs%20and%20Theory.html#AWG_Prescaler_and_Sampling_Rate
     # Memory sampling rate is either 1 GS/s, 200 MS/s or 100/n MS/s. Defaults to 1 GS/s which is the clock speed for the M2202A.
     # Therefore we have a 1 ns resolution and Labber does not give us control of this sampling rate.
     # The Nyquist frequency is half of the sampling rate from memory. This will be left to the user to consider.
     awg.set_waveform(single_electron_transistor.plunger_1, volts)
-    
     read = digitizer.get_voltage(single_electron_transistor.ai_ch_num)['y']
-
     time.sleep(piecewise.length * piecewise.resolution * 1e-9)
 
     bins = len(piecewise)
@@ -297,7 +319,10 @@ if __name__ == '__main__':
         num_samples=config['samples'],
         records=config['records'],
         averages=config['averages'],
-        buffer_size=config['buffer_size']
+        buffer_size=config['buffer_size'],
+        impedance=config['impedance'],
+        coupling=config['coupling'],
+        rng=config['range']
     )
 
     hardware_piecewise_microwave(
@@ -314,5 +339,8 @@ if __name__ == '__main__':
         num_samples=config['samples'],
         records=config['records'],
         averages=config['averages'],
-        buffer_size=config['buffer_size']
+        buffer_size=config['buffer_size'],
+        impedance=config['impedance'],
+        coupling=config['coupling'],
+        rng=config['range']
     )
