@@ -26,7 +26,7 @@ class NIDAQ(BaseDevice):
 
     def __init__(self, client):
         wd = PurePath(os.path.dirname(os.path.realpath(__file__))).parent
-        file = open(PurePath(wd).joinpath("json_schemas/NI_DAQ.json"), "r")
+        file = open(PurePath(wd).joinpath("json_schemas/instrument_schemas/NI_DAQ.json"), "r")
         schema = ''.join(file.readlines())
         file.close()
         super().__init__('NI DAQ', dict(interface='PXI', address='Dev1'), client, schema)
