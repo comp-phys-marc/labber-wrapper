@@ -60,7 +60,8 @@
         },
         "Trig All": {
             "type": "boolean"
-        },"Trig All - Sweep Rate": {
+        },
+        "Trig All - Sweep Rate": {
             "type": "number"
         },
         "Ch1 - Function": {

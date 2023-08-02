@@ -3,6 +3,10 @@
 class KeysightPXIAWG:
 
     @staticmethod
+    def _keysight_trigger_key():
+        return 'Trig All'
+
+    @staticmethod
     def _keysight_offset_key(channel):
         return f'Ch{channel} - Offset'
 
@@ -37,3 +41,4 @@ class KeysightPXIAWG:
         self.instr.setValue(self._keysight_enabled_key(channel), True)
         self.instr.setValue(self._keysight_function_key(channel), 'AWG')
         self.instr.setValue(self._keysight_run_key(), True)
+        self.instr.setValue(self._keysight_trigger_key(), True)
