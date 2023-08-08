@@ -114,8 +114,8 @@ if __name__ == '__main__':
     jschema_dev = json.load(open('../json_schemas/device_schemas/SET.json', 'r'))
 
     # voltage safety check
-    validate(instance = config, schema = jschema_sweep)
-    validate(instance = dev_config, schema = jschema_dev)   
+    validate(instance=config, schema=jschema_sweep)
+    validate(instance=dev_config, schema=jschema_dev)
 
     # perform the sweep
     config = json.load(open('../experiment_configs/1D_sweep.json', 'r'))
