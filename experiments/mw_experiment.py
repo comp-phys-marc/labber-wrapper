@@ -298,8 +298,8 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../experiment_configs/mw_experiment.json', 'r'))
-    jschema_mw = json.load(open('../json_schemas/mw_experiment.json', 'r'))
-    jschema_set = json.load(open('../json_schemas/AWG_SET.json', 'r'))
+    jschema_mw = json.load(open('../json_schemas/experiment_schemas/mw_experiment.json', 'r'))
+    jschema_set = json.load(open('../json_schemas/device_schemas/AWG_SET.json', 'r'))
 
     validate(instance=config, schema=jschema_mw)
     validate(instance=dev_config, schema=jschema_set)

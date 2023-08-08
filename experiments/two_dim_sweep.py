@@ -157,8 +157,8 @@ if __name__ == '__main__':
 
     # load the experiment config
     config = json.load(open('../experiment_configs/2D_sweep.json', 'r'))
-    jschema_sweep = jschema = json.load(open('../json_schemas/1D_&_2Dsweeps.json', 'r'))
-    jschema_dev = json.load(open('../json_schemas/QDAC_SET.json', 'r'))
+    jschema_sweep = jschema = json.load(open('../json_schemas/experiment_schemas/1D_&_2Dsweeps.json', 'r'))
+    jschema_dev = json.load(open('../json_schemas/device_schemas/QDAC_SET.json', 'r'))
 
     # voltage safety check
     validate(instance=config, schema=jschema_sweep)
