@@ -46,5 +46,4 @@ class KeysightPXIAWG:
         # self.instr.setValue(self._keysight_function_key(channel), 'AWG')
         # self.instr.setValue(self._keysight_trig_mode_key(channel), 'Continuous')
         self.instr.setValue(self._keysight_waveform_key(channel), voltages)
-        self.instr.setValue(self._keysight_run_key(), True)
-        self.instr.setValue(self._keysight_trigger_key(), True)
+        # self.instr.setValue(self._keysight_run_key(), True)

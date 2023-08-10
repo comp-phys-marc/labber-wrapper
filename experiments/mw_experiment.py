@@ -297,11 +297,11 @@ def hardware_piecewise_microwave(
     # data = {'ai': results}
     # log.file.addEntry(data)
 
-    # fig, ax = plt.subplots()  # Create a figure containing a single axes.
-    # ax.plot(np.linspace(0, len(read), len(read)), read)  # Plot some data on the axes.
-    # ax.set_xlabel('2 ns')
-    # ax.set_ylabel('volts')
-    # plt.show()
+    fig, ax = plt.subplots()  # Create a figure containing a single axes.
+    ax.plot(np.linspace(0, len(read), len(read)), read)  # Plot some data on the axes.
+    ax.set_xlabel('2 ns')
+    ax.set_ylabel('volts')
+    plt.show()
 
     digitizer.instr.stopInstrument()
     awg.instr.stopInstrument()
