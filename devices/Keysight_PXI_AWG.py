@@ -26,6 +26,10 @@ class KeysightPXIAWG:
     def _keysight_run_key():
         return 'Run'
 
+    @staticmethod
+    def _keysight_trig_mode_key(channel):
+        return f'Ch{channel} - Trig mode'
+
     def __init__(self, client):
         self.instr = client.connectToInstrument('Keysight PXI AWG', dict(interface='PXI', address='4'))
 
@@ -37,8 +41,10 @@ class KeysightPXIAWG:
 
     def set_waveform(self, channel, voltages):
         self.instr.startInstrument()
-        self.instr.setValue(self._keysight_function_key(channel), 'AWG')
-        self.instr.setValue(self._keysight_enabled_key(channel), True)
+        # errors thrown with each of these commented out lines
+        # self.instr.setValue(self._keysight_enabled_key(channel), True)
+        # self.instr.setValue(self._keysight_function_key(channel), 'AWG')
+        # self.instr.setValue(self._keysight_trig_mode_key(channel), 'Continuous')
         self.instr.setValue(self._keysight_waveform_key(channel), voltages)
         self.instr.setValue(self._keysight_run_key(), True)
         self.instr.setValue(self._keysight_trigger_key(), True)

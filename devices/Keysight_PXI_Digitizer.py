@@ -38,6 +38,10 @@ class KeysightPXIDigitizer:
     def _keysight_channel_range_key(channel):
         return f'Ch{channel} - Range'
 
+    @staticmethod
+    def _keysight_trig_mode_key():
+        return 'Trig Mode'
+
     def __init__(self, client):
         self.instr = client.connectToInstrument('Keysight PXI Digitizer', dict(interface='PXI', address='3'))
 
@@ -61,7 +65,7 @@ class KeysightPXIDigitizer:
         self.instr.setValue(self._keysight_channel_impedance_key(channel), impedance)
         self.instr.setValue(self._keysight_channel_coupling_key(channel), coupling)
         self.instr.setValue(self._keysight_channel_range_key(channel), range)
-
+        self.instr.setValue(self._keysight_trig_mode_key(), 'Immediate')
 
     def get_voltage(self, channel):
         self.instr.startInstrument()
