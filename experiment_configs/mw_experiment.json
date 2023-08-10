@@ -1,6 +1,6 @@
 {
     "ramp_time": 5,
-    "samples": 100e3,
+    "samples": 5000,
     "records": 1,
     "averages": 1,
     "buffer_size": 50,

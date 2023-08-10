@@ -208,7 +208,7 @@ def software_piecewise_microwave(
     log.file.addEntry(data)
 
     # fig, ax = plt.subplots()  # Create a figure containing a single axes.
-    # ax.plot(np.linspace(0, 1, len(reads)), reads)  # Plot some data on the axes.
+    # ax.plot(np.linspace(0, len(reads), len(reads)), reads)  # Plot some data on the axes.
     # ax.set_xlabel(f'{piecewise.resolution} ns')
     # ax.set_ylabel('volts')
     # plt.show()
@@ -288,18 +288,18 @@ def hardware_piecewise_microwave(
     read = digitizer.get_voltage(single_electron_transistor.ai_ch_num)['y']
     time.sleep(piecewise.length * piecewise.resolution * 1e-9)
 
-    bins = len(piecewise)
-    bin_size = int(num_samples / bins)
-
-    for i in range(bins):
-        results = np.append(results, np.average(read[i * bin_size:(i + 1) * bin_size]))
+    # bins = len(piecewise)
+    # bin_size = int(num_samples / bins)
+    #
+    # for i in range(bins):
+    #     results = np.append(results, np.average(read[i * bin_size:(i + 1) * bin_size]))
 
     # data = {'ai': results}
     # log.file.addEntry(data)
 
     # fig, ax = plt.subplots()  # Create a figure containing a single axes.
-    # ax.plot(np.linspace(0, 1, len(results)), results)  # Plot some data on the axes.
-    # ax.set_xlabel(f'{piecewise.length * piecewise.resolution} ns')
+    # ax.plot(np.linspace(0, len(read), len(read)), read)  # Plot some data on the axes.
+    # ax.set_xlabel('2 ns')
     # ax.set_ylabel('volts')
     # plt.show()
 
