@@ -9,7 +9,6 @@ A library of software utilities and experimental procedures built on Labber. The
 
 4) Experiments. We have provided a number of out-of-the-box experiments such as voltage sweeps and piecewise voltage ramps.
 
-
 5) Testability. We provide (passing) tests with our experiments and with our classes that wrap Labber API usage.
 
 # Examples

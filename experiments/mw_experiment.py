@@ -6,6 +6,7 @@ from typing import Optional
 from math import floor
 import json
 from jsonschema import validate
+from statistics import mean
 
 from labberwrapper.devices.Keysight_PXI_AWG import KeysightPXIAWG
 from labberwrapper.devices.Keysight_PXI_Digitizer import KeysightPXIDigitizer
@@ -202,7 +203,7 @@ def software_piecewise_microwave(
         awg.set_voltage(single_electron_transistor.plunger_1, volt)
         time.sleep(piecewise.resolution * 1e-9)
         values = digitizer.get_voltage(single_electron_transistor.ai_ch_num)
-        reads = np.append(reads, values['y'].max())
+        reads = np.append(reads, mean(values['y']))
 
     data = {'ai': reads}
     log.file.addEntry(data)
