@@ -279,7 +279,7 @@ def hardware_piecewise_microwave(
 
     # See https://rfmw.em.keysight.com/wireless/helpfiles/m31xx_m33xxa_awg/Content/M3201A_M3202A_PXIe_AWG_Users_Guide/10%20Overview%20of%20M3201A%20M3202A%20PXIe%20AWGs%20and%20Theory.html#AWG_Prescaler_and_Sampling_Rate
     # Memory sampling rate is either 1 GS/s, 200 MS/s or 100/n MS/s.
-    # Defaults to 1 GS/s which is the clock speed for the M2202A.
+    # Defaults to 1 GS/s which is the clock speed for the M3202A.
     # Therefore we have a 1 ns resolution and Labber does not give us
     # control of this sampling rate.
     # The Nyquist frequency is half of the sampling rate from memory.
@@ -288,14 +288,14 @@ def hardware_piecewise_microwave(
     read = digitizer.get_voltage(single_electron_transistor.ai_ch_num)['y']
     time.sleep(piecewise.length * piecewise.resolution * 1e-9)
 
-    # bins = len(piecewise)
-    # bin_size = int(num_samples / bins)
-    #
-    # for i in range(bins):
-    #     results = np.append(results, np.average(read[i * bin_size:(i + 1) * bin_size]))
+    bins = len(volts)
+    bin_size = int(num_samples / bins)
 
-    # data = {'ai': results}
-    # log.file.addEntry(data)
+    for i in range(bins):
+        results = np.append(results, np.average(read[i * bin_size:(i + 1) * bin_size]))
+
+    data = {'ai': results}
+    log.file.addEntry(data)
 
     # fig, ax = plt.subplots()  # Create a figure containing a single axes.
     # ax.plot(np.linspace(0, len(read), len(read)), read)  # Plot some data on the axes.
