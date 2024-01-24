@@ -122,7 +122,7 @@ def two_dimensional_sweep(
         bins = fast_steps
         bin_size = int(num_samples_raw / bins)
 
-        for i in range(bins):
+        for j in range(bins):
             results = np.append(results, np.average(result[i * bin_size:(i+1) * bin_size]))
 
         data = {
