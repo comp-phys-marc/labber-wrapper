@@ -191,6 +191,7 @@ class QDAC(BaseDevice):
         for i, ch_id in enumerate(list(self._channel_generator_map.keys())):
             amplitude = v_endlist[i] - v_startlist[i]
 
+            # TODO: verify that these two lines work as intended
             self.set_value(self._qdac_channel_amplitude_key(ch_id), amplitude)
             self.set_value(self._qdac_channel_offset_key(ch_id), v_startlist[i])
 
