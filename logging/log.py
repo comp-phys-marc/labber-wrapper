@@ -5,9 +5,6 @@ from pathlib import Path
 class Log:
 
     def __init__(self, log_file_path, log_channels, params, increment=True):
-        # define log channels
-        log_channels = [dict(name=log_name, unit=log_units, vector=False),
-                        dict(name=log_name, unit=log_units, vector=False)]
 
         # check for file and increment count if found
         if increment:
