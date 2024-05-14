@@ -1,0 +1,54 @@
+{
+    "$id": "json_schemas/instrument_schemas/SRS_lock_in.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "sourcemeter values validation",
+    "type": "object",
+    "properties": {
+        "Output amplitude": {
+            "type": "number",
+            "minimum": 0.004
+        },
+        "Reference source": {
+            "type": "number"
+        },
+        "Frequency": {
+            "type": "number"
+        },
+        "Phase": {
+            "type": "number"
+        },
+        "Detection harmonic": {
+            "type": "number"
+        },
+        "Input configuration": {
+            "type": "number"
+        },
+        "Input coupling": {
+            "type": "number"
+        },
+        "Input grounding": {
+            "type": "number"
+        },
+        "Line notch filter": {
+            "type": "number"
+        },
+        "Sensitivity": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 26
+        },
+        "Dynamic reserve": {
+            "type": "number"
+        },
+        "Time constant": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 19
+        },
+        "Filter slope": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 3
+        }
+    }
+} 

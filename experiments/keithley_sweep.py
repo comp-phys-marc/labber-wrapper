@@ -47,8 +47,7 @@ def keithley_sweep(
     # initialize logging
     log = Log(
         log_file,
-        'NIai',
-        'V',
+        [dict(name='NIai', units='V')],
         [Vg1]
     )
 

@@ -65,8 +65,7 @@ def two_dimensional_sweep(
     # initialize logging
     log = Log(
         log_file,
-        'I',
-        'A',
+        [dict(name='I', units='A')],
         [Vx, Vy]
     )
 

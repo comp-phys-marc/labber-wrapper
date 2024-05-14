@@ -181,8 +181,7 @@ def software_piecewise_microwave(
     # initialize logging
     log = Log(
         log_file,
-        'ai',
-        'V',
+        [dict(name='ai', units='V')],
         [Vg1]
     )
 
@@ -260,8 +259,7 @@ def hardware_piecewise_microwave(
     # initialize logging
     log = Log(
         log_file,
-        'ai',
-        'V',
+        [dict(name='ai', units='V')],
         [Vg1]
     )
 

@@ -4,9 +4,10 @@ from pathlib import Path
 
 class Log:
 
-    def __init__(self, log_file_path, log_name, log_units, params, increment=True):
+    def __init__(self, log_file_path, log_channels, params, increment=True):
         # define log channels
-        log = [dict(name=log_name, unit=log_units, vector=False)]
+        log_channels = [dict(name=log_name, unit=log_units, vector=False),
+                        dict(name=log_name, unit=log_units, vector=False)]
 
         # check for file and increment count if found
         if increment:
@@ -27,4 +28,5 @@ class Log:
                 raise Exception(f'Too many log files: {i}')
 
         # create log file
-        self.file = Labber.createLogFile_ForData(log_file_path, log, params, use_database=False)
+        self.file = Labber.createLogFile_ForData(log_file_path, log_channels, params, use_database=False)
+

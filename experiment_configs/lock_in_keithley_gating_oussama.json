@@ -1,0 +1,13 @@
+{
+    "gate_start": 0,
+    "gate_end": 2,
+    "gate_steps": 10,
+    "voltage": 0.004, 
+    "frequency": 10000, 
+    "sensitivity": 20, 
+    "time_constant": 0, 
+    "slope": 1,
+    "ch_id_1": "R", 
+    "ch_id_2": "theta",
+    "step_length": 0.00005
+}
