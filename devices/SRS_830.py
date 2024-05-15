@@ -4,6 +4,7 @@ from labberwrapper.devices.BaseDevice import BaseDevice
 
 
 class SRS830(BaseDevice):
+    _SRS_lock_in_data_key = "channel ID"
 
     @staticmethod
     def _SRS_lock_in_output_key():
@@ -29,18 +30,13 @@ class SRS830(BaseDevice):
     def _SRS_lock_in_slope_key():
         return 'Filter slope'
     
-    @staticmethod
-    def _SRS_lock_in_data_key(ch_id):
-        return f'{ch_id}'
-    
-
     def __init__(self, client):
         wd = PurePath(os.path.dirname(os.path.realpath(__file__))).parent
-        file = open(PurePath(wd).joinpath("json_schemas/instrument_schemas/SRS_lock_in.json"), "r")
+        file = open(PurePath(wd).joinpath("json_schemas/instrument_schemas/SRS_830.json"), "r")
         file.close()
         super().__init__('Stanford Lock-in Amplifier SRS 830', dict(interface='GPIB', address='4'), client, schema)
 
-    def set_output_and_readout(self, voltage, frequency, sensitivity, time_constant, slope, reference = 1):
+    def set_output_and_readout(self, voltage, frequency, sensitivity, time_constant, slope, reference=1):
         self.instr.startInstrument()
         self.set_value(self._SRS_lock_in_output_key(), voltage)
         self.set_value(self._SRS_lock_in_reference_key(), reference) # 0 is external and 1 is internal
@@ -50,7 +46,7 @@ class SRS830(BaseDevice):
         self.set_value(self._SRS_lock_in_slope_key(), slope)
 
     def read(self, ch_id_1, ch_id_2):
-        result_1 = self.instr.getValue(self._SRS_lock_in_data_key(ch_id_1))
-        result_2 = self.instr.getValue(self._SRS_lock_in_data_key(ch_id_2))
+        result_1 = self.instr.getValue(self._SRS_lock_in_data_key, ch_id_1)
+        result_2 = self.instr.getValue(self._SRS_lock_in_data_key, ch_id_2)
 
         return result_1, result_2

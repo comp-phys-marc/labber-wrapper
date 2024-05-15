@@ -1,7 +1,7 @@
 {
-    "$id": "json_schemas/instrument_schemas/SRS_lock_in.json",
+    "$id": "json_schemas/instrument_schemas/SRS_830.json",
     "$schema": "https://json-schema.org/draft/2020-12/schema",
-    "title" : "sourcemeter values validation",
+    "title" : "SRS 830 values validation",
     "type": "object",
     "properties": {
         "Output amplitude": {
@@ -12,7 +12,8 @@
             "type": "number"
         },
         "Frequency": {
-            "type": "number"
+            "type": "number",
+            "minimum": 0
         },
         "Phase": {
             "type": "number"
