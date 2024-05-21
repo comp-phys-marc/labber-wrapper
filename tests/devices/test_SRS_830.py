@@ -22,50 +22,61 @@ class TestSRS830(unittest.TestCase):
 
         # check that bad values are filtered out
         self.device.set_output_and_readout(
-            voltage = 0.002, #minimum should be 0.004
-            frequency = 1000, 
-            sensitivity = 2, 
-            time_constant = 2, 
-            slope = 2)
+            voltage=0.002, #minimum should be 0.004
+            frequency=1000, 
+            sensitivity=2, 
+            time_constant=2, 
+            slope=2
+            )
         
         self.device.set_output_and_readout(
-            voltage = 0.004, 
-            frequency = -1000, #should not put negative values 
-            sensitivity = 2, 
-            time_constant = 2, 
-            slope = 2
+            voltage=0.004, 
+            frequency=-1000, #should not put negative values 
+            sensitivity=2, 
+            time_constant=2, 
+            slope=2
             )
 
         self.device.set_output_and_readout(
-            voltage = 0.004, 
-            frequency = 1000,  
-            sensitivity = 'a', # should not accept a string
-            time_constant = 2, 
-            slope = 2
+            voltage=0.004, 
+            frequency=1000,  
+            sensitivity='a', # should not accept a string
+            time_constant=2, 
+            slope=2
             )
         
         self.device.set_output_and_readout(
-            voltage = 0.004, 
-            frequency = 1000, 
-            sensitivity = 2, 
-            time_constant = 20, #maximum is 19
-            slope = 2
+            voltage=0.004, 
+            frequency=1000, 
+            sensitivity=2, 
+            time_constant=20, #maximum is 19
+            slope=2
             )
         
+        self.device.set_output_and_readout(
+            voltage=0.004, 
+            frequency=1000, 
+            sensitivity=2, 
+            time_constant=2,
+            slope=4, #maximum should be 3
+            )
         self.device.instr.setValue.assert_not_called()
 
         # check that good values are set properly
         for v in [0.004, 0.05]:
-            for f in [0, 10000]:
-                self.device.set_output_and_readout(v, f, 3, 4, 2)
+            for f in [0, 1000]:
+                for s in [0, 26]:
+                    for t in [0, 19]:
+                        for slope in [0, 3]:
+                            self.device.set_output_and_readout(v, f, s, t, slope)
 
-                self.device.set_value.assert_called_with(self._SRS_lock_in_output_key(), v)
-                self.device.set_value.assert_called_with(self._SRS_lock_in_frequency_key(), f)
-                self.device.set_value.assert_called_with(self._SRS_lock_in_sensitivity_key(), 3)
-                self.device.set_value.assert_called_with(self._SRS_lock_in_time_constant_key(), 4)
-                self.device.set_value.assert_called_with(self._SRS_lock_in_slope_key(), 2)
-                self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_output_key(), v)
-                self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_frequency_key(), f)
-                self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_sensitivity_key(), 3)
-                self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_time_constant_key(), 4)
-                self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_slope_key(), 2)
+                            self.device.set_value.assert_called_with(self._SRS_lock_in_output_key(), v)
+                            self.device.set_value.assert_called_with(self._SRS_lock_in_frequency_key(), f)
+                            self.device.set_value.assert_called_with(self._SRS_lock_in_sensitivity_key(), s)
+                            self.device.set_value.assert_called_with(self._SRS_lock_in_time_constant_key(), t)
+                            self.device.set_value.assert_called_with(self._SRS_lock_in_slope_key(), slope)
+                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_output_key(), v)
+                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_frequency_key(), f)
+                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_sensitivity_key(), s)
+                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_time_constant_key(), t)
+                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_slope_key(), slope)
