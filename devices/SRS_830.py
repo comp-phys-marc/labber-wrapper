@@ -4,7 +4,6 @@ from labberwrapper.devices.BaseDevice import BaseDevice
 
 
 class SRS830(BaseDevice):
-    _SRS_lock_in_data_key = "channel ID"
 
     @staticmethod
     def _SRS_lock_in_output_key():
@@ -46,7 +45,7 @@ class SRS830(BaseDevice):
         self.set_value(self._SRS_lock_in_slope_key(), slope)
 
     def read(self, ch_id_1, ch_id_2):
-        result_1 = self.instr.getValue(self._SRS_lock_in_data_key, ch_id_1)
-        result_2 = self.instr.getValue(self._SRS_lock_in_data_key, ch_id_2)
+        result_1 = self.instr.getValue(ch_id_1)
+        result_2 = self.instr.getValue(ch_id_2)
 
         return result_1, result_2
