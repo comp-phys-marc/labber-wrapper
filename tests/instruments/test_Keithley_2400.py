@@ -2,7 +2,7 @@ import Labber
 import unittest
 from unittest.mock import MagicMock
 from functools import partial
-from instruments.Keithley_2400 import Keithley2400
+from labberwrapper.instruments.Keithley_2400 import Keithley2400
 
 
 class TestKeithley2400(unittest.TestCase):

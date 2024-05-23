@@ -2,7 +2,7 @@ import Labber
 import unittest
 from unittest.mock import MagicMock
 from functools import partial
-from instruments.SRS_830 import SRS830
+from labberwrapper.instruments.SRS_830 import SRS830
 
 
 class TestSRS830(unittest.TestCase):
@@ -12,16 +12,16 @@ class TestSRS830(unittest.TestCase):
         self.instrument.set_value = partial(self.instrument.set_value, validating=True)
 
     def test_init(self):
-        self.assertIsInstance(self.device, SRS830)
-        assert hasattr(self.device, 'instr')
-        self.assertIsNotNone(self.device.instr)
+        self.assertIsInstance(self.instrument, SRS830)
+        assert hasattr(self.instrument, 'instr')
+        self.assertIsNotNone(self.instrument.instr)
 
     def test_set_voltage(self):
-        self.device.set_value = MagicMock()
-        self.device.instr.setValue = MagicMock()
+        self.instrument.set_value = MagicMock()
+        self.instrument.instr.setValue = MagicMock()
 
         # check that bad values are filtered out
-        self.device.set_output_and_readout(
+        self.instrument.set_output_and_readout(
             voltage=0.002, #minimum should be 0.004
             frequency=1000, 
             sensitivity=2, 
@@ -29,7 +29,7 @@ class TestSRS830(unittest.TestCase):
             slope=2
             )
         
-        self.device.set_output_and_readout(
+        self.instrument.set_output_and_readout(
             voltage=0.004, 
             frequency=-1000, #should not put negative values 
             sensitivity=2, 
@@ -37,7 +37,7 @@ class TestSRS830(unittest.TestCase):
             slope=2
             )
 
-        self.device.set_output_and_readout(
+        self.instrument.set_output_and_readout(
             voltage=0.004, 
             frequency=1000,  
             sensitivity='a', # should not accept a string
@@ -45,7 +45,7 @@ class TestSRS830(unittest.TestCase):
             slope=2
             )
         
-        self.device.set_output_and_readout(
+        self.instrument.set_output_and_readout(
             voltage=0.004, 
             frequency=1000, 
             sensitivity=2, 
@@ -53,14 +53,14 @@ class TestSRS830(unittest.TestCase):
             slope=2
             )
         
-        self.device.set_output_and_readout(
+        self.instrument.set_output_and_readout(
             voltage=0.004, 
             frequency=1000, 
             sensitivity=2, 
             time_constant=2,
             slope=4, #maximum should be 3
             )
-        self.device.instr.setValue.assert_not_called()
+        self.instrument.instr.setValue.assert_not_called()
 
         # check that good values are set properly
         for v in [0.004, 0.05]:
@@ -68,15 +68,15 @@ class TestSRS830(unittest.TestCase):
                 for s in [0, 26]:
                     for t in [0, 19]:
                         for slope in [0, 3]:
-                            self.device.set_output_and_readout(v, f, s, t, slope)
+                            self.instrument.set_output_and_readout(v, f, s, t, slope)
 
-                            self.device.set_value.assert_called_with(self._SRS_lock_in_output_key(), v)
-                            self.device.set_value.assert_called_with(self._SRS_lock_in_frequency_key(), f)
-                            self.device.set_value.assert_called_with(self._SRS_lock_in_sensitivity_key(), s)
-                            self.device.set_value.assert_called_with(self._SRS_lock_in_time_constant_key(), t)
-                            self.device.set_value.assert_called_with(self._SRS_lock_in_slope_key(), slope)
-                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_output_key(), v)
-                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_frequency_key(), f)
-                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_sensitivity_key(), s)
-                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_time_constant_key(), t)
-                            self.device.instr.setValue.assert_called_with(self.device._SRS_lock_in_slope_key(), slope)
+                            self.instrument.set_value.assert_called_with(self._SRS_lock_in_output_key(), v)
+                            self.instrument.set_value.assert_called_with(self._SRS_lock_in_frequency_key(), f)
+                            self.instrument.set_value.assert_called_with(self._SRS_lock_in_sensitivity_key(), s)
+                            self.instrument.set_value.assert_called_with(self._SRS_lock_in_time_constant_key(), t)
+                            self.instrument.set_value.assert_called_with(self._SRS_lock_in_slope_key(), slope)
+                            self.instrument.instr.setValue.assert_called_with(self.instrument._SRS_lock_in_output_key(), v)
+                            self.instrument.instr.setValue.assert_called_with(self.instrument._SRS_lock_in_frequency_key(), f)
+                            self.instrument.instr.setValue.assert_called_with(self.instrument._SRS_lock_in_sensitivity_key(), s)
+                            self.instrument.instr.setValue.assert_called_with(self.instrument._SRS_lock_in_time_constant_key(), t)
+                            self.instrument.instr.setValue.assert_called_with(self.instrument._SRS_lock_in_slope_key(), slope)

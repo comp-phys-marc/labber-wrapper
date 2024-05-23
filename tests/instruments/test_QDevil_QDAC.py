@@ -1,6 +1,6 @@
 import Labber
 import unittest
-from instruments.QDevil_QDAC import QDAC
+from labberwrapper.instruments.QDevil_QDAC import QDAC
 from functools import partial
 from unittest.mock import MagicMock, call
 

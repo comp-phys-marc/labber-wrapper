@@ -5,19 +5,13 @@
     "type": "object",
     "properties": {
         "Sensitivity": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 26
+            "type": "string"
         },
         "Time constant": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 19
+            "type": "string"
         },
         "Filter slope": {
-            "type": "number",
-            "minimum": 0,
-            "maximum": 3
+            "type": "string"
         },
         "Output amplitude": {
             "type": "number",
@@ -94,7 +88,7 @@
             "type": "number"
         },
         "Synchronous filter": {
-            "type": "bool"
+            "type": "boolean"
         },
         "Synchronous filter - Sweep rate": {
             "type": "number"
