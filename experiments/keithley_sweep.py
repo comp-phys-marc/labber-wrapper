@@ -5,7 +5,7 @@ import json
 
 from labberwrapper.instruments.NI_DAQ import NIDAQ
 from labberwrapper.instruments.Keithley_6430 import Keithley6430
-from devices.SET import SET
+from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 from jsonschema import validate
 

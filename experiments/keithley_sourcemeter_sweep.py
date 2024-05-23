@@ -5,7 +5,7 @@ import json
 
 from labberwrapper.instruments.NI_DAQ import NIDAQ
 from labberwrapper.instruments.Keithley_2400 import Keithley2400
-from devices.SET import SET
+from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 
 V_LIMIT = 2.5
