@@ -1,6 +1,6 @@
 {
     "gate_start": 0,
-    "gate_end": 2,
+    "gate_end": 1,
     "gate_steps": 10,
     "voltage": 0.004, 
     "frequency": 10000, 

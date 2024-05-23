@@ -32,8 +32,15 @@ class SRS830(BaseDevice):
     def __init__(self, client):
         wd = PurePath(os.path.dirname(os.path.realpath(__file__))).parent
         file = open(PurePath(wd).joinpath("json_schemas/instrument_schemas/SRS_830.json"), "r")
+        schema = ''.join(file.readlines())
         file.close()
-        super().__init__('Stanford Lock-in Amplifier SRS 830', dict(interface='GPIB', address='4'), client, schema)
+        super().__init__(
+            'Stanford Lock-in Amplifier SRS 830',
+            dict(interface='GPIB', address='4'),
+            client,
+            schema,
+            to_validate=False  # TODO: flush out this instrument schema.
+        )
 
     def set_output_and_readout(self, voltage, frequency, sensitivity, time_constant, slope, reference=1):
         self.instr.startInstrument()

@@ -1,0 +1,74 @@
+{
+    "$id": "json_schemas/experiment_schemas/lock_in_keithley_gating_oussama.json",
+    "$schema": "https://json-schema.org/draft/2020-12/schema",
+    "title" : "Lock-in and Keithley experiment schema",
+    "required" : [
+      "gate_start",
+      "gate_end",
+      "gate_steps",
+      "voltage",
+      "frequency",
+      "sensitivity",
+      "time_constant",
+      "slope",
+      "ch_id_1",
+      "ch_id_2",
+      "step_length"
+    ],
+    "type": "object",
+    "properties": {
+        "gate_start":  {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "gate_end":  {
+          "type": "number",
+          "minimum": 0.004,
+          "maximum": 1
+        },
+        "gate_steps":  {
+          "type": "number",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "voltage":  {
+          "type": "number",
+          "minimum": 0.004,
+          "maximum": 1
+        },
+        "frequency":  {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 100000
+        },
+        "sensitivity":  {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 26
+        },
+        "time_constant":  {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 19
+        },
+        "slope":  {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 3
+        },
+        "ch_id_1":  {
+          "type": "string",
+          "enum": ["X", "Y", "R", "theta"]
+        },
+        "ch_id_2":  {
+          "type": "string",
+          "enum": ["X", "Y", "R", "theta"]
+        },
+        "step_length":  {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 0.005
+        }
+    }
+}

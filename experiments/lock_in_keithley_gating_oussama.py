@@ -2,6 +2,7 @@ import Labber
 import numpy as np
 import time
 import json
+from jsonschema import validate
 
 from labberwrapper.devices.Keithley_2400 import Keithley2400
 from labberwrapper.devices.SRS_830 import SRS830
@@ -46,7 +47,7 @@ def gate_sweep(
         sensitivity=sensitivity, 
         time_constant=time_constant, 
         slope=slope,
-        )
+    )
 
     gate_voltage_list = np.linspace(gate_start, gate_end, gate_steps)
     Vg1 = dict(name='Vg1', unit='V', values=gate_voltage_list)
@@ -61,15 +62,20 @@ def gate_sweep(
         [Vg1]
     )
 
-    results = np.array([])
+    r_results = []
+    theta_results = []
     for gate_volt in gate_voltage_list:
         keithley.set_voltage(gate_volt)
         time.sleep(step_length)  
 
         result = lock_in.read(ch_id_1=ch_id_1, ch_id_2=ch_id_2)
-        results = np.append(results, np.average(result))
-    data = {'R': results,
-            'theta': results}
+        r_results.append(result[0])
+        theta_results.append(result[1])
+
+    data = {
+        'R': np.array(r_results),
+        'theta': np.array(theta_results)
+    }
     log.file.addEntry(data)
 
 
@@ -78,6 +84,9 @@ if __name__ == '__main__':
 
     # voltage safety check
     config = json.load(open('../experiment_configs/lock_in_keithley_gating_oussama.json', 'r'))
+    schem = json.load(open('../json_schemas/experiment_schemas/lock_in_keithley_gating_oussama.json', 'r'))
+
+    validate(instance=config, schema=schem)
 
     # perform the sweep
     gate_sweep(
@@ -93,4 +102,4 @@ if __name__ == '__main__':
         config['ch_id_2'],
         config['step_length'],
         log_file='TEST.hdf5'
-        )
+    )
