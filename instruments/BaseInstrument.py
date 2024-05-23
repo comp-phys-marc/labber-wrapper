@@ -2,7 +2,7 @@ import json
 from jsonschema import validate, ValidationError
 
 
-class BaseDevice:
+class BaseInstrument:
 
     def __init__(self, name, address, client, schema, to_validate=True):
         self.client = client

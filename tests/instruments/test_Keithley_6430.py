@@ -2,23 +2,23 @@ import Labber
 import unittest
 from unittest.mock import MagicMock
 from functools import partial
-from devices.Keithley_6430 import Keithley6430
+from instruments.Keithley_6430 import Keithley6430
 
 
 class TestKeithley6430(unittest.TestCase):
 
     def setUp(self):
-        self.device = Keithley6430(Labber.connectToServer('localhost'))
-        self.device.set_value = partial(self.device.set_value, validating=True)
+        self.instrument = Keithley6430(Labber.connectToServer('localhost'))
+        self.instrument.set_value = partial(self.instrument.set_value, validating=True)
 
     def test_init(self):
-        self.assertIsInstance(self.device, Keithley6430)
-        assert hasattr(self.device, 'instr')
-        self.assertIsNotNone(self.device.instr)
+        self.assertIsInstance(self.instrument, Keithley6430)
+        assert hasattr(self.instrument, 'instr')
+        self.assertIsNotNone(self.instrument.instr)
 
     def test_set_voltage(self):
-        self.device.set_value = MagicMock()
-        self.device.instr.setValue = MagicMock()
+        self.instrument.set_value = MagicMock()
+        self.instrument.instr.setValue = MagicMock()
 
         # check that bad values are filtered out
         self.device.set_voltage('f')

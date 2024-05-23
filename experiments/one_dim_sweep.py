@@ -3,9 +3,9 @@ import numpy as np
 import time
 import json
 
-from labberwrapper.devices.NI_DAQ import NIDAQ
-from labberwrapper.devices.QDevil_QDAC import QDAC
-from labberwrapper.devices.SET import SET
+from labberwrapper.instruments.NI_DAQ import NIDAQ
+from labberwrapper.instruments.QDevil_QDAC import QDAC
+from labberwrapper.instruments.SET import SET
 from labberwrapper.logging.log import Log
 from jsonschema import validate
 

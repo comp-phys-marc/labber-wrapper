@@ -1,6 +1,6 @@
 import Labber
 import unittest
-from devices.QDevil_QDAC import QDAC
+from instruments.QDevil_QDAC import QDAC
 from functools import partial
 from unittest.mock import MagicMock, call
 
@@ -8,7 +8,7 @@ from unittest.mock import MagicMock, call
 class TestQDAC(unittest.TestCase):
 
     def setUp(self):
-        self.device = QDAC(
+        self.instrument = QDAC(
             Labber.connectToServer('localhost'),
             {
                 1: 2,
@@ -17,12 +17,12 @@ class TestQDAC(unittest.TestCase):
                 4: 5
             }
         )
-        self.device.set_value = partial(self.device.set_value, validating=True)
+        self.instrument.set_value = partial(self.instrument.set_value, validating=True)
 
     def test_init(self):
-        self.assertIsInstance(self.device, QDAC)
-        assert hasattr(self.device, 'instr')
-        self.assertIsNotNone(self.device.instr)
+        self.assertIsInstance(self.instrument, QDAC)
+        assert hasattr(self.instrument, 'instr')
+        self.assertIsNotNone(self.instrument.instr)
 
         cases = [
             (
@@ -72,16 +72,16 @@ class TestQDAC(unittest.TestCase):
 
                     # could be optimized
                     else:
-                        device = QDAC(*case)
-                        config = device.instr.getLocalInitValuesDict()
+                        instrument = QDAC(*case)
+                        config = instrument.instr.getLocalInitValuesDict()
 
-                        self.assertEqual(config[device._qdac_channel_mode_key(ch_id)], f'Generator {case[1][ch_id]}')
-                        self.assertEqual(config[device._qdac_mode_apply_key(ch_id)], True)
+                        self.assertEqual(config[instrument._qdac_channel_mode_key(ch_id)], f'Generator {case[1][ch_id]}')
+                        self.assertEqual(config[instrument._qdac_mode_apply_key(ch_id)], True)
 
-                        self.assertEqual(device._channel_generator_map, case[1])
+                        self.assertEqual(instrument._channel_generator_map, case[1])
 
     def test_sync(self):
-        self.device.instr.setValue = MagicMock()
+        self.instrument.instr.setValue = MagicMock()
 
         cases = [(1, 1), (2, 2), (3, 3), (0, 4), (1, 25), (0, 0)]
 

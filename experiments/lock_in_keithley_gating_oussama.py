@@ -4,8 +4,8 @@ import time
 import json
 from jsonschema import validate
 
-from labberwrapper.devices.Keithley_2400 import Keithley2400
-from labberwrapper.devices.SRS_830 import SRS830
+from labberwrapper.instruments.Keithley_2400 import Keithley2400
+from labberwrapper.instruments.SRS_830 import SRS830
 from labberwrapper.logging.log import Log
 
 import matplotlib

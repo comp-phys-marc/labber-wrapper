@@ -1,5 +1,5 @@
 import unittest
-from devices.SET import SET
+from instruments.SET import SET
 
 
 class TestSET(unittest.TestCase):

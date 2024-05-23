@@ -2,14 +2,14 @@ import Labber
 import unittest
 from unittest.mock import MagicMock
 from functools import partial
-from devices.SRS_830 import SRS830
+from instruments.SRS_830 import SRS830
 
 
 class TestSRS830(unittest.TestCase):
 
     def setUp(self):
-        self.device = SRS830(Labber.connectToServer('localhost'))
-        self.device.set_value = partial(self.device.set_value, validating=True)
+        self.instrument = SRS830(Labber.connectToServer('localhost'))
+        self.instrument.set_value = partial(self.instrument.set_value, validating=True)
 
     def test_init(self):
         self.assertIsInstance(self.device, SRS830)

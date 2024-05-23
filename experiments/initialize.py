@@ -1,7 +1,7 @@
 import Labber
 import time
 
-from labberwrapper.devices.QDevil_QDAC import QDAC
+from labberwrapper.instruments.QDevil_QDAC import QDAC
 
 
 def initialize(

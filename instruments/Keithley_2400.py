@@ -1,9 +1,9 @@
 import os
 from pathlib import PurePath
-from labberwrapper.devices.BaseDevice import BaseDevice
+from labberwrapper.instruments.BaseInstrument import BaseInstrument
 
 
-class Keithley2400(BaseDevice):
+class Keithley2400(BaseInstrument):
 
     @staticmethod
     def _keithley_src_status_key():

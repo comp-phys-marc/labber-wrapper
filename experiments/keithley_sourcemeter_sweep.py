@@ -3,9 +3,9 @@ import numpy as np
 import time
 import json
 
-from labberwrapper.devices.NI_DAQ import NIDAQ
-from labberwrapper.devices.Keithley_2400 import Keithley2400
-from labberwrapper.devices.SET import SET
+from labberwrapper.instruments.NI_DAQ import NIDAQ
+from labberwrapper.instruments.Keithley_2400 import Keithley2400
+from labberwrapper.instruments.SET import SET
 from labberwrapper.logging.log import Log
 
 V_LIMIT = 2.5

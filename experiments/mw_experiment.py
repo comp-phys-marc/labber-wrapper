@@ -8,10 +8,10 @@ import json
 from jsonschema import validate
 from statistics import mean
 
-from labberwrapper.devices.Keysight_PXI_AWG import KeysightPXIAWG
-from labberwrapper.devices.Keysight_PXI_Digitizer import KeysightPXIDigitizer
+from labberwrapper.instruments.Keysight_PXI_AWG import KeysightPXIAWG
+from labberwrapper.instruments.Keysight_PXI_Digitizer import KeysightPXIDigitizer
 from labberwrapper.logging.log import Log
-from labberwrapper.devices.AWG_SET import SET
+from labberwrapper.instruments.AWG_SET import SET
 
 
 import matplotlib

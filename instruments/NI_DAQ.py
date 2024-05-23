@@ -1,9 +1,9 @@
 import os
 from pathlib import PurePath
-from labberwrapper.devices.BaseDevice import BaseDevice
+from labberwrapper.instruments.BaseInstrument import BaseInstrument
 
 
-class NIDAQ(BaseDevice):
+class NIDAQ(BaseInstrument):
     _ni_num_sames_key = 'Number of samples'
     _ni_sample_rate_key = 'Sample rate'
     _ni_trig_key = 'Trig source'

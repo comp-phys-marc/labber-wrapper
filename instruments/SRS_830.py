@@ -1,9 +1,9 @@
 import os
 from pathlib import PurePath
-from labberwrapper.devices.BaseDevice import BaseDevice
+from labberwrapper.instruments.BaseInstrument import BaseInstrument
 
 
-class SRS830(BaseDevice):
+class SRS830(BaseInstrument):
 
     @staticmethod
     def _SRS_lock_in_output_key():
@@ -38,8 +38,7 @@ class SRS830(BaseDevice):
             'Stanford Lock-in Amplifier SRS 830',
             dict(interface='GPIB', address='4'),
             client,
-            schema,
-            to_validate=False  # TODO: flush out this instrument schema.
+            schema
         )
 
     def set_output_and_readout(self, voltage, frequency, sensitivity, time_constant, slope, reference=1):

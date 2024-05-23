@@ -4,42 +4,10 @@
     "title" : "SRS 830 values validation",
     "type": "object",
     "properties": {
-        "Output amplitude": {
-            "type": "number",
-            "minimum": 0.004
-        },
-        "Reference source": {
-            "type": "number"
-        },
-        "Frequency": {
-            "type": "number",
-            "minimum": 0
-        },
-        "Phase": {
-            "type": "number"
-        },
-        "Detection harmonic": {
-            "type": "number"
-        },
-        "Input configuration": {
-            "type": "number"
-        },
-        "Input coupling": {
-            "type": "number"
-        },
-        "Input grounding": {
-            "type": "number"
-        },
-        "Line notch filter": {
-            "type": "number"
-        },
         "Sensitivity": {
             "type": "number",
             "minimum": 0,
             "maximum": 26
-        },
-        "Dynamic reserve": {
-            "type": "number"
         },
         "Time constant": {
             "type": "number",
@@ -50,6 +18,164 @@
             "type": "number",
             "minimum": 0,
             "maximum": 3
+        },
+        "Output amplitude": {
+            "type": "number",
+            "minimum": 0.004,
+            "maximum": 1
+        },
+        "Output amplitude - Sweep rate": {
+            "type": "number"
+        },
+        "Reference source": {
+            "type": "string",
+            "enum": ["Internal", "External"]
+        },
+        "Reference source - Sweep rate": {
+            "type": "number"
+        },
+        "Frequency": {
+            "type": "number",
+            "minimum": 0,
+            "maximum": 100000
+        },
+        "Frequency - Sweep rate": {
+            "type": "number"
+        },
+        "Phase": {
+            "type": "number"
+        },
+        "Phase - Sweep rate": {
+            "type": "number"
+        },
+        "Detection harmonic": {
+            "type": "number"
+        },
+        "Detection harmonic - Sweep rate": {
+            "type": "number"
+        },
+        "Input configuration": {
+            "type": "string"
+        },
+        "Input configuration - Sweep rate": {
+            "type": "number"
+        },
+        "Input coupling": {
+            "type": "string"
+        },
+        "Input coupling - Sweep rate": {
+            "type": "number"
+        },
+        "Input grounding": {
+            "type": "string"
+        },
+        "Input grounding - Sweep rate": {
+            "type": "number"
+        },
+        "Line notch filter": {
+            "type": "string"
+        },
+        "Line notch filter - Sweep rate": {
+            "type": "number"
+        },
+        "Sensitivity - Sweep rate": {
+            "type": "number"
+        },
+        "Dynamic reserve": {
+            "type": "string"
+        },
+        "Dynamic reserve - Sweep rate": {
+            "type": "number"
+        },
+        "Time constant - Sweep rate": {
+            "type": "number"
+        },
+        "Filter slope - Sweep rate": {
+            "type": "number"
+        },
+        "Synchronous filter": {
+            "type": "bool"
+        },
+        "Synchronous filter - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 1 output": {
+            "type": "number"
+        },
+        "Aux 1 output - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 2 output": {
+            "type": "number"
+        },
+        "Aux 2 output - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 3 output": {
+            "type": "number"
+        },
+        "Aux 3 output - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 4 output": {
+            "type": "number"
+        },
+        "Aux 4 output - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 1 input": {
+            "type": "number"
+        },
+        "Aux 1 input - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 2 input": {
+            "type": "number"
+        },
+        "Aux 2 input - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 3 input": {
+            "type": "number"
+        },
+        "Aux 3 input - Sweep rate": {
+            "type": "number"
+        },
+        "Aux 4 input": {
+            "type": "number"
+        },
+        "Aux 4 input - Sweep rate": {
+            "type": "number"
+        },
+        "Value": {
+            "type": "number"
+        },
+        "Value - Sweep rate": {
+            "type": "number"
+        },
+        "X": {
+            "type": "number"
+        },
+        "X - Sweep rate": {
+            "type": "number"
+        },
+        "Y": {
+            "type": "number"
+        },
+        "Y - Sweep rate": {
+            "type": "number"
+        },
+        "R": {
+            "type": "number"
+        },
+        "R - Sweep rate": {
+            "type": "number"
+        },
+        "theta": {
+            "type": "number"
+        },
+        "theta - Sweep rate": {
+            "type": "number"
         }
     }
-} 
+}
