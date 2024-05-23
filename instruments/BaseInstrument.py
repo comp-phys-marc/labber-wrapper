@@ -2,17 +2,19 @@ import json
 from jsonschema import validate, ValidationError
 
 
-class BaseDevice:
+class BaseInstrument:
 
-    def __init__(self, name, address, client, schema):
+    def __init__(self, name, address, client, schema, to_validate=True):
         self.client = client
         self.instr = self.client.connectToInstrument(name, address)
 
         self.schema = json.loads(schema)
         self.config = self.instr.getLocalInitValuesDict()
 
-        # check that the provided schema matches the provided device definition
-        validate(schema=self.schema, instance=self.config)
+        if to_validate:
+
+            # check that the provided schema matches the provided device definition
+            validate(schema=self.schema, instance=self.config)
 
     def set_value(self, key, val, validating=False):
         previous = self.config[key]

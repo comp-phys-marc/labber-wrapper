@@ -1,10 +1,10 @@
 import time
 import os
 from pathlib import PurePath
-from labberwrapper.devices.BaseDevice import BaseDevice
+from labberwrapper.instruments.BaseInstrument import BaseInstrument
 
 
-class QDAC(BaseDevice):
+class QDAC(BaseInstrument):
 
     # TODO: make use of QCodes with Labber (translate between their msgs and labber setValues statements?)
 

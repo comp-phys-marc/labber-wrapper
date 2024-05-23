@@ -3,8 +3,8 @@ import numpy as np
 import time
 import json
 
-from labberwrapper.devices.NI_DAQ import NIDAQ
-from labberwrapper.devices.Keithley_2400 import Keithley2400
+from labberwrapper.instruments.NI_DAQ import NIDAQ
+from labberwrapper.instruments.Keithley_2400 import Keithley2400
 from labberwrapper.devices.SET import SET
 from labberwrapper.logging.log import Log
 
@@ -46,8 +46,7 @@ def keithley_sourcemeter_sweep(
     # initialize logging
     log = Log(
         log_file,
-        'NIai',
-        'V',
+        [dict(name='NIai', units='V')],
         [Vg1]
     )
 
