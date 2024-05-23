@@ -11,7 +11,7 @@ from statistics import mean
 from labberwrapper.instruments.Keysight_PXI_AWG import KeysightPXIAWG
 from labberwrapper.instruments.Keysight_PXI_Digitizer import KeysightPXIDigitizer
 from labberwrapper.logging.log import Log
-from labberwrapper.instruments.AWG_SET import SET
+from labberwrapper.devices.AWG_SET import SET
 
 
 import matplotlib
